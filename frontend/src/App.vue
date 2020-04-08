@@ -1,12 +1,16 @@
 <template>
   <div>
-    Hello World!
+    <header-bar></header-bar>
   </div>
 </template>
 
 <script>
-export default {
+import HeaderBar from './components/HeaderBar';
 
+export default {
+  components: {
+    headerBar: HeaderBar
+  }
 }
 </script>
 
