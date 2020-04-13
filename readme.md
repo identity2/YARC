@@ -16,14 +16,15 @@ I like Go and Vue.
 I like Reddit.
 
 ## Frontend Milestones
-- [ ] Header bar.
-- [ ] Article entry box.
-- [ ] Right panel.
-- [ ] View/New/Edit article page.
-- [ ] Register/Login page.
-- [ ] View/Edit profile page.
-- [ ] New subreddit page.
-- [ ] Search result page.
+- [x] Header bar template.
+- [ ] Article entry box template.
+- [ ] Right panel template.
+- [ ] View/New/Edit article page template.
+- [ ] Register/Login page template.
+- [ ] View/Edit profile page template.
+- [ ] New subreddit page template.
+- [ ] Search result page template.
+- [ ] Hooking up the functionality of the templates.
 
 ## Backend Milestones
 - [ ] Retrieve article lists.

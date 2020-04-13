@@ -1,6 +1,6 @@
 <template>
   <div class>
-    <q-toolbar class="bg-black text-white">
+    <q-toolbar class="bg-grey-10 text-white">
       <q-avatar>
         <img src="../assets/logo.jpg" alt="YARC" />
       </q-avatar>

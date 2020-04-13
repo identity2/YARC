@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="bg-black">
     <header-bar></header-bar>
+    <router-view></router-view>
   </div>
 </template>
 
