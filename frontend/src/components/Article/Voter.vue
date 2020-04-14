@@ -1,19 +1,25 @@
 <template>
-  <div class="column q-gutter-sm">
+  <div class="column q-ml-md">
     <div class="col">
-      <q-icon name="arrow_upward"></q-icon>
+      <q-btn round flat size="xs" icon="arrow_upward"></q-btn>
+    </div>
+    <div class="col text-center">
+      {{votes}}
     </div>
     <div class="col">
-      87
-    </div>
-    <div class="col">
-      <q-icon name="arrow_downward"></q-icon>
+      <q-btn round flat size="xs" icon="arrow_downward"></q-btn>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  
+  props: {
+    votes: Number
+  },
+  data() {
+    return {
+    };
+  }
 }
 </script>

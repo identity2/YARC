@@ -17,8 +17,8 @@ I like Reddit.
 
 ## Frontend Milestones
 - [x] Header bar template.
-- [ ] Article entry box template.
-- [ ] Right panel template.
+- [x] Article entry box template.
+- [x] Right panel templates.
 - [ ] View/New/Edit article page template.
 - [ ] Register/Login page template.
 - [ ] View/Edit profile page template.

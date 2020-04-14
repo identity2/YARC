@@ -1,20 +1,18 @@
 <template>
-  <div class>
-    <q-toolbar class="bg-grey-10 text-white">
-      <q-avatar>
-        <img src="../assets/logo.jpg" alt="YARC" />
-      </q-avatar>
+  <q-toolbar class="bg-grey-10 text-white">
+    <q-avatar @click="linkToHome" class="cursor-pointer">
+      <img src="../assets/logo.jpg" alt="YARC" />
+    </q-avatar>
 
-      <q-toolbar-title>
+    <q-toolbar-title @click="linkToHome" class="cursor-pointer">
         YARC
-      </q-toolbar-title>
+    </q-toolbar-title>
 
-      <q-input class="q-ml-xl" style="width: 400px" dark clearable outlined dense standout v-model="searchText" label="Search" />
-      <q-space />
-      <q-btn stretch flat label="Log in" />
-      <q-btn stretch flat label="Register" />
-    </q-toolbar>
-  </div>
+    <q-input class="q-ml-xl" style="width: 400px" dark clearable outlined dense standout v-model="searchText" label="Search" />
+    <q-space />
+    <q-btn stretch flat label="Log in" />
+    <q-btn stretch flat label="Register" />
+  </q-toolbar>
 </template>
 
 <script>
@@ -23,6 +21,11 @@ export default {
     return {
       searchText: ''
     };
+  },
+  methods: {
+    linkToHome() {
+      this.$router.push('/');
+    }
   }
 }
 </script>
