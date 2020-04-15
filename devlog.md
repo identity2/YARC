@@ -12,3 +12,6 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Set the props of `ArticleEntry`, passed from `ListOfArticles`.
 * Added 10 mock articles for testing.
 * Fine-tuning the layout of the main page. It's very Reddit-like now!!!
+
+## 2020.04.16
+* Completed the `CreateArticle` page. It can be linked from the `ListOfArticles` page.

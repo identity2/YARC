@@ -19,7 +19,8 @@ I like Reddit.
 - [x] Header bar template.
 - [x] Article entry box template.
 - [x] Right panel templates.
-- [ ] View/New/Edit article page template.
+- [x] Create post page template.
+- [ ] View/Edit article page template.
 - [ ] Register/Login page template.
 - [ ] View/Edit profile page template.
 - [ ] New subreddit page template.

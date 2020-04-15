@@ -24,7 +24,9 @@ export default {
   },
   methods: {
     linkToHome() {
-      this.$router.push('/');
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      }
     }
   }
 }
