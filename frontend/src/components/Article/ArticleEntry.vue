@@ -25,7 +25,7 @@
       </q-item-label>
 
       <q-item-label lines="1" class="text-grey text-weight-bold">
-        <q-btn flat round @click="expandClicked" :icon="expanded ? 'expand_less' : 'expand_more'" size='xs'></q-btn>
+        <q-btn flat round @click.stop="expandClicked" :icon="expanded ? 'expand_less' : 'expand_more'" size='xs'></q-btn>
         | {{comments}} Comments 
         | Share 
         | (Save) 

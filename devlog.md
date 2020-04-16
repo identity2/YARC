@@ -15,3 +15,6 @@ I like to keep a chronological development log, so that I can regain my motivati
 
 ## 2020.04.16
 * Completed the `CreateArticle` page. It can be linked from the `ListOfArticles` page.
+
+## 2020.04.17
+* Bug fix: Buttons on `ArticleEntry` will not trigger the article popup now.
