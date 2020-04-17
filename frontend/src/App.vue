@@ -27,3 +27,14 @@ export default {
   }
 }
 </script>
+
+<style>
+a {
+  color: #9e9e9e;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+</style>

@@ -18,3 +18,4 @@ I like to keep a chronological development log, so that I can regain my motivati
 
 ## 2020.04.17
 * Bug fix: Buttons on `ArticleEntry` will not trigger the article popup now.
+* Completed the "expand" functionality of `ArticleEntry`.

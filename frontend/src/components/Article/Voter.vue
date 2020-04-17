@@ -1,5 +1,5 @@
 <template>
-  <div class="column q-ml-md">
+  <div class="column">
     <div class="col">
       <q-btn @click.stop="upvoteClicked" round flat size="xs" icon="arrow_upward"></q-btn>
     </div>
