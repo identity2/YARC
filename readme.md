@@ -20,12 +20,12 @@ I like Reddit.
 - [x] Article entry box template.
 - [x] Right panel templates.
 - [x] Create post page template.
-- [ ] View/Edit article page template.
+- [x] View/Edit article page template.
+- [ ] Article overlay. Routing.
 - [ ] Register/Login page template.
 - [ ] View/Edit profile page template.
 - [ ] New subreddit page template.
 - [ ] Search result page template.
-- [ ] Hooking up the functionality of the templates.
 
 ## Backend Milestones
 - [ ] Retrieve article lists.

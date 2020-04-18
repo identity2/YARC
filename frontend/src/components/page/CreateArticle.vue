@@ -42,7 +42,7 @@
         <q-tab-panels class="bg-grey-10" v-model="postType" animated>
           <q-tab-panel name="text">
             <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" />
-            <q-input dark outlined standout v-model="textPostBody" type="textarea" label="Text (optional)" counter :maxlength="textPostMaxLen" />
+            <q-input dark outlined standout v-model="textPostBody" type="textarea" placeholder="Text (optional)" counter :maxlength="textPostMaxLen" />
           </q-tab-panel>
 
           <q-tab-panel name="image">
@@ -90,6 +90,7 @@ const allSubreddits = ['r/radiohead', 'r/news', 'r/vuejs']; // Mock data.
 
 import PostingTips from '../rightPanel/PostingTips';
 import Advertisement from '../rightPanel/Advertisement';
+import Limits from '../../limits';
 
 export default {
   props: {
@@ -118,9 +119,9 @@ export default {
       postType: 'text',
       subreddit: '',
       title: '',
-      titleMaxLen: 128,
-      textPostMaxLen: 1024,
-      linkPostUrlMaxLen: 512,
+      titleMaxLen: Limits.titleMaxLen,
+      textPostMaxLen: Limits.textPostMaxLen,
+      linkPostUrlMaxLen: Limits.linkPostUrlMaxLen,
       textPostBody: '',
       linkPostUrl: '',
       imagePostFile: '',

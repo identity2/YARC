@@ -35,7 +35,7 @@
             :imageUrl="article.imageUrl"
             :linkUrl="article.linkUrl"
             :textBody="article.textBody"
-            :votes="article.votes"
+            :points="article.points"
             :postedBy="article.postedBy"
             :comments="article.comments"
             :subreddit="article.subreddit"
@@ -63,9 +63,7 @@
           <q-btn dense flat icon="close" v-close-popup>CLOSE</q-btn>
         </q-bar>
         <q-card-section>
-          <div class="text-h6">
-            Article Component Here!!
-          </div>
+          <router-view></router-view>
         </q-card-section>
       </q-card>
     </q-dialog>

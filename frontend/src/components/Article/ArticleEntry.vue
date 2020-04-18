@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Upvote, Downvote -->
       <q-item-section thumbnail>
-        <voter :votes="votes"></voter>
+        <voter :votes="points"></voter>
       </q-item-section>
 
       <!-- Thumbnail -->
@@ -23,23 +23,18 @@
         <q-item-label lines="1" class="text-grey">
           <a :href="'r/' + subreddit">r/{{subreddit}}</a>
           <span>．Posted by </span>
-          <a :href="'user/' + postedBy">u/{{postedBy}}</a>
+          <a :href="'/user/' + postedBy">u/{{postedBy}}</a>
           <span> on {{postedDate}}</span>
         </q-item-label>
 
-        <!-- Expand, Comments, Share, Save, Edit, Delete -->
+        <!-- Expand, Comments, Share, Save, Delete -->
         <q-item-label lines="1" class="text-grey text-weight-bold">
           <q-btn v-if="postType !== 'link'" flat round @click.stop="expandClicked" :icon="expanded ? 'expand_less' : 'expand_more'" size="xs" />
           <q-btn v-if="postType === 'link'" flat round @click.stop="openLinkInNewTab" size="xs" icon="open_in_new" />
           |
           <q-btn class="q-ml-sm" dense flat size="xs" icon="chat_bubble" :label="'' + comments + ' Comments'" />
-
           <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="share" label="Share" />
-
           <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="(Save)" />
-
-          <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="create" label="(Edit)" />
-
           <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="delete" label="(Delete)" />
         </q-item-label>
       </q-item-section>
@@ -63,7 +58,7 @@ export default {
     textBody: String,
     imageUrl: String,
     linkUrl: String,
-    votes: Number,
+    points: Number,
     postedBy: String,
     comments: Number,
     subreddit: String,
