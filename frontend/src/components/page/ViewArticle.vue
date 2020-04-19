@@ -8,21 +8,26 @@
             <div class="row">
               <!-- Upvote, Downvote -->
               <q-item-section class="q-mt-lg" thumbnail top>
-                <voter :votes="votes"></voter>
+                <voter :votes="points"></voter>
               </q-item-section>
 
               <!-- Posted by, Date -->
               <q-item-section class="col">
                 <div class="text-caption text-grey q-ml-md q-mt-md">
                   <span>Posted by </span>
-                  <a :href="'/user/' + postedBy">u/{{postedBy}}</a>
+                  <router-link :to="'/user/' + postedBy">
+                    u/{{postedBy}}
+                  </router-link>
                   <span> on {{postedDate}}</span>
                 </div>
                 
                 <!-- Article -->
                 <article-content
                   :title="title"
+                  :postType="postType"
                   :textBody="textBody"
+                  :imageUrl="imageUrl"
+                  :linkUrl="linkUrl"
                   :editMode="editMode"
                   @cancelEdit="editMode = false"
                 ></article-content>
@@ -32,7 +37,7 @@
                   <q-btn class="q-ml-sm" dense flat size="xs" icon="chat_bubble" :label="'' + comments.length + ' Comments'" />
                   <q-btn @click="shareClicked" class="q-ml-sm" dense flat size="xs" icon="share" label="Share" />
                   <q-btn @click="saveClicked" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="(Save)" />
-                  <q-btn @click="editMode = true" class="q-ml-sm" dense flat size="xs" icon="create" label="(Edit)" />
+                  <q-btn v-if="postType === 'text'" @click="editMode = true" class="q-ml-sm" dense flat size="xs" icon="create" label="(Edit)" />
                   <q-btn @click="deleteClicked" class="q-ml-sm" dense flat size="xs" icon="delete" label="(Delete)" />
                 </q-item-label>
 
@@ -58,7 +63,8 @@
 
     <!-- Right Panel -->
     <div class="col-3 q-pr-md q-pt-md gt-sm">
-      <about-subreddit></about-subreddit>
+      <about-subreddit :subreddit="subreddit" :members="subredditMembers" />
+      <advertisement />
     </div>
   </div>
 </template>
@@ -69,17 +75,23 @@ import Voter from '../article/Voter';
 import ArticleContent from '../article/ArticleContent';
 import CommentContent from '../article/CommentContent';
 import CreateComment from '../article/CreateComment';
+import Advertisement from '../rightPanel/Advertisement';
 import mockComments from '../../mock_data/mock_comments';
 
 export default {
   data() {
     return {
-      votes: 42,
-      postedBy: 'wigfrid',
-      postedDate: Date(1587340801),
       title: 'This is the title of the article.',
-      textBody: "Please could you stop the noise I'm trying to get some rest! For all the unborn chikens voices in my head! What was that? When I am king I will be first against the wall. With your opinion which is of no consequence at all. What was that, what was that?",
+      postType: 'text',
+      textBody: 'This is the body of the text post.',
+      imageUrl: '',
+      linkUrl: '',
+      points: 39,
+      postedBy: 'boneless_kandra',
       comments: mockComments,
+      subreddit: 'mistborn',
+      subredditMembers: 32,
+      postedDate: Date(),
       editMode: false
     };
   },
@@ -89,6 +101,7 @@ export default {
     articleContent: ArticleContent,
     commentContent: CommentContent,
     createComment: CreateComment,
+    advertisement: Advertisement
   },
   methods: {
     shareClicked() {

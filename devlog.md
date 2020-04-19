@@ -23,3 +23,8 @@ I like to keep a chronological development log, so that I can regain my motivati
 ## 2020.04.18
 * Completed the `ViewArticle` page, along with the `ArticleContent`, `CommentContent` and `CreateComment` components.
 * Added some mock comments for testing.
+
+## 2020.04.19
+* Now the URL query strings of `CreateArticle` will change according to the postType.
+* Abandoned the overlaying approach of viewing articles. Adjusted the route paths accordingly.
+* Restructured the templates: Added `Home` and `Subreddit`, while pushing `ListOfArticles` to the children.

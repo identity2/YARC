@@ -4,7 +4,9 @@
     <q-item-section>
       <div class="text-grey text-subtitle2 q-mt-md q-mb-sm q-ml-xs">
         <span>Add a comment as </span>
-        <a class="text-blue" :href="'/user/' + currUser">u/{{currUser}}</a>
+        <router-link :to="'/user/' + currUser">
+          <span class="text-blue">r/{{currUser}}</span>
+        </router-link>
       </div>
       <q-input dark outlined standout v-model="commentText" type="textarea" placeholder="What are your thoughts?" counter :maxlength="commentMaxLen" />
     </q-item-section>

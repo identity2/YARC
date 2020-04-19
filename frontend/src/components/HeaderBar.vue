@@ -25,7 +25,11 @@ export default {
   methods: {
     linkToHome() {
       if (this.$route.path !== '/') {
+        // Get back to home.
         this.$router.push('/');
+      } else {
+        // Refresh the page.
+        location.href = this.$route.fullPath;
       }
     }
   }

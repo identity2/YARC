@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import ListOfArticles from './components/page/ListOfArticles';
+import Home from './components/page/Home';
+import Subreddit from './components/page/Subreddit';
 import CreateArticle from './components/page/CreateArticle';
 import ViewArticle from './components/page/ViewArticle';
 
@@ -12,7 +13,7 @@ export const router = new VueRouter({
     {
       name: 'home',
       path: '/',
-      component: ListOfArticles
+      component: Home
     },
     {
       name: 'submit',
@@ -22,11 +23,11 @@ export const router = new VueRouter({
     {
       name: 'subreddit',
       path: '/r/:subreddit',
-      component: ListOfArticles
+      component: Subreddit
     },
     {
       name: 'article',
-      path: '/r/:subreddit/comments/:pid',
+      path: '/r/:subreddit/p/:pid',
       component: ViewArticle
     }
   ]

@@ -21,9 +21,13 @@
         </q-item-label>
 
         <q-item-label lines="1" class="text-grey">
-          <a :href="'r/' + subreddit">r/{{subreddit}}</a>
+          <router-link @click.native.stop :to="'/r/' + subreddit">
+            r/{{subreddit}}
+          </router-link>
           <span>．Posted by </span>
-          <a :href="'/user/' + postedBy">u/{{postedBy}}</a>
+          <router-link @click.native.stop :to="'/user/' + postedBy">
+            u/{{postedBy}}
+          </router-link>
           <span> on {{postedDate}}</span>
         </q-item-label>
 

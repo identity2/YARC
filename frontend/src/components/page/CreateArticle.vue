@@ -86,7 +86,7 @@
 </template>
 
 <script>
-const allSubreddits = ['r/radiohead', 'r/news', 'r/vuejs']; // Mock data.
+const allSubreddits = ['radiohead', 'news', 'vuejs']; // Mock data.
 
 import PostingTips from '../rightPanel/PostingTips';
 import Advertisement from '../rightPanel/Advertisement';
@@ -130,7 +130,26 @@ export default {
       subredditOptions: allSubreddits
     };
   },
+  watch: {
+    postType(newVal) {
+      this.$router.replace({
+        query: {
+          subreddit: this.subreddit,
+          postType: newVal
+        }
+      }).catch(() => {});
+    },
+    subreddit(newVal) {
+      this.$router.replace({
+        query: {
+          subreddit: newVal,
+          postType: this.postType
+        }
+      }).catch(() => {});
+    }
+  },
   created() {
+    console.log('created');
     this.postType = this.$route.query.postType;
     if (!this.postType) {
       this.postType = 'text';

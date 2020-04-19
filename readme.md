@@ -21,10 +21,9 @@ I like Reddit.
 - [x] Right panel templates.
 - [x] Create post page template.
 - [x] View/Edit article page template.
-- [ ] Article overlay. Routing.
-- [ ] Register/Login page template.
-- [ ] View/Edit profile page template.
 - [ ] New subreddit page template.
+- [ ] View/Edit profile page template.
+- [ ] Register/Login page template.
 - [ ] Search result page template.
 
 ## Backend Milestones

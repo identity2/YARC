@@ -10,7 +10,11 @@
             </q-avatar>
           </q-item-section>
           <q-item-section>
-            <q-item-label>r/{{sub.name}}</q-item-label>
+            <q-item-label>
+              <router-link :to="'/r/' + sub.name">
+                <span class="text-white">r/{{sub.name}}</span>
+              </router-link>
+            </q-item-label>
             <q-item-label caption lines="1">Members: {{sub.members}}</q-item-label>
           </q-item-section>
         </q-item>

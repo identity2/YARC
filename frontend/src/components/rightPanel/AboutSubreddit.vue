@@ -1,7 +1,7 @@
 <template>
   <q-card dark flat bordered class="bg-grey-10 q-mb-md">
     <q-card-section>
-      <div class="text-h6 q-mb-md">{{subreddit}}</div>
+      <div class="text-h6 q-mb-md">r/{{subreddit}}</div>
       <div>{{description}}</div>
     </q-card-section>
 
@@ -21,12 +21,10 @@
 
 <script>
 export default {
-  data() {
-    return {
-      subreddit: 'r/subreddit',
-      members: 0,
-      description: 'The description of the subreddit goes here!'
-    };
+  props: {
+    subreddit: String,
+    members: Number,
+    description: String
   },
   methods: {
     createPostClicked() {
