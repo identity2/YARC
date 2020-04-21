@@ -1,6 +1,8 @@
 export default [
   {
     id: 1,
+    postID: 3,
+    postTitle: 'This post is wonderful',
     commentedBy: 'localhost',
     points: 32,
     commentedDate: Date(1234567),
@@ -8,6 +10,8 @@ export default [
   },
   {
     id: 2,
+    postID: 3,
+    postTitle: 'This post is wonderful',
     commentedBy: 'remoteHost',
     points: -1,
     commentedDate: Date(12345672),
@@ -15,6 +19,8 @@ export default [
   },
   {
     id: 3,
+    postID: 9,
+    postTitle: 'Never mind this post',
     commentedBy: 'send_bass',
     points: 66,
     commentedDate: Date(12345647),
@@ -22,6 +28,8 @@ export default [
   },
   {
     id: 4,
+    postID: 6,
+    postTitle: 'A post here!',
     commentedBy: 'squidward_tentacles',
     points: 0,
     commentedDate: Date(1234567),

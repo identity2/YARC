@@ -8,14 +8,14 @@
             <div class="row">
               <!-- Upvote, Downvote -->
               <q-item-section class="q-mt-lg" thumbnail top>
-                <voter :votes="points"></voter>
+                <voter :votes="points" />
               </q-item-section>
 
               <!-- Posted by, Date -->
               <q-item-section class="col">
                 <div class="text-caption text-grey q-ml-md q-mt-md">
                   <span>Posted by </span>
-                  <router-link :to="'/user/' + postedBy">
+                  <router-link :to="'/u/' + postedBy">
                     u/{{postedBy}}
                   </router-link>
                   <span> on {{postedDate}}</span>
@@ -30,7 +30,7 @@
                   :linkUrl="linkUrl"
                   :editMode="editMode"
                   @cancelEdit="editMode = false"
-                ></article-content>
+                />
 
                 <!-- Comments, Share, Save, Edit, Delete -->
                 <q-item-label v-if="!editMode" lines="1" class="text-grey q-ml-sm q-mt-sm q-mb-sm">
@@ -42,7 +42,7 @@
                 </q-item-label>
 
                 <!-- New Comment -->
-                <create-comment></create-comment>
+                <create-comment />
 
                 <!-- Comment Contents -->
                 <comment-content
@@ -52,7 +52,7 @@
                   :points="comment.points"
                   :commentedDate="comment.commentedDate"
                   :commentText="comment.commentText"
-                ></comment-content>
+                />
                 
               </q-item-section>
             </div>
@@ -95,13 +95,9 @@ export default {
       editMode: false
     };
   },
-  components: {
-    aboutSubreddit: AboutSubreddit,
-    voter: Voter,
-    articleContent: ArticleContent,
-    commentContent: CommentContent,
-    createComment: CreateComment,
-    advertisement: Advertisement
+  mounted() {
+    this.subreddit = this.$route.params.subreddit;
+    // TODO: Load the articles, change title.
   },
   methods: {
     shareClicked() {
@@ -113,6 +109,14 @@ export default {
     deleteClicked() {
 
     }
+  },
+  components: {
+    aboutSubreddit: AboutSubreddit,
+    voter: Voter,
+    articleContent: ArticleContent,
+    commentContent: CommentContent,
+    createComment: CreateComment,
+    advertisement: Advertisement
   }
 }
 </script>

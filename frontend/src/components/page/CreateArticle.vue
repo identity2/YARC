@@ -57,7 +57,7 @@
         </q-tab-panels>
 
         <q-card-actions class="bg-grey-10 q-pr-lg q-pb-lg" align="right">
-          <q-btn @click="cancelClicked" outline class="q-mr-sm" style="color: white; width: 100px" label="Cancel"/>
+          <q-btn @click="cancelClicked" outline class="q-mr-sm" style="color: white; width: 100px" label="Cancel" />
           <q-btn @click="postClicked" :disabled="!validPost" style="background: white; color: black; width: 100px" label="Post" />
         </q-card-actions>
 
@@ -79,8 +79,16 @@
 
     <!-- Right Panel -->
     <div class="col-3 q-pr-md q-pt-md gt-sm">
-      <posting-tips></posting-tips>
-      <advertisement></advertisement>
+      <tips
+        title="Posting Rules"
+        :tips="[
+          '1. You do not talk about YARC.',
+          '2. Do not post something important here, this site will not be persistent.',
+          '3. Do not post offensive or NSFW contents, or I will simply reset the database.',
+          '4. The forth rule doesn\'t exist.'
+        ]"
+      />
+      <advertisement />
     </div>
   </div>
 </template>
@@ -88,17 +96,17 @@
 <script>
 const allSubreddits = ['radiohead', 'news', 'vuejs']; // Mock data.
 
-import PostingTips from '../rightPanel/PostingTips';
+import Tips from '../rightPanel/Tips';
 import Advertisement from '../rightPanel/Advertisement';
 import Limits from '../../limits';
 
 export default {
-  props: {
-
+  mounted() {
+    document.title = 'Submit Post - YARC';
   },
   computed: {
     validPost() {
-      if (this.subreddit === '' || this.title === '') {
+      if (this.subreddit === '' || this.title.trim() === '') {
         return false;
       }
 
@@ -149,7 +157,6 @@ export default {
     }
   },
   created() {
-    console.log('created');
     this.postType = this.$route.query.postType;
     if (!this.postType) {
       this.postType = 'text';
@@ -174,7 +181,7 @@ export default {
     }
   },
   components: {
-    postingTips: PostingTips,
+    tips: Tips,
     advertisement: Advertisement
   }
 }

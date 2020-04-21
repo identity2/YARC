@@ -4,7 +4,7 @@
     <q-item-section>
       <div class="text-grey text-subtitle2 q-mt-md q-mb-sm q-ml-xs">
         <span>Add a comment as </span>
-        <router-link :to="'/user/' + currUser">
+        <router-link :to="'/u/' + currUser">
           <span class="text-blue">r/{{currUser}}</span>
         </router-link>
       </div>

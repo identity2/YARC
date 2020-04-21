@@ -10,7 +10,7 @@
         
         <div class="col">
           <div class="text-caption text-grey">
-            <router-link :to="'/user/' + commentedBy">
+            <router-link :to="'/u/' + commentedBy">
               <span class="text-grey-5">u/{{commentedBy}}</span>
             </router-link>
             <span>．{{points}} points．{{commentedDate}}</span>

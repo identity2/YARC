@@ -4,14 +4,14 @@
       <!-- Header Bar -->
       <q-header>
         <q-page-sticky position="top" expand>
-          <header-bar></header-bar>
+          <header-bar />
         </q-page-sticky>
       </q-header>
       
       <!-- Page Content -->
       <q-page-container>
         <q-page style="padding-top: 50px">
-          <router-view></router-view>
+          <router-view />
         </q-page>
       </q-page-container>
     </q-layout>

@@ -1,7 +1,7 @@
 <template>
   <div class="col">
     <!-- Sort, Create Post -->
-    <div v-if="canCreatePost" class="q-pt-md q-pl-md q-pr-md text-white">
+    <div class="q-pt-md q-pl-md q-pr-md text-white">
       <q-list dark bordered class="bg-grey-10 rounded-borders">
         <q-item class="q-mt-sm q-mb-sm">          
             <q-btn-dropdown color="blue" label="Sort">
@@ -42,7 +42,7 @@
           :subreddit="article.subreddit"
           :postedDate="article.postedDate"
           @click.native="articleClicked(article)"
-        ></article-entry>
+        />
       </q-list>
     </div>
   </div>

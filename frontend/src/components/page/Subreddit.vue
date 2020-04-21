@@ -46,8 +46,8 @@ export default {
     reloadPage(subreddit) {
       window.scrollTo(0, 0);
       this.subreddit = subreddit;
-
-      // Load the articles.
+      document.title = 'r/' + subreddit + ' - YARC';
+      // TODO: Load the articles.
     }
   },
   components: {

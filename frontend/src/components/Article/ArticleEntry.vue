@@ -3,13 +3,13 @@
     <div class="row">
       <!-- Upvote, Downvote -->
       <q-item-section thumbnail>
-        <voter :votes="points"></voter>
+        <voter :votes="points" />
       </q-item-section>
 
       <!-- Thumbnail -->
       <q-item-section thumbnail>
         <q-avatar color="grey-9" rounded size="65px">
-          <q-icon v-if="postType !== 'image'" :name="thumbnailIcon"></q-icon>
+          <q-icon v-if="postType !== 'image'" :name="thumbnailIcon" />
           <img v-if="postType === 'image'" :src="imageUrl" />
         </q-avatar>
       </q-item-section>
@@ -25,7 +25,7 @@
             r/{{subreddit}}
           </router-link>
           <span>．Posted by </span>
-          <router-link @click.native.stop :to="'/user/' + postedBy">
+          <router-link @click.native.stop :to="'/u/' + postedBy">
             u/{{postedBy}}
           </router-link>
           <span> on {{postedDate}}</span>

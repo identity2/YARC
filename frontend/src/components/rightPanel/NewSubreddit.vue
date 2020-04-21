@@ -4,7 +4,7 @@
       <div class="text-h6">New Subreddit</div>
     </q-card-section>
     <q-card-actions align="center">
-      <q-btn class="q-mb-md" flat style="background: white; color: black; width: 70%" label="Create" />
+      <q-btn @click="$router.push('/subreddits/create')" class="q-mb-md" flat style="background: white; color: black; width: 70%" label="Create" />
     </q-card-actions>
   </q-card>
 </template>

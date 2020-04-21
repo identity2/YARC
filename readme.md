@@ -21,8 +21,8 @@ I like Reddit.
 - [x] Right panel templates.
 - [x] Create post page template.
 - [x] View/Edit article page template.
-- [ ] New subreddit page template.
-- [ ] View/Edit profile page template.
+- [x] New subreddit page template.
+- [x] View profile page template.
 - [ ] Register/Login page template.
 - [ ] Search result page template.
 

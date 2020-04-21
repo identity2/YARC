@@ -28,3 +28,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Now the URL query strings of `CreateArticle` will change according to the postType.
 * Abandoned the overlaying approach of viewing articles. Adjusted the route paths accordingly.
 * Restructured the templates: Added `Home` and `Subreddit`, while pushing `ListOfArticles` to the children.
+
+## 2020.04.21
+* Created pages: `UserProfile` and `CreateSubreddit`.
+* Changed `PostingTips` to more generalized `Tips`.
+* Added right panel `AboutUser`.
+* Changed all `<tag></tag>` into `<tag />`.
+* Changed route `/user/` to `/u/` for consistency.
