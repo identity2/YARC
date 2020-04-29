@@ -6,6 +6,8 @@ import CreateArticle from './components/page/CreateArticle';
 import ViewArticle from './components/page/ViewArticle';
 import CreateSubreddit from './components/page/CreateSubreddit';
 import UserProfile from './components/page/UserProfile';
+import LogInRegister from './components/page/LogInRegister';
+import SearchResult from './components/page/SearchResult';
 
 Vue.use(VueRouter);
 
@@ -41,6 +43,16 @@ export const router = new VueRouter({
       name: 'user',
       path: '/u/:username',
       component: UserProfile
+    },
+    {
+      name: 'account',
+      path: '/account',
+      component: LogInRegister
+    },
+    {
+      name: 'search',
+      path: '/search',
+      component: SearchResult
     }
   ]
 });

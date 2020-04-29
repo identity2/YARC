@@ -23,8 +23,8 @@ I like Reddit.
 - [x] View/Edit article page template.
 - [x] New subreddit page template.
 - [x] View profile page template.
-- [ ] Register/Login page template.
-- [ ] Search result page template.
+- [x] Register/Login page template.
+- [x] Search result page template.
 
 ## Backend Milestones
 - [ ] Retrieve article lists.

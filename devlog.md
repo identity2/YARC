@@ -35,3 +35,7 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Added right panel `AboutUser`.
 * Changed all `<tag></tag>` into `<tag />`.
 * Changed route `/user/` to `/u/` for consistency.
+
+## 2020.04.29
+* Completed pages: `LogInRegister`, `SearchResult`.
+* **Overall, the frontend templates are completed. Switching to backend development.**

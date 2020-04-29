@@ -8,19 +8,34 @@
         YARC
     </q-toolbar-title>
 
-    <q-input class="q-ml-xl" style="width: 400px" dark clearable outlined dense standout v-model="searchText" label="Search" />
+    <q-input @keydown.enter.prevent="submitSearch" class="q-ml-xl" style="width: 400px" dark clearable outlined dense standout v-model="searchText" label="Search" :maxlength="searchTermMaxLen" />
     <q-space />
-    <q-btn stretch flat label="Log in" />
-    <q-btn stretch flat label="Register" />
+
+    <q-btn v-if="showLoginRegister" @click="loginRegisterClicked('login')" stretch flat label="Log in" />
+    <q-btn v-if="showLoginRegister" @click="loginRegisterClicked('register')" stretch flat label="Register" />
   </q-toolbar>
 </template>
 
 <script>
+import Limits from '../limits';
+
 export default {
   data() {
     return {
-      searchText: ''
+      searchText: '',
+      searchTermMaxLen: Limits.searchTermMaxLen
     };
+  },
+  computed: {
+    showLoginRegister() {
+      if (this.$route.path === '/account') {
+        return false;
+      }
+
+      // TODO: Check log in.
+
+      return true;
+    }
   },
   methods: {
     linkToHome() {
@@ -31,6 +46,22 @@ export default {
         // Refresh the page.
         location.href = this.$route.fullPath;
       }
+    },
+    loginRegisterClicked(type) {
+      this.$router.push({
+        name: 'account',
+        query: {
+          type: type
+        }
+      });
+    },
+    submitSearch() {
+      this.$router.push({
+        name: 'search',
+        query: {
+          q: this.searchText
+        }
+      });
     }
   }
 }

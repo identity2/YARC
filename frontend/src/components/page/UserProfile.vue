@@ -74,8 +74,10 @@ export default {
   },
   methods: {
     reloadPage(username) {
+      window.scrollTo(0, 0);
       this.username = username;
-    // TODO: Load user data.
+      document.title = 'u/' + username + ' - YARC';
+      // TODO: Load user data.
     }
   },
   components: {
