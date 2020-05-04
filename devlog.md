@@ -39,3 +39,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 ## 2020.04.29
 * Completed pages: `LogInRegister`, `SearchResult`.
 * **Overall, the frontend templates are completed. Switching to backend development.**
+
+## 2020.05.04
+* Designed the ER Diagram and database schema.
+* Started designing the backend API.
+
+# TODO
+* Frontend: Allow user to edit their short bio.

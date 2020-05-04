@@ -27,6 +27,7 @@ I like Reddit.
 - [x] Search result page template.
 
 ## Backend Milestones
+- [ ] Design API and database schema.
 - [ ] Retrieve article lists.
 - [ ] Article CRUD.
 - [ ] Comment CRUD (allow only single layer).
