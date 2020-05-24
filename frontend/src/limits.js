@@ -9,5 +9,6 @@ export default {
   usernameMaxLen: 20,
   passwordMinLen: 6,
   passwordMaxLen: 20,
-  searchTermMaxLen: 256
+  searchTermMaxLen: 256,
+  shortBioMaxLen: 256
 };

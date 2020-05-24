@@ -44,5 +44,9 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Designed the ER Diagram and database schema.
 * Started designing the backend API.
 
-# TODO
-* Frontend: Allow user to edit their short bio.
+**Short Gap: Preparing for my final exams in Programming Languages, Software Engineering, Computer Networks, and Database Systems**
+
+## 2020.05.25
+* Added the edit functionality for user's short bio.
+* Minor tweaks in ER Diagram and database schema (to avoid using PostgreSQL's reserved words).
+* Completed `setup.sql` and `teardown.sql` according to the designed schema.
