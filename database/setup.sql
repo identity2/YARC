@@ -1,8 +1,10 @@
 CREATE TABLE account (
     username VARCHAR(20) PRIMARY KEY,
     hashed_password CHAR(60) NOT NULL,
+    email VARCHAR(256) NOT NULL CONSTRAINT email_unique UNIQUE,
     karma INT NOT NULL,
-    bio VARCHAR(60) NOT NULL
+    bio VARCHAR(60) NOT NULL,
+    join_time TIME NOT NULL
 );
 
 CREATE TABLE subreddit (

@@ -3,12 +3,12 @@ This directory contains the SQL scripts for the backend database.
 
 # Design
 ## ER Diagram
-![ER Diagram](https://i.imgur.com/hU1nP2a.jpg)
+![ER Diagram](https://i.imgur.com/8onV4ms.jpg)
 
 ## Schema
 (**key: bold**, *foreign key: italic*)
 
-* account(**username**, hashed_password, karma, bio)
+* account(**username**, hashed_password, email, karma, bio, join_time)
 * subreddit(**sub_name**, description)
 * join_sub(***username***, ***sub_name***)
 * article(***sub_name***, **aid**, type, body, title, points, *posted_by*, posted_time)
