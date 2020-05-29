@@ -4,10 +4,10 @@
       <div class="text-h5">{{title}}</div>
       
       <!-- Text Post -->
-      <div v-if="!editMode && postType === 'text'" class="q-mt-lg">{{textBody}}</div>
+      <div v-if="!editMode && postType === 'text'" class="q-mt-lg">{{textPostBody}}</div>
       <div v-if="editMode" class="q-mt-lg">
         <div class="q-ml-xs q-mb-sm">Editing post:</div>
-        <q-input dark outlined standout v-model="textBody" type="textarea" counter :maxlength="textPostMaxLen" />
+        <q-input dark outlined standout v-model="textPostBody" type="textarea" counter :maxlength="textPostMaxLen" />
         <q-btn class="q-mr-md" @click="saveClicked" style="background: white; color: black" label="Save" />
         <q-btn outline @click="cancelClicked" style="color: red" label="Cancel" />
       </div>
@@ -42,7 +42,8 @@ export default {
   },
   data() {
     return {
-      textPostMaxLen: Limits.textPostMaxLen
+      textPostMaxLen: Limits.textPostMaxLen,
+      textPostBody: this.textBody
     };
   },
   methods: {
@@ -50,6 +51,7 @@ export default {
 
     },
     cancelClicked() {
+      this.textPostBody = this.textBody;  // Reset to the original content.
       this.$emit('cancelEdit');
     }
   }

@@ -38,8 +38,8 @@
           |
           <q-btn class="q-ml-sm" dense flat size="xs" icon="chat_bubble" :label="'' + comments + ' Comments'" />
           <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="share" label="Share" />
-          <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="(Save)" />
-          <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="delete" label="(Delete)" />
+          <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="Save" />
+          <q-btn @click.stop="" class="q-ml-sm" dense flat size="xs" icon="delete" label="Delete" />
         </q-item-label>
       </q-item-section>
     </div>

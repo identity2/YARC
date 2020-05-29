@@ -16,8 +16,21 @@
             <span>．{{points}} points．{{commentedDate}}</span>
           </div>
 
-          <div class="text-white q-mt-xs q-mr-sm">
-            {{commentText}}
+          <!-- Comment Text -->
+          <div v-if="!editMode" class="text-white q-mt-xs q-mr-sm">
+            {{commentBody}}
+          </div>
+
+          <div v-if="editMode" class="q-mt-sm q-mr-sm q-mb-md">
+            <div class="q-ml-xs q-mb-sm">Editing comment:</div>
+            <q-input dark outlined standout v-model="commentBody" type="textarea" counter :maxlength="commentMaxLen" />
+            <q-btn class="q-mr-md" @click="saveClicked" style="background: white; color: black" label="Save" />
+            <q-btn outline @click="cancelClicked" style="color: red" label="Cancel" />
+          </div>
+
+          <div class="text-caption text-grey q-mt-xs">
+            <q-btn @click="editMode = true" dense flat size="xs" icon="create" label="Edit" />
+            <q-btn @click="deleteClicked" class="q-ml-sm" dense flat size="xs" icon="delete" label="Delete" />
           </div>
         </div>
 
@@ -27,6 +40,8 @@
 </template>
 
 <script>
+import Limits from '../../limits';
+
 export default {
   props: {
     commentedBy: String,
@@ -36,7 +51,9 @@ export default {
   },
   data() {
     return {
-      
+      editMode: false,
+      commentMaxLen: Limits.commentMaxLen,
+      commentBody: this.commentText
     };
   },
   methods: {
@@ -45,6 +62,16 @@ export default {
     },
     downvoteClicked() {
       
+    },
+    deleteClicked() {
+
+    },
+    saveClicked() {
+
+    },
+    cancelClicked() {
+      this.editMode = false;
+      this.commentBody = this.commentText; // Store to the original comment text.
     }
   }
 }

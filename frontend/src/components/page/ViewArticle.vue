@@ -36,9 +36,9 @@
                 <q-item-label v-if="!editMode" lines="1" class="text-grey q-ml-sm q-mt-sm q-mb-sm">
                   <q-btn class="q-ml-sm" dense flat size="xs" icon="chat_bubble" :label="'' + comments.length + ' Comments'" />
                   <q-btn @click="shareClicked" class="q-ml-sm" dense flat size="xs" icon="share" label="Share" />
-                  <q-btn @click="saveClicked" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="(Save)" />
-                  <q-btn v-if="postType === 'text'" @click="editMode = true" class="q-ml-sm" dense flat size="xs" icon="create" label="(Edit)" />
-                  <q-btn @click="deleteClicked" class="q-ml-sm" dense flat size="xs" icon="delete" label="(Delete)" />
+                  <q-btn @click="saveClicked" class="q-ml-sm" dense flat size="xs" icon="save_alt" label="Save" />
+                  <q-btn v-if="postType === 'text'" @click="editMode = true" class="q-ml-sm" dense flat size="xs" icon="create" label="Edit" />
+                  <q-btn @click="deleteClicked" class="q-ml-sm" dense flat size="xs" icon="delete" label="Delete" />
                 </q-item-label>
 
                 <!-- New Comment -->

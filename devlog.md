@@ -56,5 +56,8 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Designed the overall file structure of the backend server.
 * Designed the RESTful API for backend. Documented in `backend/readme.md`. (Not done yet.)
 
-## TODO
-* Allow editing and deletion of comments in Frontend.
+## 2020.05.29
+* Added an editing and deletion functionality to comments in frontend.
+* Fixed a bug in frontend. Editing articles no longer pass `prop`s as `v-model`s.
+* Completed the design of the RESTful API of backend. Documented in `backend/readme.md`.
+* Added `UNIQUE` constraints to `aid` and `cid` in database.

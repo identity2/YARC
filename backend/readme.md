@@ -315,7 +315,7 @@ Response Body: Empty if succeeded (`200`), otherwise (`400`) or (`401`) with err
 All actions related to user accounts, an account can be uniquely identified by the `username`.
 
 | Method | URL                  | Description                              | Login Required |
-| ------ | -------------------- | --------------------------------------   | -------------- |
+| ------ | -------------------- | ---------------------------------------- | -------------- |
 | GET    | /user/{username}     | Return the info of a user.               | No             |
 | PUT    | /me/bio              | Modify the bio of the current user.      | Yes            |
 | POST   | /me/save/{articleID} | Save the article for the current user.   | Yes            |
@@ -359,7 +359,93 @@ Request Body: Empty
 Response Body: Empty if succeeded (`200`), otherwise (`401`) or (`400`) with error message.
 
 ### Subreddit
-TODO
+All actions related to subreddits, a subreddit can be uniquely identified by its subreddit name.
+
+| Method | URL                  | Description                              | Login Required |
+| ------ | -------------------- | ---------------------------------------- | -------------- |
+| GET    | /subreddit/{name}    | Return the subreddit {name}.             | No             |
+| POST   | /subreddit           | Add a new subreddit.                     | Yes            |
+| GET    | /trending            | Return the a list of trending subreddits.| No             |
+
+#### GET `/subreddit/{name}`
+Return the subreddit info of {name}.
+
+Response Body:
+
+```
+{
+    "name": "The name of the subreddit.",
+    "description": "The description of the subreddit."
+}
+```
+
+#### POST `/subreddit`
+Create a new subreddit.
+
+Request Body:
+
+```
+{
+    "name": "The name of the subreddit.",
+    "description": "The description of the subreddit."
+}
+```
+
+Response Body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
+
+#### GET `/trending`
+Return a list of trending subreddit.
+
+Request query strings:
+
+| Query String | Value       | Default | Note                                     |
+| ------------ | ----------- | ------- | ---------------------------------------- |
+| limit        | integer     | 5       | The number of subreddits to be returned. |
+
+Response Body:
+
+```
+{
+    subreddits: [
+        {
+            "name": "The name of the subreddit.",
+            "description": "The description of the subreddit."
+        },
+        ...
+    ]
+}
+```
 
 ### Karma
-TODO
+Upvote and downvote.
+
+| Method | URL                   | Description                              | Login Required |
+| ------ | --------------------- | ---------------------------------------- | -------------- |
+| POST   | /karma/article/{aid}  | Upvote or downvote an article.           | Yes            |
+| POST   | /karma/comment/{cid}  | Upvote or downvote a comment.            | Yes            |
+
+#### POST `/karma/article/{aid}`
+Upvote or downvote an article.
+
+Request body:
+```
+{
+    "articleID": "The id of the article.",
+    "action": "upvote"
+}
+```
+
+Response body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
+
+#### POST `/karma/comment/{cid}`
+Upvote or downvote a comment.
+
+Request body:
+```
+{
+    "commentID": "The id of the comment.",
+    "action": "upvote"
+}
+```
+
+Response body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
