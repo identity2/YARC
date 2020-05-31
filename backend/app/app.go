@@ -67,7 +67,43 @@ func (a *App) InitializeAndRun(config *config.Config) {
 
 // setRouters sets all the routers of the API.
 func (a *App) setRouters() {
+	// Home and ping.
 	a.Get("/", a.handler.Home)
+	a.Get("/ping", a.handler.Ping)
+
+	// Authentication.
+	a.Post("/login", a.handler.Login)
+	a.Post("/register", a.handler.Register)
+	a.Post("/logout", a.handler.Logout)
+
+	// Article.
+	a.Get("/article", a.handler.ListArticle)
+	a.Get("/article/{articleID}", a.handler.Article)
+	a.Post("/article", a.handler.NewArticle)
+	a.Put("/article/{articleID}", a.handler.ModifyArticle)
+	a.Delete("/article/{articleID}", a.handler.DeleteArticle)
+
+	// Comment.
+	a.Get("/comment", a.handler.ListComment)
+	a.Get("/comment/{id}", a.handler.Comment)
+	a.Post("/comment", a.handler.NewComment)
+	a.Put("/comment/{id}", a.handler.ModifyComment)
+	a.Delete("/comment/{id}", a.handler.DeleteComment)
+
+	// Account.
+	a.Get("/user/{username}", a.handler.User)
+	a.Put("/me/bio", a.handler.ModifyBio)
+	a.Post("/me/save/{articleID}", a.handler.SaveArticle)
+	a.Post("/me/join/{subreddit}", a.handler.JoinSubreddit)
+
+	// Subreddit.
+	a.Get("/subreddit/{name}", a.handler.Subreddit)
+	a.Post("/subreddit", a.handler.NewSubreddit)
+	a.Get("/trending", a.handler.TrendingSubreddit)
+
+	// Karma.
+	a.Post("/karma/article/{articleID}", a.handler.VoteArticle)
+	a.Post("/karma/comment/{commentID}", a.handler.VoteComment)
 }
 
 // Get wraps the gorilla mux for GET method.

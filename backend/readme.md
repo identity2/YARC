@@ -419,12 +419,12 @@ Response Body:
 ### Karma
 Upvote and downvote.
 
-| Method | URL                   | Description                              | Login Required |
-| ------ | --------------------- | ---------------------------------------- | -------------- |
-| POST   | /karma/article/{aid}  | Upvote or downvote an article.           | Yes            |
-| POST   | /karma/comment/{cid}  | Upvote or downvote a comment.            | Yes            |
+| Method | URL                         | Description                              | Login Required |
+| ------ | --------------------------- | ---------------------------------------- | -------------- |
+| POST   | /karma/article/{articleID}  | Upvote or downvote an article.           | Yes            |
+| POST   | /karma/comment/{commentID}  | Upvote or downvote a comment.            | Yes            |
 
-#### POST `/karma/article/{aid}`
+#### POST `/karma/article/{articleID}`
 Upvote or downvote an article.
 
 Request body:
@@ -437,7 +437,7 @@ Request body:
 
 Response body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
 
-#### POST `/karma/comment/{cid}`
+#### POST `/karma/comment/{commentID}`
 Upvote or downvote a comment.
 
 Request body:

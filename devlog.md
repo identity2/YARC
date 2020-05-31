@@ -61,3 +61,7 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Fixed a bug in frontend. Editing articles no longer pass `prop`s as `v-model`s.
 * Completed the design of the RESTful API of backend. Documented in `backend/readme.md`.
 * Added `UNIQUE` constraints to `aid` and `cid` in database.
+
+## 2020.05.31
+* Wrote some backend router and handler code.
+* Did research on how to implement authentication.
