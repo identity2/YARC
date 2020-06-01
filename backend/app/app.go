@@ -74,7 +74,6 @@ func (a *App) setRouters() {
 	// Authentication.
 	a.Post("/login", a.handler.Login)
 	a.Post("/register", a.handler.Register)
-	a.Post("/logout", a.handler.Logout)
 
 	// Article.
 	a.Get("/article", a.handler.ListArticle)

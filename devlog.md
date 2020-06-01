@@ -65,3 +65,8 @@ I like to keep a chronological development log, so that I can regain my motivati
 ## 2020.05.31
 * Wrote some backend router and handler code.
 * Did research on how to implement authentication.
+
+## 2020.06.01
+* Wrote some account authentication code.
+* Removed to `/logout` API because I plan to use JWT, and I won't bother doing token invalidation.
+* Named primary key constraints in the database.

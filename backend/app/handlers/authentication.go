@@ -13,9 +13,3 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) Register(w http.ResponseWriter, r *http.Request) {
 
 }
-
-// Logout clears the session of a user.
-// Routed from POST "/logout".
-func (h *Handler) Logout(w http.ResponseWriter, r *http.Request) {
-
-}

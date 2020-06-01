@@ -1,16 +1,16 @@
 -- An account wouldn't be deleted once created.
 CREATE TABLE account (
-    username VARCHAR(20) PRIMARY KEY,
+    username VARCHAR(20) CONSTRAINT username_unique PRIMARY KEY,
     hashed_password CHAR(60) NOT NULL,
     email VARCHAR(256) NOT NULL CONSTRAINT email_unique UNIQUE,
-    karma INT NOT NULL,
-    bio VARCHAR(60) NOT NULL,
+    karma INT DEFAULT 0,
+    bio VARCHAR(60) DEFAULT '',
     join_time TIME NOT NULL
 );
 
 -- A subreddit wouldn't be deleted once created.
 CREATE TABLE subreddit (
-    sub_name VARCHAR(16) PRIMARY KEY,
+    sub_name VARCHAR(16) CONSTRAINT sub_name_unique PRIMARY KEY,
     description VARCHAR(512) NOT NULL
 );
 
