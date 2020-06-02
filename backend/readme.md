@@ -7,6 +7,13 @@ This is the backend of YARC developed with Go.
 
 ## API
 
+### Authorization
+Some of the requests require the user to be logged in. After logging in using `POST /login`, the user would request a token string. When performing login-required requests, the user should add the authorization header as follows:
+
+```
+Authorization: Bearer theTokenGoesHere
+```
+
 ### GET `/`
 Redirects to this readme page on GitHub.
 
@@ -38,7 +45,17 @@ Request body:
 }
 ```
 
-Response body: Empty if success (`200`), otherwise (`400`) with error message:
+Response body:
+
+If succeeded (`200`),
+
+```
+{
+    "token": "the authorization token string."
+}
+```
+
+Otherwise (`400`) with error message:
 
 ```
 { "error": "The reason of failure." }

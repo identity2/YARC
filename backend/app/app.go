@@ -24,7 +24,7 @@ type App struct {
 }
 
 // InitializeAndRun initializes the app with predefined configuration, and run the app.
-func (a *App) InitializeAndRun(config *config.Config) {
+func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 	// PostgreSQL connection.
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		config.DB.Host,
@@ -42,9 +42,10 @@ func (a *App) InitializeAndRun(config *config.Config) {
 	}
 	defer db.Close()
 	a.handler = &handlers.Handler{
-		Accounts:   &models.AccountModel{DB: db},
-		Comments:   &models.CommentModel{DB: db},
-		Subreddits: &models.SubredditModel{DB: db},
+		Accounts:     &models.AccountModel{DB: db},
+		Comments:     &models.CommentModel{DB: db},
+		Subreddits:   &models.SubredditModel{DB: db},
+		JWTSecretKey: jwtSecretKey,
 	}
 
 	// Router.
@@ -67,6 +68,12 @@ func (a *App) InitializeAndRun(config *config.Config) {
 
 // setRouters sets all the routers of the API.
 func (a *App) setRouters() {
+	// Universal middlewares.
+	a.router.Use(handlers.RecoverPanic, handlers.LogRequest)
+
+	// Abbreviations, to make code more succinct.
+	auth := a.handler.Authorize
+
 	// Home and ping.
 	a.Get("/", a.handler.Home)
 	a.Get("/ping", a.handler.Ping)
@@ -78,31 +85,31 @@ func (a *App) setRouters() {
 	// Article.
 	a.Get("/article", a.handler.ListArticle)
 	a.Get("/article/{articleID}", a.handler.Article)
-	a.Post("/article", a.handler.NewArticle)
-	a.Put("/article/{articleID}", a.handler.ModifyArticle)
-	a.Delete("/article/{articleID}", a.handler.DeleteArticle)
+	a.Post("/article", auth(a.handler.NewArticle))
+	a.Put("/article/{articleID}", auth(a.handler.ModifyArticle))
+	a.Delete("/article/{articleID}", auth(a.handler.DeleteArticle))
 
 	// Comment.
 	a.Get("/comment", a.handler.ListComment)
 	a.Get("/comment/{id}", a.handler.Comment)
-	a.Post("/comment", a.handler.NewComment)
-	a.Put("/comment/{id}", a.handler.ModifyComment)
-	a.Delete("/comment/{id}", a.handler.DeleteComment)
+	a.Post("/comment", auth(a.handler.NewComment))
+	a.Put("/comment/{id}", auth(a.handler.ModifyComment))
+	a.Delete("/comment/{id}", auth(a.handler.DeleteComment))
 
 	// Account.
 	a.Get("/user/{username}", a.handler.User)
-	a.Put("/me/bio", a.handler.ModifyBio)
-	a.Post("/me/save/{articleID}", a.handler.SaveArticle)
-	a.Post("/me/join/{subreddit}", a.handler.JoinSubreddit)
+	a.Put("/me/bio", auth(a.handler.ModifyBio))
+	a.Post("/me/save/{articleID}", auth(a.handler.SaveArticle))
+	a.Post("/me/join/{subreddit}", auth(a.handler.JoinSubreddit))
 
 	// Subreddit.
 	a.Get("/subreddit/{name}", a.handler.Subreddit)
-	a.Post("/subreddit", a.handler.NewSubreddit)
-	a.Get("/trending", a.handler.TrendingSubreddit)
+	a.Post("/subreddit", auth(a.handler.NewSubreddit))
+	a.Get("/trending", auth(a.handler.TrendingSubreddit))
 
 	// Karma.
-	a.Post("/karma/article/{articleID}", a.handler.VoteArticle)
-	a.Post("/karma/comment/{commentID}", a.handler.VoteComment)
+	a.Post("/karma/article/{articleID}", auth(a.handler.VoteArticle))
+	a.Post("/karma/comment/{commentID}", auth(a.handler.VoteComment))
 }
 
 // Get wraps the gorilla mux for GET method.

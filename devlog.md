@@ -70,3 +70,7 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Wrote some account authentication code.
 * Removed to `/logout` API because I plan to use JWT, and I won't bother doing token invalidation.
 * Named primary key constraints in the database.
+
+## 2020.06.02
+* Implemented middlewares: Recover Panic, Logger, Authorization.
+* Completed the APIs of `/login` and `/register`.
