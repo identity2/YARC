@@ -45,6 +45,8 @@ func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 		Accounts:     &models.AccountModel{DB: db},
 		Comments:     &models.CommentModel{DB: db},
 		Subreddits:   &models.SubredditModel{DB: db},
+		Articles:     &models.ArticleModel{DB: db},
+		Searches:     &models.SearchModel{DB: db},
 		JWTSecretKey: jwtSecretKey,
 	}
 
@@ -84,10 +86,10 @@ func (a *App) setRouters() {
 
 	// Article.
 	a.Get("/article", a.handler.ListArticle)
-	a.Get("/article/{articleID}", a.handler.Article)
+	a.Get("/article/{id}", a.handler.Article)
 	a.Post("/article", auth(a.handler.NewArticle))
-	a.Put("/article/{articleID}", auth(a.handler.ModifyArticle))
-	a.Delete("/article/{articleID}", auth(a.handler.DeleteArticle))
+	a.Put("/article/{id}", auth(a.handler.ModifyArticle))
+	a.Delete("/article/{id}", auth(a.handler.DeleteArticle))
 
 	// Comment.
 	a.Get("/comment", a.handler.ListComment)
@@ -108,8 +110,8 @@ func (a *App) setRouters() {
 	a.Get("/trending", auth(a.handler.TrendingSubreddit))
 
 	// Karma.
-	a.Post("/karma/article/{articleID}", auth(a.handler.VoteArticle))
-	a.Post("/karma/comment/{commentID}", auth(a.handler.VoteComment))
+	a.Post("/karma/article/{id}", auth(a.handler.VoteArticle))
+	a.Post("/karma/comment/{id}", auth(a.handler.VoteComment))
 }
 
 // Get wraps the gorilla mux for GET method.

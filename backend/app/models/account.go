@@ -25,13 +25,26 @@ type UserInfo struct {
 	Bio      string `json:"bio"`
 }
 
-var errUsernameInvalid = errors.New("the username should be 3-20 alphanumerical or underscore characters")
-var errUsernameDup = errors.New("the username is used")
-var errPasswordInvalid = errors.New("the password should be 6-20 alphanumerical or underscore characters")
-var errEmailInvalid = errors.New("the email has invalid format")
-var errEmailDup = errors.New("the email is used")
-var errAccountInfoMismatch = errors.New("the username and password does not match")
-var errUsernameNotExist = errors.New("the username does not exist")
+// ErrUsernameInvalid means the username contains illegal characters or is too long/short.
+var ErrUsernameInvalid = errors.New("the username should be 3-20 alphanumerical or underscore characters")
+
+// ErrUsernameDup means the username already exists in the database.
+var ErrUsernameDup = errors.New("the username is used")
+
+// ErrPasswordInvalid means the password contains illegal characters or is too long/short.
+var ErrPasswordInvalid = errors.New("the password should be 6-20 alphanumerical or underscore characters")
+
+// ErrEmailInvalid means the format of the email is invalid.
+var ErrEmailInvalid = errors.New("the email has invalid format")
+
+// ErrEmailDup means the email already exists in the database.
+var ErrEmailDup = errors.New("the email is used")
+
+// ErrAccountInfoMismatch means the username and password provided doesn't match.
+var ErrAccountInfoMismatch = errors.New("the username and password does not match")
+
+// ErrUsernameNotExist means the username doesn't exist in the database.
+var ErrUsernameNotExist = errors.New("the username does not exist")
 
 var usernamePasswordRegExp = regexp.MustCompile("^[a-zA-Z0-9_]*$")
 var emailRegExp = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -46,18 +59,18 @@ func (m *AccountModel) Insert(username, email, password string) error {
 	// Validate the username.
 	usernameLen := len(username)
 	if usernameLen < usernameMinLen || usernameLen > usernameMaxLen || !usernamePasswordRegExp.MatchString(username) {
-		return errUsernameInvalid
+		return ErrUsernameInvalid
 	}
 
 	// Validate the email.
 	if !emailRegExp.MatchString(email) {
-		return errEmailInvalid
+		return ErrEmailInvalid
 	}
 
 	// Validate the password.
 	passwordLen := len(password)
 	if passwordLen < passwordMinLen || passwordLen > passwordMaxLen || !usernamePasswordRegExp.MatchString(password) {
-		return errPasswordInvalid
+		return ErrPasswordInvalid
 	}
 
 	// Hash the password.
@@ -71,14 +84,14 @@ func (m *AccountModel) Insert(username, email, password string) error {
 	_, err = m.DB.Exec(stmt, username, hashedPassword, email, time.Now().UTC())
 	if err, ok := err.(*pq.Error); ok {
 		if strings.Contains(err.Message, "username_unique") {
-			return errUsernameDup
+			return ErrUsernameDup
 		} else if strings.Contains(err.Message, "email_unique") {
-			return errEmailDup
+			return ErrEmailDup
 		}
 		return err
 	}
 
-	// Successfully insert to the database.
+	// Successfully inserted to the database.
 	return nil
 }
 
@@ -93,17 +106,33 @@ func (m *AccountModel) Authenticate(username, password string) error {
 
 	err := row.Scan(&hashedPassword)
 	if err != nil {
-		return errUsernameNotExist
+		return ErrUsernameNotExist
 	}
 
 	// Validate the password.
 	err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password))
 	if err != nil {
-		return errAccountInfoMismatch
+		return ErrAccountInfoMismatch
 	}
 
-	// TODO: Issue a JWT token. (Maybe do this in another function).
+	return nil
+}
 
+// ModifyBio modifies bio of the user.
+func (m *AccountModel) ModifyBio(username, newBio string) error {
+	// TODO
+	return nil
+}
+
+// SaveArticle saves an article for the user.
+func (m *AccountModel) SaveArticle(articleID, username string) error {
+	// TODO
+	return nil
+}
+
+// JoinSubreddit lets the user join a subreddit.
+func (m *AccountModel) JoinSubreddit(subName, username string) error {
+	// TODO
 	return nil
 }
 

@@ -145,8 +145,7 @@ Request Body:
     "subreddit": "The subreddit the article is in.",
     "type": "text/image/link",
     "body": "Text post body / Image URL / Link URL",
-    "title": "The title of the article.",
-    "postedBy": "username"
+    "title": "The title of the article."
 }
 ```
 

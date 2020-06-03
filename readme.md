@@ -3,11 +3,30 @@
 ## What's the point?
 I plan to get a web backend job after university, but I have zero web projects to show off. Therefore, I figured I might as well start building a web project to demonstrate my web skills.
 
+## Features
+* Create, join subreddits.
+* Post, edit, delete, vote, save articles.
+* Post, edit, delete, vote comments.
+* View articles posted and saved, comments posted of a user.
+* Karma system for articles, comments, and user.
+* Subreddit and article searching.
+
 ## Tech Stack
-* Frontend: Vue (Vuex + Vue-Router + Quasar)
-* Backend: Go (Gorilla)
-* Database: PostgreSQL + Redis
-* Container: Docker
+* Frontend: Vue
+* Backend: Go
+* Database: PostgreSQL + (maybe) Redis
+* (maybe) Container: Docker
+
+### Vue Package Used
+* Vuex
+* Vue-Router
+* Quasar
+
+### Go Package Used
+* gorilla/mux
+* lib/pq (PostgreSQL driver)
+* dgrijalva/jwt-go
+* teris-io/shortid,
 
 ### Why Go and Vue?
 I like Go and Vue.
@@ -28,11 +47,8 @@ I like Reddit.
 
 ## Backend Milestones
 - [x] Design API and database schema.
-- [ ] Retrieve article lists.
-- [ ] Article CRUD.
-- [ ] Comment CRUD (allow only single layer).
-- [ ] Login/Register, OAuth (Reddit/Twitter).
-- [ ] User profile CRU.
-- [ ] Search System.
-- [ ] Upvotes, downvotes for articles and comments.
-- [ ] Karma system.
+- [ ] Subreddit APIs.
+- [ ] Article APIs.
+- [ ] Comment APIs.
+- [ ] Karma APIs.
+- [ ] Search API.

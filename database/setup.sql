@@ -3,7 +3,6 @@ CREATE TABLE account (
     username VARCHAR(20) CONSTRAINT username_unique PRIMARY KEY,
     hashed_password CHAR(60) NOT NULL,
     email VARCHAR(256) NOT NULL CONSTRAINT email_unique UNIQUE,
-    karma INT DEFAULT 0,
     bio VARCHAR(60) DEFAULT '',
     join_time TIME NOT NULL
 );
@@ -29,7 +28,6 @@ CREATE TABLE article (
     type VARCHAR(8) NOT NULL,
     body VARCHAR(1024) NOT NULL,
     title VARCHAR(128) NOT NULL,
-    points INT NOT NULL,
     posted_by VARCHAR(20) NOT NULL,
     posted_time TIME NOT NULL,
     PRIMARY KEY (sub_name, aid),
@@ -44,7 +42,6 @@ CREATE TABLE comment (
     aid VARCHAR(16) NOT NULL,
     cid VARCHAR(16) NOT NULL CONSTRAINT cid_unique UNIQUE,
     body VARCHAR(512) NOT NULL,
-    points INT NOT NULL,
     posted_by VARCHAR(20) NOT NULL,
     posted_time TIME NOT NULL,
     PRIMARY KEY (sub_name, aid, cid),
@@ -62,4 +59,33 @@ CREATE TABLE save_article (
     FOREIGN KEY (username) REFERENCES account (username),
     FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
     FOREIGN KEY (aid) REFERENCES article (aid) ON DELETE CASCADE
+);
+
+-- If the upvoted article is deleted, the vote_article entry will also be deleted.
+CREATE TABLE vote_article (
+    username VARCHAR(20) NOT NULL,
+    sub_name VARCHAR(16) NOT NULL,
+    aid VARCHAR(16) NOT NULL,
+    positive BOOLEAN NOT NULL,
+    PRIMARY KEY (username, sub_name, aid),
+    FOREIGN KEY (username) REFERENCES account (username),
+    FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
+    FOREIGN KEY (aid) REFERENCES article (aid) ON DELETE CASCADE
+);
+
+-- If the upvoted article or comment is deleted, the vote_comment entry will also be deleted.
+-- Design note: Probably not that scalable that I treat article and comment as two different
+-- entity, so that vote_article and vote_comment have to be separated. However, this works
+-- fine for this small and simple app that wouldn't grow.
+CREATE TABLE vote_comment (
+    username VARCHAR(20) NOT NULL,
+    sub_name VARCHAR(16) NOT NULL,
+    aid VARCHAR(16) NOT NULL,
+    cid VARCHAR(16) NOT NULL,
+    positive BOOLEAN NOT NULL,
+    PRIMARY KEY (username, sub_name, aid, cid),
+    FOREIGN KEY (username) REFERENCES account (username),
+    FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
+    FOREIGN KEY (aid) REFERENCES article (aid) ON DELETE CASCADE,
+    FOREIGN KEY (cid) REFERENCES comment (cid) ON DELETE CASCADE
 );

@@ -74,3 +74,12 @@ I like to keep a chronological development log, so that I can regain my motivati
 ## 2020.06.02
 * Implemented middlewares: Recover Panic, Logger, Authorization.
 * Completed the APIs of `/login` and `/register`.
+
+## 2020.06.03
+* Redesigned the database so that the karma system is can work correctly.
+* Completed the APIs of `GET /subreddit/{name}` and `POST /subreddit`.
+* Completed the APIs of `DELETE, PUT, GET /article/{id}` and `POST /article`.
+* Added files mock models for writing tests.
+
+## TODO
+* Write tests for existing APIs.

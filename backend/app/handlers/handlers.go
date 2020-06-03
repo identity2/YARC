@@ -13,11 +13,60 @@ const (
 	documentationURL = "https://github.com/YuChaoGithub/YARC/tree/master/backend"
 )
 
+// Design notes: The point of defining all these interfaces is that
+// we could insert stubs with the same interfaces to perform tests.
+
+// AccountModel defines the operations related to account.
+type AccountModel interface {
+	Insert(string, string, string) error
+	Authenticate(string, string) error
+	ModifyBio(string, string) error
+	SaveArticle(string, string) error
+	JoinSubreddit(string, string) error
+	Get(string) (models.UserInfo, error)
+}
+
+// SubredditModel defines the operations related to subreddit.
+type SubredditModel interface {
+	Insert(string, string) error
+	Get(string) (models.SubredditInfo, error)
+	GetTrending(int) ([]models.SubredditInfo, error)
+}
+
+// CommentModel defines the operations related to comment.
+type CommentModel interface {
+	Insert(string, string, string, string) (string, error)
+	ModifyBody(string, string, string) error
+	Delete(string, string) error
+	GetByArticle(string, string, int) ([]models.CommentInfo, error)
+	GetByUsername(string, string, int) ([]models.CommentInfo, error)
+	GetPoints(string) (int, error)
+}
+
+// ArticleModel defines the operations related to article.
+type ArticleModel interface {
+	Insert(string, string, string, string, string) (string, error)
+	ModifyBody(string, string, string) error
+	Delete(string, string) error
+	Get(string) (models.ArticleInfo, error)
+	GetBySubreddit(string, string, string, int) ([]models.ArticleInfo, error)
+	GetByUser(string, string, string, int) ([]models.ArticleInfo, error)
+	GetSavedByUser(string, string, string, int) ([]models.ArticleInfo, error)
+	GetPoints(string) (int, error)
+}
+
+// SearchModel defines the operations related to searching.
+type SearchModel interface {
+	GetResult(string) (models.SearchResults, error)
+}
+
 // Handler contains a database so that all handlers could access it.
 type Handler struct {
-	Accounts     *models.AccountModel
-	Subreddits   *models.SubredditModel
-	Comments     *models.CommentModel
+	Accounts     AccountModel
+	Subreddits   SubredditModel
+	Comments     CommentModel
+	Articles     ArticleModel
+	Searches     SearchModel
 	JWTSecretKey string
 }
 
