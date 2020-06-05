@@ -10,12 +10,15 @@ func (m *SubredditModel) Insert(name, description string) error {
 	return nil
 }
 
-// Get TODO.
+// Get only returns a result when name is "radiohead".
 func (m *SubredditModel) Get(name string) (models.SubredditInfo, error) {
-	return models.SubredditInfo{
-		Name:        "radiohead",
-		Description: "Dedicated to all human beings.",
-	}, nil
+	if name == "radiohead" {
+		return models.SubredditInfo{
+			Name:        "radiohead",
+			Description: "Dedicated to all human beings.",
+		}, nil
+	}
+	return models.SubredditInfo{}, models.ErrSubredditNotExist
 }
 
 // GetTrending TODO.

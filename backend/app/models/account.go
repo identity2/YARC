@@ -38,7 +38,7 @@ var ErrPasswordInvalid = errors.New("the password should be 6-20 alphanumerical 
 var ErrEmailInvalid = errors.New("the email has invalid format")
 
 // ErrEmailDup means the email already exists in the database.
-var ErrEmailDup = errors.New("the email is used")
+var ErrEmailDup = errors.New("the email is already used")
 
 // ErrAccountInfoMismatch means the username and password provided doesn't match.
 var ErrAccountInfoMismatch = errors.New("the username and password does not match")

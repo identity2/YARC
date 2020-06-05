@@ -110,9 +110,14 @@ func (m *ArticleModel) ModifyBody(articleID, username, body string) error {
 
 	// Update the database.
 	stmt := `UPDATE article SET body = $1 WHERE aid = $2 AND posted_by = $3 AND type = 'text'`
-	_, err := m.DB.Exec(stmt, body, articleID, username)
+	res, err := m.DB.Exec(stmt, body, articleID, username)
 	if err != nil {
 		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrArticleNotExist
 	}
 
 	// Successfully updated the article.
@@ -122,9 +127,14 @@ func (m *ArticleModel) ModifyBody(articleID, username, body string) error {
 // Delete deletes an article if the user is authorized to do so.
 func (m *ArticleModel) Delete(articleID, username string) error {
 	stmt := `DELETE FROM article WHERE aid = $1 AND posted_by = $2`
-	_, err := m.DB.Exec(stmt, articleID, username)
+	res, err := m.DB.Exec(stmt, articleID, username)
 	if err != nil {
 		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrArticleNotExist
 	}
 
 	// Successfully deleted the article.

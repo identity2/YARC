@@ -5,14 +5,24 @@ import "github.com/YuChaoGithub/YARC/backend/app/models"
 // AccountModel is a mock account model.
 type AccountModel struct{}
 
-// Insert TODO.
+// Insert only returns ErrEmailDup if the email is "mobile@blizzard.com.hk".
 func (m *AccountModel) Insert(username, email, password string) error {
+	if email == "mobile@blizzard.com.hk" {
+		return models.ErrEmailDup
+	}
 	return nil
 }
 
-// Authenticate TODO.
+// Authenticate only returns nil when username is "mediocre_nothingness" and password "pasword".
 func (m *AccountModel) Authenticate(username, password string) error {
-	return nil
+	if username == "mediocre_nothingness" {
+		if password == "password" {
+			return nil
+		}
+		return models.ErrAccountInfoMismatch
+	}
+
+	return models.ErrUsernameNotExist
 }
 
 // ModifyBio TODO.

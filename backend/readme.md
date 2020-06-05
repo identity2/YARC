@@ -55,7 +55,7 @@ If succeeded (`200`),
 }
 ```
 
-Otherwise (`400`) with error message:
+Otherwise (`400`) or (`401`) with error message:
 
 ```
 { "error": "The reason of failure." }
@@ -171,14 +171,14 @@ Request Body:
 }
 ```
 
-Response Body: Empty if succeeded (`200`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
 
 #### DELETE `/article/{id}`
 The article {id} will be deleted.
 
 Request Body: Empty.
 
-Response Body: Empty if succeeded (`200`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
 
 ### Search
 Searches for both articles and subreddits.
@@ -310,14 +310,14 @@ Request Body:
     "body": "The updated text body."
 }
 
-Response Body: Empty if succeeded (`200`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
 
 #### DELETE `/comment/{id}`
 Delete the comment {id}.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`200`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
 
 
 ### Account
@@ -351,21 +351,21 @@ Request Body:
 {"bio": "Updated short bio of the username"}
 ```
 
-Response Body: Empty if succeeded (`200`), otherwise (`401`) or (`400`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`401`) or (`400`) with error message.
 
 #### POST `/me/save/{articleID}`
 Save the article {articleID} for the current user.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`200`), otherwise (`401`) or (`400`) with error message.
+Response Body: Empty if succeeded (`201`), otherwise (`401`) or (`400`) with error message.
 
 #### POST `/me/join/{subreddit}`
 Join the subreddit {subreddit} for the current user.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`200`), otherwise (`401`) or (`400`) with error message.
+Response Body: Empty if succeeded (`201`), otherwise (`401`) or (`400`) with error message.
 
 ### Subreddit
 All actions related to subreddits, a subreddit can be uniquely identified by its subreddit name.

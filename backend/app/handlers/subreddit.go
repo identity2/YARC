@@ -20,11 +20,11 @@ func (h *Handler) Subreddit(w http.ResponseWriter, r *http.Request) {
 	name := mux.Vars(r)["name"]
 	resp, err := h.Subreddits.Get(name)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err)
+		respondWithError(w, http.StatusNotFound, err)
 		return
 	}
 
-	jsonResponse(w, resp)
+	jsonResponse(w, http.StatusOK, resp)
 }
 
 // NewSubreddit adds a new subreddit to the database.

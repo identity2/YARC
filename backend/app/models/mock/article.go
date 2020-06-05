@@ -9,18 +9,33 @@ import (
 // ArticleModel is the mock model for article.
 type ArticleModel struct{}
 
-// Insert always returns "WX-78", nil.
-func (m *ArticleModel) Insert(string, string, string, string, string) (string, error) {
+// Insert returns errSubredditNotExist if the subreddit is "dankmeme",
+// otherwise it returns "WX-78", nil.
+func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (string, error) {
+	if subName == "dankmeme" {
+		return "", models.ErrSubredditNotExist
+	}
+
 	return "WX-78", nil
 }
 
-// ModifyBody always returns nil.
-func (m *ArticleModel) ModifyBody(string, string, string) error {
+// ModifyBody returns errArticleNotExist if articleID is "Dijkstra",
+// other it returns nil.
+func (m *ArticleModel) ModifyBody(articleID, username, body string) error {
+	if articleID == "Dijkstra" {
+		return models.ErrArticleNotExist
+	}
+
 	return nil
 }
 
-// Delete always returns nil.
-func (m *ArticleModel) Delete(string, string) error {
+// Delete returns errArticleNotExist if articleID is "Dijkstra",
+// otherwise it returns nil.
+func (m *ArticleModel) Delete(articleID, username string) error {
+	if articleID == "Dijkstra" {
+		return models.ErrArticleNotExist
+	}
+
 	return nil
 }
 

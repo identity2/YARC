@@ -84,14 +84,14 @@ func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
 }
 
 // jsonResponse responds with a JSON formatted payload.
-func jsonResponse(w http.ResponseWriter, resp interface{}) {
+func jsonResponse(w http.ResponseWriter, statusCode int, resp interface{}) {
 	json, err := json.Marshal(resp)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(statusCode)
 	w.Header().Set("content-type", "application/json")
 	w.Write(json)
 }
@@ -104,11 +104,7 @@ func respondWithError(w http.ResponseWriter, statusCode int, err error) {
 		ErrStr: err.Error(),
 	}
 
-	json, err := json.Marshal(resp)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	json, _ := json.Marshal(resp)
 
 	w.WriteHeader(statusCode)
 	w.Header().Set("content-type", "application/json")

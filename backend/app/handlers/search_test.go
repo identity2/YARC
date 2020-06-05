@@ -1,3 +1,7 @@
 package handlers
 
-// TODO
+import "testing"
+
+func TestSearch(t *testing.T) {
+	// TODO
+}

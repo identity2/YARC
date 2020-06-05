@@ -43,7 +43,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	// Validate the username and password.
 	err = h.Accounts.Authenticate(req.Username, req.Password)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err)
+		respondWithError(w, http.StatusUnauthorized, err)
 		return
 	}
 
@@ -66,7 +66,7 @@ func (h *Handler) Login(w http.ResponseWriter, r *http.Request) {
 	}{
 		Token: tokenStr,
 	}
-	jsonResponse(w, resp)
+	jsonResponse(w, http.StatusOK, resp)
 }
 
 // Register validates the request and adds a new user to the database.

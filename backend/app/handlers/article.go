@@ -2,10 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"log"
 	"net/http"
 
+	"github.com/YuChaoGithub/YARC/backend/app/models"
 	"github.com/gorilla/mux"
 )
 
@@ -32,7 +34,7 @@ func (h *Handler) Article(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jsonResponse(w, resp)
+	jsonResponse(w, http.StatusOK, resp)
 }
 
 // NewArticle adds a new article to the database.
@@ -59,6 +61,10 @@ func (h *Handler) NewArticle(w http.ResponseWriter, r *http.Request) {
 
 	// Insert to database.
 	articleID, err := h.Articles.Insert(req.Subreddit, req.Type, req.Body, req.Title, username)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
 
 	// Respond with the inserted articleID.
 	resp := struct {
@@ -67,7 +73,7 @@ func (h *Handler) NewArticle(w http.ResponseWriter, r *http.Request) {
 		ArticleID: articleID,
 	}
 
-	jsonResponse(w, resp)
+	jsonResponse(w, http.StatusCreated, resp)
 }
 
 // ModifyArticle changes an article to the new content.
@@ -98,12 +104,16 @@ func (h *Handler) ModifyArticle(w http.ResponseWriter, r *http.Request) {
 	// Modify the entry in database.
 	err = h.Articles.ModifyBody(articleID, username, req.Body)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err)
+		if errors.Is(err, models.ErrArticleNotExist) {
+			respondWithError(w, http.StatusNotFound, err)
+		} else {
+			respondWithError(w, http.StatusBadRequest, err)
+		}
 		return
 	}
 
 	// Successfully modified.
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // DeleteArticle deletes an article in the database.
@@ -116,10 +126,14 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	// Delete the entry in database.
 	err := h.Articles.Delete(articleID, username)
 	if err != nil {
-		respondWithError(w, http.StatusBadRequest, err)
+		if errors.Is(err, models.ErrArticleNotExist) {
+			respondWithError(w, http.StatusNotFound, err)
+		} else {
+			respondWithError(w, http.StatusBadRequest, err)
+		}
 		return
 	}
 
 	// Successfully deleted.
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusNoContent)
 }

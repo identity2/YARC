@@ -81,5 +81,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Completed the APIs of `DELETE, PUT, GET /article/{id}` and `POST /article`.
 * Added files mock models for writing tests.
 
+## 2020.06.05
+* Modified some HTTP response code from `200` to `204` and some from `401` to `404`.
+* Wrote tests for handlers. Very tiring, but kind of learned some stuff about testing.
+* Added mock data in database for testing.
+
 ## TODO
-* Write tests for existing APIs.
+* Write tests for models.
