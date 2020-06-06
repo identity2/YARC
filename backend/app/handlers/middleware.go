@@ -13,7 +13,8 @@ import (
 )
 
 const (
-	jwtTokenLifetimeInDays = 7
+	jwtTokenLifetimeInDays   = 7
+	allowAccessControlOrigin = "http://127.0.0.1:80"
 )
 
 type contextKey string
@@ -28,12 +29,20 @@ func LogRequest(next http.Handler) http.Handler {
 	})
 }
 
+// AddCORSHeader adds the Access-Control-Allow-Origin header to the response.
+func AddCORSHeader(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", allowAccessControlOrigin)
+		next.ServeHTTP(w, r)
+	})
+}
+
 // RecoverPanic recovers the server from panic (if there is any) and responds with internal server error.
 func RecoverPanic(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
 			if err := recover(); err != nil {
-				w.Header().Set("connection", "close")
+				w.Header().Set("Connection", "close")
 				log.Printf("%s\n%s\n", fmt.Errorf("%s", err), debug.Stack())
 				w.WriteHeader(http.StatusInternalServerError)
 			}
@@ -60,6 +69,9 @@ func (h *Handler) Authorize(next http.HandlerFunc) http.HandlerFunc {
 			respondWithError(w, http.StatusUnauthorized, err)
 			return
 		}
+
+		// Add Cache-Control header.
+		w.Header().Add("Cache-Control", "no-store")
 
 		// Save the username in the context so that the next handler can retreive it.
 		ctx := context.WithValue(r.Context(), usernameCtxKey, username)

@@ -86,5 +86,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Wrote tests for handlers. Very tiring, but kind of learned some stuff about testing.
 * Added mock data in database for testing.
 
+## 2020.06.06
+* Modified some model functions to return errors when no rows are changed under Modify and Delete operations.
+* Changed `positive BOOLEAN` to `point INTEGER` in `vote_article` and `vote_comment` table of the database, so getting the points of an article could be done easier by `SUM(point)`.
+* Wrote tests for models.
+
 ## TODO
-* Write tests for models.
+* Change the sorting UI of the article list in frontend to radio buttons.

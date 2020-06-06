@@ -37,6 +37,9 @@ var ErrArticleNotExist = errors.New("the article does not exist")
 // ErrGetPoints means some error occurred when getting points from the database.
 var ErrGetPoints = errors.New("error getting the points of the article")
 
+// ErrInvalidPostType means the post type is invalid.
+var ErrInvalidPostType = errors.New("the post type should be either 'text', 'image' or 'link'")
+
 // ArticleModel defines the database which the functions operate on.
 type ArticleModel struct {
 	DB *sql.DB
@@ -70,12 +73,14 @@ func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (
 		if len(body) > textPostMaxLen {
 			return "", ErrTextBodyInvalid
 		}
-	} else {
+	} else if postType == linkPost || postType == imagePost {
 		// Link or image post. (Image post is essentially a link to the image.)
 		u, err := url.Parse(body)
 		if err != nil || u.Scheme == "" || u.Host == "" || u.Path == "" {
 			return "", ErrLinkBodyInvalid
 		}
+	} else {
+		return "", ErrInvalidPostType
 	}
 
 	// Generate a short ID for the article.
@@ -153,10 +158,7 @@ func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 	}
 
 	// Get the points of the article.
-	a.Points, err = m.GetPoints(articleID)
-	if err != nil {
-		return a, ErrGetPoints
-	}
+	a.Points = m.GetPoints(articleID)
 
 	// Successfully selected the article.
 	return a, nil
@@ -184,7 +186,13 @@ func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string,
 }
 
 // GetPoints returns the total points of an article.
-func (m *ArticleModel) GetPoints(articleID string) (int, error) {
-	// TODO
-	return 42, nil
+// If error occurs when fetching the points, 0 will be returned.
+func (m *ArticleModel) GetPoints(articleID string) int {
+	stmt := `SELECT SUM(point) FROM vote_article WHERE aid = $1`
+	row := m.DB.QueryRow(stmt, articleID)
+
+	res := 0
+	row.Scan(&res)
+
+	return res
 }

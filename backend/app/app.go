@@ -71,7 +71,7 @@ func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 // setRouters sets all the routers of the API.
 func (a *App) setRouters() {
 	// Universal middlewares.
-	a.router.Use(handlers.RecoverPanic, handlers.LogRequest)
+	a.router.Use(handlers.RecoverPanic, handlers.LogRequest, handlers.AddCORSHeader)
 
 	// Abbreviations, to make code more succinct.
 	auth := a.handler.Authorize

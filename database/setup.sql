@@ -1,10 +1,12 @@
+SET timezone = 'UTC';
+
 -- An account wouldn't be deleted once created.
 CREATE TABLE account (
     username VARCHAR(20) CONSTRAINT username_unique PRIMARY KEY,
     hashed_password CHAR(60) NOT NULL,
     email VARCHAR(256) NOT NULL CONSTRAINT email_unique UNIQUE,
     bio VARCHAR(60) DEFAULT '',
-    join_time DATE NOT NULL
+    join_time TIMESTAMPTZ NOT NULL
 );
 
 -- A subreddit wouldn't be deleted once created.
@@ -29,7 +31,7 @@ CREATE TABLE article (
     body VARCHAR(1024) NOT NULL,
     title VARCHAR(128) NOT NULL,
     posted_by VARCHAR(20) NOT NULL,
-    posted_time DATE NOT NULL,
+    posted_time TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (sub_name, aid),
     FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
     FOREIGN KEY (posted_by) REFERENCES account (username)
@@ -43,7 +45,7 @@ CREATE TABLE comment (
     cid VARCHAR(16) NOT NULL CONSTRAINT cid_unique UNIQUE,
     body VARCHAR(512) NOT NULL,
     posted_by VARCHAR(20) NOT NULL,
-    posted_time DATE NOT NULL,
+    posted_time TIMESTAMPTZ NOT NULL,
     PRIMARY KEY (sub_name, aid, cid),
     FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
     FOREIGN KEY (aid) REFERENCES article (aid) ON DELETE CASCADE,
@@ -66,7 +68,7 @@ CREATE TABLE vote_article (
     username VARCHAR(20) NOT NULL,
     sub_name VARCHAR(16) NOT NULL,
     aid VARCHAR(16) NOT NULL,
-    positive BOOLEAN NOT NULL,
+    point INTEGER NOT NULL,
     PRIMARY KEY (username, sub_name, aid),
     FOREIGN KEY (username) REFERENCES account (username),
     FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),
@@ -82,7 +84,7 @@ CREATE TABLE vote_comment (
     sub_name VARCHAR(16) NOT NULL,
     aid VARCHAR(16) NOT NULL,
     cid VARCHAR(16) NOT NULL,
-    positive BOOLEAN NOT NULL,
+    point INTEGER NOT NULL,
     PRIMARY KEY (username, sub_name, aid, cid),
     FOREIGN KEY (username) REFERENCES account (username),
     FOREIGN KEY (sub_name) REFERENCES subreddit (sub_name),

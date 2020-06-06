@@ -1,3 +1,7 @@
 package models
 
-// TODO
+import "testing"
+
+func TestSearchGetResult(t *testing.T) {
+	// TODO
+}

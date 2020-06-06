@@ -3,7 +3,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/YuChaoGithub/YARC/backend/app/models"
@@ -52,7 +51,7 @@ type ArticleModel interface {
 	GetBySubreddit(string, string, string, int) ([]models.ArticleInfo, error)
 	GetByUser(string, string, string, int) ([]models.ArticleInfo, error)
 	GetSavedByUser(string, string, string, int) ([]models.ArticleInfo, error)
-	GetPoints(string) (int, error)
+	GetPoints(string) int
 }
 
 // SearchModel defines the operations related to searching.
@@ -80,7 +79,7 @@ func (h *Handler) Home(w http.ResponseWriter, r *http.Request) {
 // The client would use this as a connection test.
 // Routed from GET "/ping".
 func (h *Handler) Ping(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "ok")
+	w.Write([]byte("ok"))
 }
 
 // jsonResponse responds with a JSON formatted payload.

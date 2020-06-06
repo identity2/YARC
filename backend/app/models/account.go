@@ -20,9 +20,10 @@ const (
 
 // UserInfo stores the public information of an account.
 type UserInfo struct {
-	Username string `json:"username"`
-	Karma    int    `json:"karma"`
-	Bio      string `json:"bio"`
+	Username string    `json:"username"`
+	Karma    int       `json:"karma"`
+	Bio      string    `json:"bio"`
+	JoinTime time.Time `json:"joinTime"`
 }
 
 // ErrUsernameInvalid means the username contains illegal characters or is too long/short.

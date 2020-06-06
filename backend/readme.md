@@ -338,7 +338,8 @@ Response Body:
 {
     "username": "The username",
     "karma": 3,
-    "bio": "Short bio of the username"
+    "bio": "Short bio of the username",
+    "joinTime": "The date of joining yarc."
 }
 ```
 

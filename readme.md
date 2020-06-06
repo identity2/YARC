@@ -4,12 +4,14 @@
 I plan to get a web backend job after university, but I have zero web projects to show off. Therefore, I figured I might as well start building a web project to demonstrate my web skills.
 
 ## Features
+* Front page article list with sorting.
+* Register, login.
 * Create, join subreddits.
 * Post, edit, delete, vote, save articles.
 * Post, edit, delete, vote comments.
-* View articles posted and saved, comments posted of a user.
-* Karma system for articles, comments, and user.
-* Subreddit and article searching.
+* View user info: short bio, comments, articles, saved article.
+* Karma system.
+* Searching: subreddit and articles.
 
 ## Tech Stack
 * Frontend: Vue

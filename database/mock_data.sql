@@ -4,7 +4,7 @@ INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
     '$2a$12$hkuxonzFkayzlECMua.l5.Cl8AHPgJ/vIBUvugFvZ7m7OXWjuT/xa',
     'morty@thesmiths.com.uk',
     'Oh mother, I can feel, the soil falling.',
-    '1959-05-22'
+    '1959-05-22 10:23:54'
 );
 
 INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
@@ -12,7 +12,7 @@ INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
     '$2a$12$hkuxonzFkayzlECMua.l5.Cl8AHPgJ/vIBUvugFvZ7m7OXWjuT/xa',
     'jonny@onafriday.com.uk',
     'Pop is dead, long ive pop.',
-    '1971-11-05'
+    '1971-11-05 10:33:52'
 );
 
 INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
@@ -20,7 +20,7 @@ INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
     '$2a$12$hkuxonzFkayzlECMua.l5.Cl8AHPgJ/vIBUvugFvZ7m7OXWjuT/xa',
     'albarn@blur.com.uk',
     'Shade from the sun was his intention.',
-    '1968-03-23'
+    '1968-03-23 10:10:10'
 );
 
 -- subreddit
@@ -36,7 +36,7 @@ INSERT INTO subreddit (sub_name, description) VALUES (
 
 INSERT INTO subreddit (sub_name, description) VALUES (
     'golang',
-    'Hey, oh! Let''s go!'
+    'Hey, ho! Let''s go!'
 );
 
 INSERT INTO subreddit (sub_name, description) VALUES (
@@ -73,7 +73,7 @@ INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) V
     'Is this a text post?',
     'An interesting title',
     'Morrissey',
-    '2011-11-11'
+    '2011-11-11 11:11:11'
 );
 
 INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) VALUES (
@@ -83,7 +83,7 @@ INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) V
     'http://www.google.com.tw/',
     'This is a nice website I discovered.',
     'Jonny',
-    '2012-12-12'
+    '2012-12-12 12:12:12'
 );
 
 INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) VALUES (
@@ -93,7 +93,7 @@ INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) V
     'Is this the real life, is this just fantasy? Stuck in a landslide no escape from reality. Open your eyes.',
     'meirl',
     'Albarn',
-    '2016-10-30'
+    '2016-10-30 10:30:30'
 );
 
 INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) VALUES (
@@ -103,7 +103,7 @@ INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) V
     'https://i.imgur.com/TVYXCAi.jpg',
     'This is a nice PHP tutorial I discovered',
     'Jonny',
-    '2018-06-04'
+    '2018-06-04 06:04:04'
 );
 
 INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) VALUES (
@@ -113,7 +113,7 @@ INSERT INTO article (sub_name, aid, type, body, title, posted_by, posted_time) V
     'Guys, I think PHP is just too good to be real!',
     'My Confession',
     'Jonny',
-    '2020-02-20'
+    '2020-02-20 02:20:02'
 );
 
 -- comment
@@ -123,7 +123,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     'wjifo',
     'Learn to love me, assemble the ways.',
     'Morrissey',
-    '2019-09-19'
+    '2019-09-19 09:19:19'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -132,7 +132,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     '01jf9',
     'I don''t know.',
     'Jonny',
-    '2019-10-10'
+    '2019-10-10 10:10:10'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -141,7 +141,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     'fewji3',
     'Nice.',
     'Albarn',
-    '2020-01-01'
+    '2020-01-01 01:01:01'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -150,7 +150,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     '007op',
     'Have my upvote and leave.',
     'Jonny',
-    '2019-08-01'
+    '2019-08-01 08:01:20'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -159,7 +159,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     'n00bs',
     'Yeah you are right',
     'Jonny',
-    '2019-07-01'
+    '2019-07-01 07:01:20'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -168,7 +168,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     'n01bs',
     'Epic',
     'Jonny',
-    '2019-07-02'
+    '2019-07-02 03:02:20'
 );
 
 INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
@@ -177,7 +177,7 @@ INSERT INTO comment (sub_name, aid, cid, body, posted_by, posted_time) VALUES (
     'WhipP',
     'That is not true',
     'Albarn',
-    '2020-01-20'
+    '2020-01-20 03:02:20'
 );
 
 -- save_article
@@ -206,63 +206,77 @@ INSERT INTO save_article (username, sub_name, aid) VALUES (
 );
 
 -- vote_article
-INSERT INTO vote_article (username, sub_name, aid, positive) VALUES (
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
     'Morrissey',
     'PHP',
     'RgMG_RTSvkQ',
-    FALSE
+    -1
 );
 
-INSERT INTO vote_article (username, sub_name, aid, positive) VALUES (
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
     'Morrissey',
     'dankmeme',
     '246o1',
-    FALSE
+    -1
 );
 
-INSERT INTO vote_article (username, sub_name, aid, positive) VALUES (
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
     'Jonny',
     'dankmeme',
     '246o1',
-    TRUE
+    1
 );
 
-INSERT INTO vote_article (username, sub_name, aid, positive) VALUES (
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
+    'Albarn',
+    'dankmeme',
+    '246o1',
+    -1
+);
+
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
     'Jonny',
     'dankmeme',
     'WX-78',
-    TRUE
+    1
+);
+
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
+    'Albarn',
+    'dankmeme',
+    'WX-78',
+    1
 );
 
 -- vote_comment
-INSERT INTO vote_comment (username, sub_name, aid, cid, positive) VALUES (
+INSERT INTO vote_comment (username, sub_name, aid, cid, point) VALUES (
     'Jonny',
     'PHP',
     'IpX177',
     'WhipP',
-    FALSE
+    -1
 );
 
-INSERT INTO vote_comment (username, sub_name, aid, cid, positive) VALUES (
+INSERT INTO vote_comment (username, sub_name, aid, cid, point) VALUES (
     'Morrissey',
     'PHP',
     'IpX177',
     'WhipP',
-    FALSE
+    -1
 );
 
-INSERT INTO vote_comment (username, sub_name, aid, cid, positive) VALUES (
+INSERT INTO vote_comment (username, sub_name, aid, cid, point) VALUES (
     'Albarn',
     'PHP',
     'IpX177',
     'WhipP',
-    FALSE
+    -1
 );
 
-INSERT INTO vote_comment (username, sub_name, aid, cid, positive) VALUES (
+INSERT INTO vote_comment (username, sub_name, aid, cid, point) VALUES (
     'Jonny',
     'meirl',
     't09o3',
     '007op',
-    TRUE
+    1
 );
