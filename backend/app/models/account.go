@@ -16,6 +16,7 @@ const (
 	usernameMaxLen = 20
 	passwordMinLen = 6
 	passwordMaxLen = 20
+	bioMaxLen      = 256
 )
 
 // UserInfo stores the public information of an account.
@@ -46,6 +47,21 @@ var ErrAccountInfoMismatch = errors.New("the username and password does not matc
 
 // ErrUsernameNotExist means the username doesn't exist in the database.
 var ErrUsernameNotExist = errors.New("the username does not exist")
+
+// ErrBioInvalid means the bio of the user is not valid.
+var ErrBioInvalid = errors.New("the short bio should contain at most 256 characters")
+
+// ErrArticleAlreadySaved means the article is already saved by the user.
+var ErrArticleAlreadySaved = errors.New("the article is already saved")
+
+// ErrArticleNotSaved means the article is not saved by the user.
+var ErrArticleNotSaved = errors.New("the article is not saved by the user")
+
+// ErrSubAlreadyJoined means the user already joined the subreddit.
+var ErrSubAlreadyJoined = errors.New("the user already joined the subreddit")
+
+// ErrSubNotJoined means the user has not joined the subreddit.
+var ErrSubNotJoined = errors.New("the user has not joined the subreddit")
 
 var usernamePasswordRegExp = regexp.MustCompile("^[a-zA-Z0-9_]*$")
 var emailRegExp = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -121,25 +137,123 @@ func (m *AccountModel) Authenticate(username, password string) error {
 
 // ModifyBio modifies bio of the user.
 func (m *AccountModel) ModifyBio(username, newBio string) error {
-	// TODO
+	// Validate the bio.
+	if len(newBio) > bioMaxLen {
+		return ErrBioInvalid
+	}
+
+	// Update the database.
+	stmt := `UPDATE account SET bio = $1 WHERE username = $2`
+	res, err := m.DB.Exec(stmt, newBio, username)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrUsernameNotExist
+	}
+
+	// Successfully updated the bio.
 	return nil
 }
 
 // SaveArticle saves an article for the user.
 func (m *AccountModel) SaveArticle(articleID, username string) error {
-	// TODO
+	stmt := `INSERT INTO save_article (username, sub_name, aid) VALUES ($1, (SELECT sub_name FROM article WHERE aid = $2), $2)`
+	_, err := m.DB.Exec(stmt, username, articleID)
+	if err, ok := err.(*pq.Error); ok {
+		if strings.Contains(err.Message, "unique") {
+			return ErrArticleAlreadySaved
+		} else if strings.Contains(err.Message, "sub_name") || strings.Contains(err.Message, "aid") {
+			return ErrArticleNotExist
+		} else if strings.Contains(err.Message, "username") {
+			return ErrUsernameNotExist
+		}
+		return err
+	}
+
+	// Successfully inserted to the database.
+	return nil
+}
+
+// UnsaveArticle unsaves an article for the user.
+func (m *AccountModel) UnsaveArticle(articleID, username string) error {
+	stmt := `DELETE FROM save_article WHERE aid = $1 AND username = $2`
+	res, err := m.DB.Exec(stmt, articleID, username)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrArticleNotSaved
+	}
+
+	// Successfully deleted from the database.
 	return nil
 }
 
 // JoinSubreddit lets the user join a subreddit.
 func (m *AccountModel) JoinSubreddit(subName, username string) error {
-	// TODO
+	stmt := `INSERT INTO join_sub (username, sub_name) VALUES ($1, $2)`
+	_, err := m.DB.Exec(stmt, username, subName)
+	if err, ok := err.(*pq.Error); ok {
+		if strings.Contains(err.Message, "unique") {
+			return ErrSubAlreadyJoined
+		} else if strings.Contains(err.Message, "username") {
+			return ErrUsernameNotExist
+		} else if strings.Contains(err.Message, "sub_name") {
+			return ErrSubredditNotExist
+		}
+		return err
+	}
+
+	// Successfully inserted to the database.
+	return nil
+}
+
+// LeaveSubreddit lets the user leave a subscribed subreddit.
+func (m *AccountModel) LeaveSubreddit(subName, username string) error {
+	stmt := `DELETE FROM join_sub WHERE username = $1 AND sub_name = $2`
+	res, err := m.DB.Exec(stmt, username, subName)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrSubNotJoined
+	}
+
+	// Successfully deleted from the database.
 	return nil
 }
 
 // Get selects an account in the database and returns its info.
 func (m *AccountModel) Get(username string) (UserInfo, error) {
-	// TODO
+	u := UserInfo{}
+	stmt := `SELECT
+	username, (COALESCE(ART_PT.karma, 0) + COALESCE(COM_PT.karma, 0)) AS karma, bio, join_time
+	FROM account ACC
+	LEFT JOIN (
+		SELECT posted_by, SUM(point) AS karma FROM vote_article VA
+		INNER JOIN article ART ON VA.aid = ART.aid GROUP BY ART.posted_by
+	) ART_PT
+	ON ACC.username = ART_PT.posted_by
+	LEFT JOIN (
+		SELECT posted_by, SUM(point) AS karma FROM vote_comment VC
+		INNER JOIN comment COM ON VC.cid = COM.cid GROUP BY COM.posted_by
+	) COM_PT
+	ON ACC.username = COM_PT.posted_by
+	WHERE username = $1`
+	row := m.DB.QueryRow(stmt, username)
 
-	return UserInfo{}, nil
+	err := row.Scan(&u.Username, &u.Karma, &u.Bio, &u.JoinTime)
+	if err != nil {
+		return u, ErrUsernameNotExist
+	}
+
+	// Successfully selected the user.
+	return u, nil
 }

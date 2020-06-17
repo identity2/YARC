@@ -17,46 +17,47 @@ const (
 
 // AccountModel defines the operations related to account.
 type AccountModel interface {
-	Insert(string, string, string) error
-	Authenticate(string, string) error
-	ModifyBio(string, string) error
-	SaveArticle(string, string) error
-	JoinSubreddit(string, string) error
-	Get(string) (models.UserInfo, error)
+	Insert(username, email, password string) error
+	Authenticate(username, password string) error
+	ModifyBio(username, newBio string) error
+	SaveArticle(articleID, username string) error
+	UnsaveArticle(articleID, username string) error
+	JoinSubreddit(subName, username string) error
+	LeaveSubreddit(subName, username string) error
+	Get(username string) (models.UserInfo, error)
 }
 
 // SubredditModel defines the operations related to subreddit.
 type SubredditModel interface {
-	Insert(string, string) error
-	Get(string) (models.SubredditInfo, error)
-	GetTrending(int) ([]models.SubredditInfo, error)
+	Insert(name, description string) error
+	Get(name string) (models.SubredditInfo, error)
+	GetTrending(limit int) ([]models.SubredditInfo, error)
 }
 
 // CommentModel defines the operations related to comment.
 type CommentModel interface {
-	Insert(string, string, string, string) (string, error)
-	ModifyBody(string, string, string) error
-	Delete(string, string) error
-	GetByArticle(string, string, int) ([]models.CommentInfo, error)
-	GetByUsername(string, string, int) ([]models.CommentInfo, error)
-	GetPoints(string) (int, error)
+	Insert(subName, articleID, body, postedBy string) (string, error)
+	ModifyBody(commentID, username, newBody string) error
+	Delete(commentID, username string) error
+	GetByArticle(articleID, afterCommentID string, limit int) ([]models.CommentInfo, error)
+	GetByUsername(username, afterCommentID string, limit int) ([]models.CommentInfo, error)
+	GetPoints(commentID string) (int, error)
 }
 
 // ArticleModel defines the operations related to article.
 type ArticleModel interface {
-	Insert(string, string, string, string, string) (string, error)
-	ModifyBody(string, string, string) error
-	Delete(string, string) error
-	Get(string) (models.ArticleInfo, error)
-	GetBySubreddit(string, string, string, int) ([]models.ArticleInfo, error)
-	GetByUser(string, string, string, int) ([]models.ArticleInfo, error)
-	GetSavedByUser(string, string, string, int) ([]models.ArticleInfo, error)
-	GetPoints(string) int
+	Insert(subName, postType, body, title, postedBy string) (string, error)
+	ModifyBody(articleID, username, body string) error
+	Delete(articleID, username string) error
+	Get(articleID string) (models.ArticleInfo, error)
+	GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
+	GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
+	GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 }
 
 // SearchModel defines the operations related to searching.
 type SearchModel interface {
-	GetResult(string) (models.SearchResults, error)
+	GetResult(query string) (models.SearchResults, error)
 }
 
 // Handler contains a database so that all handlers could access it.

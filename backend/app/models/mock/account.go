@@ -1,6 +1,10 @@
 package mock
 
-import "github.com/YuChaoGithub/YARC/backend/app/models"
+import (
+	"time"
+
+	"github.com/YuChaoGithub/YARC/backend/app/models"
+)
 
 // AccountModel is a mock account model.
 type AccountModel struct{}
@@ -25,22 +29,60 @@ func (m *AccountModel) Authenticate(username, password string) error {
 	return models.ErrUsernameNotExist
 }
 
-// ModifyBio TODO.
+// ModifyBio returns ErrBioInvalid if newBio is "Dirty Dan".
 func (m *AccountModel) ModifyBio(username, newBio string) error {
+	if newBio == "Dirty Dan" {
+		return models.ErrBioInvalid
+	}
+
 	return nil
 }
 
-// SaveArticle TODO.
+// SaveArticle returns ErrArticleAlreadySaved if articleID is "77777" and username is "PatrickStar".
 func (m *AccountModel) SaveArticle(articleID, username string) error {
+	if articleID == "77777" && username == "PatrickStar" {
+		return models.ErrArticleAlreadySaved
+	}
+
 	return nil
 }
 
-// JoinSubreddit TODO.
+// UnsaveArticle returns ErrArticleNotSaved if articleID is "5566" and username is "SpongeBob".
+func (m *AccountModel) UnsaveArticle(articleID, username string) error {
+	if articleID == "5566" && username == "SpongeBob" {
+		return models.ErrArticleNotSaved
+	}
+
+	return nil
+}
+
+// JoinSubreddit returns ErrSubAlreadyJoined when subName is "gamedev" and username is "nirvana".
 func (m *AccountModel) JoinSubreddit(subName, username string) error {
+	if subName == "gamedev" && username == "nirvana" {
+		return models.ErrSubAlreadyJoined
+	}
+
 	return nil
 }
 
-// Get TODO.
+// LeaveSubreddit returns ErrSubNotJoin when subName is "CSMajor" and username is "WarGod69".
+func (m *AccountModel) LeaveSubreddit(subName, username string) error {
+	if subName == "CSMajor" && username == "WarGod69" {
+		return models.ErrSubNotJoined
+	}
+
+	return nil
+}
+
+// Get only has the account Jonny.
 func (m *AccountModel) Get(username string) (models.UserInfo, error) {
-	return models.UserInfo{Username: "user", Karma: 0, Bio: "Bio"}, nil
+	if username == "Jonny" {
+		return models.UserInfo{
+			Username: "Jonny",
+			Karma:    -1,
+			Bio:      "Who's in the bunker?",
+			JoinTime: time.Date(1999, 9, 5, 10, 33, 52, 0, time.UTC),
+		}, nil
+	}
+	return models.UserInfo{}, models.ErrUsernameNotExist
 }

@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 	"time"
@@ -160,38 +159,6 @@ func TestArticleGetByUser(t *testing.T) {
 
 func TestArticleGetSavedByUser(t *testing.T) {
 	// TODO
-}
-
-func TestArticleGetPoints(t *testing.T) {
-	// Testcases.
-	tests := []struct {
-		articleID string
-		wantPoint int
-	}{
-		{"RgMG_RTSvkQ", -1},
-		{"246o1", -1},
-		{"WX-78", 2},
-		{"t09o3", 0},
-	}
-
-	// Perform tests.
-	for i, tc := range tests {
-		t.Run(fmt.Sprintf("Test %d", i+1), func(t *testing.T) {
-			// Stub.
-			db, teardown := newTestDB(t)
-			defer teardown()
-
-			m := ArticleModel{db}
-
-			// When.
-			point := m.GetPoints(tc.articleID)
-
-			// Want.
-			if point != tc.wantPoint {
-				t.Errorf("want %d; got %d", tc.wantPoint, point)
-			}
-		})
-	}
 }
 
 // Combination test.

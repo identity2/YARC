@@ -43,7 +43,7 @@ func TestArticle(t *testing.T) {
 			}
 
 			if body != tc.wantBody {
-				t.Errorf("want:\n%s\ngot:\n%s\n\n", tc.wantBody, body)
+				t.Errorf("want:\n%s\ngot:\n%s", tc.wantBody, body)
 			}
 		})
 	}

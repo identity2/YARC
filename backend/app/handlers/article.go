@@ -126,11 +126,7 @@ func (h *Handler) DeleteArticle(w http.ResponseWriter, r *http.Request) {
 	// Delete the entry in database.
 	err := h.Articles.Delete(articleID, username)
 	if err != nil {
-		if errors.Is(err, models.ErrArticleNotExist) {
-			respondWithError(w, http.StatusNotFound, err)
-		} else {
-			respondWithError(w, http.StatusBadRequest, err)
-		}
+		respondWithError(w, http.StatusNotFound, err)
 		return
 	}
 

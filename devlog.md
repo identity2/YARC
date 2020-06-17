@@ -91,5 +91,13 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Changed `positive BOOLEAN` to `point INTEGER` in `vote_article` and `vote_comment` table of the database, so getting the points of an article could be done easier by `SUM(point)`.
 * Wrote tests for models.
 
+**Short Gap: Got addicted to Don't Starve Together, so I kept on playing and neglected the dev work. 10/10 worth it.**
+
+## 2020.06.17
+* Added `DELETE /me/save/{articleID}` and `DELETE /me/join/{subreddit}` APIs to the backend.
+* Modified the implementation of `ArticleModel`'s `Get`. Using a single SQL query instead of separating the article and points queries.
+* Completed the all Account related APIs. Wrote tests for all of them.
+* Added more mock articles and comments so that it would be easier to test list article/comment APIs.
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

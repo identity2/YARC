@@ -134,8 +134,3 @@ func (m *ArticleModel) GetSavedByUser(string, string, string, int) ([]models.Art
 		},
 	}, nil
 }
-
-// GetPoints TODO.
-func (m *ArticleModel) GetPoints(string) int {
-	return 0
-}

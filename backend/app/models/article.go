@@ -149,16 +149,17 @@ func (m *ArticleModel) Delete(articleID, username string) error {
 // Get returns the article specified by the articleID.
 func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 	a := ArticleInfo{}
-	stmt := `SELECT sub_name, aid, type, body, title, posted_by, posted_time FROM article WHERE aid = $1`
+	stmt := `SELECT
+	ART.sub_name, ART.aid, ART.type, ART.body, ART.title, COALESCE(SUM(VA.point), 0) AS points, ART.posted_by, ART.posted_time
+	FROM article ART LEFT JOIN vote_article VA ON ART.aid = VA.aid
+	WHERE ART.aid = $1
+	GROUP BY ART.sub_name, ART.aid`
 	row := m.DB.QueryRow(stmt, articleID)
 
-	err := row.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.PostedBy, &a.PostedTime)
+	err := row.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.PostedBy, &a.PostedTime)
 	if err != nil {
 		return a, ErrArticleNotExist
 	}
-
-	// Get the points of the article.
-	a.Points = m.GetPoints(articleID)
 
 	// Successfully selected the article.
 	return a, nil
@@ -183,16 +184,4 @@ func (m *ArticleModel) GetByUser(username, afterArticleID, sortedBy string, limi
 func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
 	// TODO
 	return []ArticleInfo{}, nil
-}
-
-// GetPoints returns the total points of an article.
-// If error occurs when fetching the points, 0 will be returned.
-func (m *ArticleModel) GetPoints(articleID string) int {
-	stmt := `SELECT SUM(point) FROM vote_article WHERE aid = $1`
-	row := m.DB.QueryRow(stmt, articleID)
-
-	res := 0
-	row.Scan(&res)
-
-	return res
 }

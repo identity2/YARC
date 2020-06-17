@@ -171,14 +171,14 @@ Request Body:
 }
 ```
 
-Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`), (`404`) or (`401`) with error message.
 
 #### DELETE `/article/{id}`
 The article {id} will be deleted.
 
 Request Body: Empty.
 
-Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`404`) or (`401`) with error message.
 
 ### Search
 Searches for both articles and subreddits.
@@ -305,30 +305,34 @@ Otherwise (`400`) or (`401`) with error message.
 #### PUT `/comment/{id}`
 Update the comment {id}.
 
+```
 Request Body:
 {
     "body": "The updated text body."
 }
+```
 
-Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`400`), (`404`) or (`401`) with error message.
 
 #### DELETE `/comment/{id}`
 Delete the comment {id}.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`204`), otherwise (`400`) or (`401`) with error message.
+Response Body: Empty if succeeded (`204`), otherwise (`404`) or (`401`) with error message.
 
 
 ### Account
 All actions related to user accounts, an account can be uniquely identified by the `username`.
 
-| Method | URL                  | Description                              | Login Required |
-| ------ | -------------------- | ---------------------------------------- | -------------- |
-| GET    | /user/{username}     | Return the info of a user.               | No             |
-| PUT    | /me/bio              | Modify the bio of the current user.      | Yes            |
-| POST   | /me/save/{articleID} | Save the article for the current user.   | Yes            |
-| POST   | /me/join/{subreddit} | Join the subreddit for the current user. | Yes            |
+| Method | URL                    | Description                               | Login Required |
+| ------ | ---------------------- | ----------------------------------------- | -------------- |
+| GET    | /user/{username}       | Return the info of a user.                | No             |
+| PUT    | /me/bio                | Modify the bio of the current user.       | Yes            |
+| POST   | /me/save/{articleID}   | Save the article for the current user.    | Yes            |
+| DELETE | /me/save/{articleID}   | Unsave the article for the current user.  | Yes            |
+| POST   | /me/join/{subreddit}   | Join the subreddit for the current user.  | Yes            |
+| DELETE | /me/join/{subreddit}   | Leave the subreddit for the current user. | Yes            |
 
 #### GET `/user/{username}`
 Return the user info of {username}.
@@ -359,14 +363,28 @@ Save the article {articleID} for the current user.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`201`), otherwise (`401`) or (`400`) with error message.
+Response Body: Empty if succeeded (`201`), otherwise (`404`) or (`400`) with error message.
+
+#### DELETE `/me/save/{articleID}`
+Unsave the article {articleID} for the current user.
+
+Request Body: Empty
+
+Response Body: Empty if succeeded (`204`), otherwise (`404`) or (`400`) with error message.
 
 #### POST `/me/join/{subreddit}`
 Join the subreddit {subreddit} for the current user.
 
 Request Body: Empty
 
-Response Body: Empty if succeeded (`201`), otherwise (`401`) or (`400`) with error message.
+Response Body: Empty if succeeded (`201`), otherwise (`404`) or (`400`) with error message.
+
+#### DELETE `/me/join/{subreddit}`
+Leave (aka un-join) the subreddit {subreddit} for the current user.
+
+Request Body: Empty
+
+Response Body: Empty if succeeded (`204`), otherwise (`404`) or (`400`) with error message.
 
 ### Subreddit
 All actions related to subreddits, a subreddit can be uniquely identified by its subreddit name.
