@@ -383,6 +383,27 @@ INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
     1
 );
 
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
+    'Albarn',
+    'PHP',
+    'IpX177',
+    1
+);
+
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
+    'Jonny',
+    'PHP',
+    'IpX177',
+    1
+);
+
+INSERT INTO vote_article (username, sub_name, aid, point) VALUES (
+    'Jonny',
+    'PHP',
+    'RgMG_RTSvkQ9',
+    1
+);
+
 -- vote_comment
 INSERT INTO vote_comment (username, sub_name, aid, cid, point) VALUES (
     'Jonny',

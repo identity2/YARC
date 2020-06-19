@@ -17,5 +17,10 @@ This directory contains the SQL scripts for the backend database.
 * vote_article(***username***, ***sub_name***, ***aid***, point)
 * vote_comment(***username***, ***sub_name***, ***aid***, ***cid***, point)
 
+## Notes
+* No indexes are created because the data size is rather small.
+* Redis is used for tracking trending subreddits only because my purpose is to just try it out.
+
 ## Retrospect
-Maybe I could merge the article entity together with the comment entity for simplicity. Also, vote_article and vote_comment could definitely be merged. 
+* Maybe I could merge the article entity together with the comment entity for simplicity. Also, vote_article and vote_comment could definitely be merged.
+* I could use Redis to cache hot articles and karma, but I was too lazy to do it.

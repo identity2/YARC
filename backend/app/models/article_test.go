@@ -150,7 +150,57 @@ func TestArticleGet(t *testing.T) {
 }
 
 func TestArticleGetBySubreddit(t *testing.T) {
-	// TODO
+	// Testcases.
+	tests := []struct {
+		name           string
+		subName        string
+		afterArticleID string
+		sortedBy       string
+		limit          int
+		wantArticleIDs []string
+		wantError      error
+	}{
+		{"Exceed Max Limit", "PHP", "RgMG_RTSvkQ6", "hot", 101, []string{}, ErrLimitInvalid},
+		{"Exceed Min Limit", "PHP", "RgMG_RTSvkQ6", "new", -1, []string{}, ErrLimitInvalid},
+		{"Invalid sortedBy", "PHP", "RgMG_RTSvkQ6", "hey", 20, []string{}, ErrSortedByInvalid},
+		{"Sort by hot in range", "PHP", "IpX177", "hot", 3, []string{"RgMG_RTSvkQ9", "RgMG_RTSvkQa", "RgMG_RTSvkQ6"}, nil},
+		{"Sort by hot from start", "PHP", "", "hot", 2, []string{"IpX177", "RgMG_RTSvkQ9"}, nil},
+		{"Sort by hot pass end", "PHP", "RgMG_RTSvkQ8", "hot", 5, []string{"IpX1779", "RgMG_RTSvkQ"}, nil},
+		{"Sort by new in range", "dankmeme", "246o1", "new", 2, []string{"WX-789", "WX-78"}, nil},
+		{"Sort by new from start", "dankmeme", "", "new", 3, []string{"246o19", "246o1", "WX-789"}, nil},
+		{"Sort by new pass end", "dankmeme", "WX-78", "new", 3, []string{}, nil},
+		{"Sort by old in range", "PHP", "RgMG_RTSvkQ", "old", 2, []string{"RgMG_RTSvkQ9", "RgMG_RTSvkQ8"}, nil},
+		{"Sort by old from start", "PHP", "77777", "old", 4, []string{"IpX177", "IpX1779", "RgMG_RTSvkQ", "RgMG_RTSvkQ9"}, nil},
+		{"Sort by old pass end", "PHP", "RgMG_RTSvkQ6", "old", 4, []string{"RgMG_RTSvkQa"}, nil},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			res, err := m.GetBySubreddit(tc.subName, tc.afterArticleID, tc.sortedBy, tc.limit)
+
+			// Want.
+			if tc.wantError != err {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+
+			if len(tc.wantArticleIDs) != len(res) {
+				t.Fatalf("want len %v; got len %v", len(tc.wantArticleIDs), len(res))
+			}
+			for i := range tc.wantArticleIDs {
+				if tc.wantArticleIDs[i] != res[i].ArticleID {
+					t.Errorf("want %v; got %v", tc.wantArticleIDs[i], res[i].ArticleID)
+				}
+			}
+		})
+	}
 }
 
 func TestArticleGetByUser(t *testing.T) {

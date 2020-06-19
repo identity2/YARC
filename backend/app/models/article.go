@@ -20,6 +20,8 @@ const (
 	textPost       = "text"
 	linkPost       = "link"
 	imagePost      = "image"
+	listLimitMin   = 1
+	listLimitMax   = 100
 )
 
 // ErrTitleInvalid means the title length is too long.
@@ -39,6 +41,36 @@ var ErrGetPoints = errors.New("error getting the points of the article")
 
 // ErrInvalidPostType means the post type is invalid.
 var ErrInvalidPostType = errors.New("the post type should be either 'text', 'image' or 'link'")
+
+// ErrSortedByInvalid means the sorted by request string is not "hot", "new", or "old".
+var ErrSortedByInvalid = errors.New("the sorted_by query should be either 'hot', 'new', or 'old'")
+
+// ErrLimitInvalid means the limit query in the list request is too large.
+var ErrLimitInvalid = errors.New("the limit query should be 1 to 100 inclusively")
+
+// queryClauses store the query clauses to be interpolate into the get list queries.
+type queryClauses struct {
+	where   string
+	orderBy string
+}
+
+// sortQuery store the query strings specific for sorting by hot, new, or old.
+var sortQuery = map[string]queryClauses{
+	"hot": {
+		where: `COALESCE(points < (SELECT points FROM temp WHERE aid = $2) OR
+			(points = (SELECT points FROM temp WHERE aid = $2) AND
+			posted_time < (SELECT posted_time FROM temp WHERE aid = $2)), TRUE)`,
+		orderBy: `points DESC, posted_time DESC`,
+	},
+	"new": {
+		where:   `COALESCE(posted_time < (SELECT posted_time FROM temp WHERE aid = $2), TRUE)`,
+		orderBy: `posted_time DESC`,
+	},
+	"old": {
+		where:   `COALESCE(posted_time > (SELECT posted_time FROM temp WHERE aid = $2), TRUE)`,
+		orderBy: `posted_time ASC`,
+	},
+}
 
 // ArticleModel defines the database which the functions operate on.
 type ArticleModel struct {
@@ -168,20 +200,58 @@ func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 // GetBySubreddit returns a list of articles in the subreddit continued after an article,
 // and limited by a number, sorted by hot/new/old.
 func (m *ArticleModel) GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
-	// TODO
-	return []ArticleInfo{}, nil
+	return m.getList(sortedBy, ``, `A.sub_name = $1`, subName, afterArticleID, limit)
 }
 
 // GetByUser returns a list of articles posted by the user continued after an article,
 // and limited by a number, sorted by hot/new/old.
 func (m *ArticleModel) GetByUser(username, afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
-	// TODO
-	return []ArticleInfo{}, nil
+	return m.getList(sortedBy, ``, `A.posted_by = $1`, username, afterArticleID, limit)
 }
 
 // GetSavedByUser returns a list of articles saved by the user continued after an article,
 // and limited by a number, sorted by hot/new/old.
 func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
-	// TODO
-	return []ArticleInfo{}, nil
+	return m.getList(sortedBy, `LEFT JOIN save_article SA ON A.aid = SA.aid`,
+		`SA.username = $1`, username, afterArticleID, limit)
+}
+
+// getList validates and perform the select query to list articles according to the SQL clauses provided.
+func (m *ArticleModel) getList(sortedBy, join, firstWhere, firstParam, afterArticleID string, limit int) ([]ArticleInfo, error) {
+	var res []ArticleInfo
+
+	// Validate sortedBy.
+	clauses, ok := sortQuery[sortedBy]
+	if !ok {
+		return res, ErrSortedByInvalid
+	}
+
+	// Validate limit.
+	if limit < listLimitMin || limit > listLimitMax {
+		return res, ErrLimitInvalid
+	}
+
+	// Select query statement.
+	// $1 should be the first selecting criterion in the where clause.
+	// $2 should be the aid marking the start of the selecting range.
+	// $3 is the limit.
+	stmt := fmt.Sprintf(`WITH temp AS (SELECT A.sub_name, A.aid, A.type, A.body, A.title, COALESCE(SUM(VA.point), 0) AS points, A.posted_by, A.posted_time
+		FROM article A LEFT JOIN vote_article VA ON A.aid = VA.aid %s WHERE %s GROUP BY A.sub_name, A.aid)
+		SELECT sub_name, aid, type, body, title, points, posted_by, posted_time FROM temp
+		WHERE %s ORDER BY %s LIMIT $3`, join, firstWhere, clauses.where, clauses.orderBy)
+
+	rows, err := m.DB.Query(stmt, firstParam, afterArticleID, limit)
+	if err != nil {
+		return res, err
+	}
+	for rows.Next() {
+		a := ArticleInfo{}
+		err = rows.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.PostedBy, &a.PostedTime)
+		if err != nil {
+			return []ArticleInfo{}, err
+		}
+		res = append(res, a)
+	}
+
+	return res, nil
 }

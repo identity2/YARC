@@ -99,5 +99,9 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Completed the all Account related APIs. Wrote tests for all of them.
 * Added more mock articles and comments so that it would be easier to test list article/comment APIs.
 
+## 2020.06.19
+* Completed writing `Get`-functions for article lists for `ArticleModel`. I struggled a bit in writing nested SQL select-queries. SQL is such a profound and complex field itself.
+* Wrote tests for the newly written `Get`-functions, but not completed yet.
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

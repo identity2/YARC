@@ -99,6 +99,10 @@ Request query strings:
 | postedBy     | username    |         | Return articles posted by username.     |
 | savedBy      | username    |         | Return articles saved by username.      |
 
+*When `after` is the blank string "", it returns the list from the start.*
+
+*The `limit` should be below `100`.*
+
 Response body:
 
 ```
@@ -241,6 +245,10 @@ Request query strings:
 | limit        | integer     | 25      | The number of comments to be returned.  |
 | postedBy     | username    |         | Return comments posted by username.     |
 | ofArticle    | articleID   |         | Return comments of the articleID.       |
+
+*When `after` is the blank string "", it returns the list from the start.*
+
+*The `limit` should be below `100`.*
 
 Response Body:
 
