@@ -90,14 +90,15 @@ Return a list of articles filtered by the query strings.
 
 Request query strings:
 
-| Query String | Value       | Default | Note                                    |
-| ------------ | ----------- | ------- | --------------------------------------- |
-| sort         | hot/new/old | hot     | Sort the returned list in hot/new/old.  |
-| subreddit    | sub_name    |         | Return articles in subreddit.           |
-| after        | articleID   |         | Return articles succeeded by articleID. |
-| limit        | integer     | 25      | The number of articles to be returned.  |
-| postedBy     | username    |         | Return articles posted by username.     |
-| savedBy      | username    |         | Return articles saved by username.      |
+| Query String | Value            | Default | Note                                    |
+| ------------ | ---------------- | ------- | --------------------------------------- |
+| sort         | hot/new/old      | hot     | Sort the returned list in hot/new/old.  |
+| after        | articleID        |         | Return articles succeeded by articleID. |
+| limit        | integer          | 25      | The number of articles to be returned.  |
+| criterion    | sub/by/savedBy   |         | The criterion to filter the articles.   |
+| key          | subName/username |         | The key for the criterion.              |
+
+*If either the criterion or the key is missing, all articles in the subreddits subscribed by the logged in user would be returned, or if the user is not logged in, articles in all subreddits would be returned.
 
 *When `after` is the blank string "", it returns the list from the start.*
 
@@ -134,6 +135,7 @@ Response Body:
     "type": "text/image/link",
     "body": "Text post body / Image URL / Link URL",
     "title": "The title of the article.",
+    "comments": 3,
     "points": 10,
     "postedBy": "username",
     "postedTime": "Date & time in string format"
@@ -214,6 +216,7 @@ Response Body:
             "type": "text/image/link",
             "body": "Text post body / Image URL / Link URL",
             "title": "The title of the article.",
+            "comments:" 4,
             "points": 10,
             "postedBy": "username",
             "postedTime": "Date & time in string format"

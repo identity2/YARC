@@ -41,7 +41,6 @@ type CommentModel interface {
 	Delete(commentID, username string) error
 	GetByArticle(articleID, afterCommentID string, limit int) ([]models.CommentInfo, error)
 	GetByUsername(username, afterCommentID string, limit int) ([]models.CommentInfo, error)
-	GetPoints(commentID string) (int, error)
 }
 
 // ArticleModel defines the operations related to article.
@@ -53,6 +52,8 @@ type ArticleModel interface {
 	GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 	GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 	GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
+	GetAll(afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
+	GetBySubscribed(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 }
 
 // SearchModel defines the operations related to searching.

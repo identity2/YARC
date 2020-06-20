@@ -3,12 +3,20 @@ package handlers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/YuChaoGithub/YARC/backend/app/models"
 	"github.com/gorilla/mux"
+)
+
+const (
+	defaultListSort  = "hot"
+	defaultListLimit = 25
 )
 
 type newArticleReq struct {
@@ -21,7 +29,78 @@ type newArticleReq struct {
 // ListArticle responds with a list of articles according the the query string.
 // Routed from GET "/article".
 func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	// Get query parameters.
+	q := r.URL.Query()
+	sortedBy, after, criterion, key := q.Get("sort"), q.Get("after"), q.Get("criterion"), q.Get("key")
+	if sortedBy == "" {
+		sortedBy = defaultListSort
+	}
+
+	limit, err := strconv.Atoi(q.Get("limit"))
+	if err != nil {
+		limit = defaultListLimit
+	}
+
+	// The response is a list of ArticleInfo.
+	resp := struct {
+		Articles []models.ArticleInfo `json:"articles"`
+	}{Articles: []models.ArticleInfo{}}
+
+	// Criterion or key is invalid: list articles from all subreddits or from all subscribed
+	// subreddits if the user is logged in.
+	if criterion == "" || key == "" {
+		// Check if the user is logged in.
+		if authHeader, ok := r.Header["Authorization"]; ok {
+			// This block inside the if-condition is not included in the unit tests,
+			// it is only manually tested, so modify with care...need to find a way to test it.
+			username, err := decodeJWT(strings.Split(authHeader[0], " ")[1], h.JWTSecretKey)
+			if err == nil {
+				// The user is logged in.
+				resp.Articles, err = h.Articles.GetBySubscribed(username, after, sortedBy, limit)
+				if err != nil {
+					respondWithError(w, http.StatusBadRequest, err)
+					return
+				}
+
+				// Successfully get the article lists.
+				jsonResponse(w, http.StatusOK, resp)
+				return
+			}
+		}
+
+		// The user is not logged in.
+		resp.Articles, err = h.Articles.GetAll(after, sortedBy, limit)
+		if err != nil {
+			respondWithError(w, http.StatusBadRequest, err)
+			return
+		}
+
+		// Successfully get the article lists.
+		jsonResponse(w, http.StatusOK, resp)
+		return
+	}
+
+	// Get the functions for each criterion.
+	listFuncs := map[string]func(string, string, string, int) ([]models.ArticleInfo, error){
+		"sub":     h.Articles.GetBySubreddit,
+		"by":      h.Articles.GetByUser,
+		"savedBy": h.Articles.GetSavedByUser,
+	}
+	fn, ok := listFuncs[criterion]
+	if !ok {
+		respondWithError(w, http.StatusBadRequest, fmt.Errorf("the criterion query string should be either 'sub', 'by', or 'savedBy'"))
+		return
+	}
+
+	// Get the article lists from the database.
+	resp.Articles, err = fn(key, after, sortedBy, limit)
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	// Successfully get the articles.
+	jsonResponse(w, http.StatusOK, resp)
 }
 
 // Article responds with an article according to the articleID parameter.

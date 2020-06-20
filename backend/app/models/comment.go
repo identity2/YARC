@@ -52,9 +52,3 @@ func (m *CommentModel) GetByUsername(username, afterCommentID string, limit int)
 	// TODO
 	return []CommentInfo{}, nil
 }
-
-// GetPoints returns the total points of a comment.
-func (m *CommentModel) GetPoints(commentID string) (int, error) {
-	// TODO
-	return 0, nil
-}

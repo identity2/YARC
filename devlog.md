@@ -103,5 +103,11 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Completed writing `Get`-functions for article lists for `ArticleModel`. I struggled a bit in writing nested SQL select-queries. SQL is such a profound and complex field itself.
 * Wrote tests for the newly written `Get`-functions, but not completed yet.
 
+# 2020.06.20
+* Completed writing tests for get article list functions.
+* Added a comment count field in the the article response API. (This means the list article SQL I wrote yesterday was changed modified again.)
+* Completed all the routes in article handler. Also wrote tests for it.
+* Did some manual tests.
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

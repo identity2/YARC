@@ -49,88 +49,107 @@ func (m *ArticleModel) Get(articleID string) (models.ArticleInfo, error) {
 			Body:       "I'm a reasonable man, get off my case.",
 			Title:      "Tin can",
 			Points:     42,
+			Comments:   30,
 			PostedBy:   "Bellamy",
-			PostedTime: time.Date(2019, time.November, 13, 0, 0, 0, 0, time.UTC),
+			PostedTime: time.Date(2019, 11, 13, 0, 0, 0, 0, time.UTC),
 		}, nil
 	}
 
 	return models.ArticleInfo{}, models.ErrArticleNotExist
 }
 
-// GetBySubreddit TODO.
-func (m *ArticleModel) GetBySubreddit(string, string, string, int) ([]models.ArticleInfo, error) {
+// GetAll always return a valid list of article.
+func (m *ArticleModel) GetAll(afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
 	return []models.ArticleInfo{
 		{
 			Subreddit:  "radiohead",
 			ArticleID:  "WX-78",
 			Type:       "text",
-			Body:       "I'm a reasonable man, get off my case.",
-			Title:      "Tin can",
-			Points:     42,
-			PostedBy:   "Bellamy",
-			PostedTime: time.Date(2019, time.November, 13, 0, 0, 0, 0, time.UTC),
+			Body:       "1",
+			Title:      "2",
+			Points:     1,
+			Comments:   2,
+			PostedBy:   "Tom",
+			PostedTime: time.Date(2000, 12, 12, 12, 12, 12, 0, time.UTC),
 		},
 		{
-			Subreddit:  "theclash",
-			ArticleID:  "bRiXtoN",
-			Type:       "image",
-			Body:       "On your head or trigger?",
-			Title:      "On the pavement",
-			Points:     66,
-			PostedBy:   "Lyndon",
-			PostedTime: time.Date(1989, time.June, 4, 0, 0, 0, 0, time.UTC),
+			Subreddit:  "meirl",
+			ArticleID:  "tyty",
+			Type:       "text",
+			Body:       "2",
+			Title:      "11",
+			Points:     -3,
+			Comments:   1,
+			PostedBy:   "Tim",
+			PostedTime: time.Date(2020, 1, 1, 1, 1, 1, 0, time.UTC),
 		},
 	}, nil
 }
 
-// GetByUser TODO.
-func (m *ArticleModel) GetByUser(string, string, string, int) ([]models.ArticleInfo, error) {
-	return []models.ArticleInfo{
-		{
-			Subreddit:  "radiohead",
-			ArticleID:  "WX-78",
-			Type:       "text",
-			Body:       "I'm a reasonable man, get off my case.",
-			Title:      "Tin can",
-			Points:     42,
-			PostedBy:   "Bellamy",
-			PostedTime: time.Date(2019, time.November, 13, 0, 0, 0, 0, time.UTC),
-		},
-		{
-			Subreddit:  "theclash",
-			ArticleID:  "bRiXtoN",
-			Type:       "image",
-			Body:       "On your head or trigger?",
-			Title:      "On the pavement",
-			Points:     66,
-			PostedBy:   "Lyndon",
-			PostedTime: time.Date(1989, time.June, 4, 0, 0, 0, 0, time.UTC),
-		},
-	}, nil
+// GetBySubscribed will not be called for now.
+func (m *ArticleModel) GetBySubscribed(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
+	return []models.ArticleInfo{}, nil
 }
 
-// GetSavedByUser TODO.
-func (m *ArticleModel) GetSavedByUser(string, string, string, int) ([]models.ArticleInfo, error) {
-	return []models.ArticleInfo{
-		{
-			Subreddit:  "radiohead",
-			ArticleID:  "WX-78",
-			Type:       "text",
-			Body:       "I'm a reasonable man, get off my case.",
-			Title:      "Tin can",
-			Points:     42,
-			PostedBy:   "Bellamy",
-			PostedTime: time.Date(2019, time.November, 13, 0, 0, 0, 0, time.UTC),
-		},
-		{
-			Subreddit:  "theclash",
-			ArticleID:  "bRiXtoN",
-			Type:       "image",
-			Body:       "On your head or trigger?",
-			Title:      "On the pavement",
-			Points:     66,
-			PostedBy:   "Lyndon",
-			PostedTime: time.Date(1989, time.June, 4, 0, 0, 0, 0, time.UTC),
-		},
-	}, nil
+// GetBySubreddit will only return a result if subName=radiohead, sortedBy=hot, limit=1.
+func (m *ArticleModel) GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
+	if subName == "radiohead" && sortedBy == "hot" && limit == 1 {
+		return []models.ArticleInfo{
+			{
+				Subreddit:  "radiohead",
+				ArticleID:  "WX-78",
+				Type:       "text",
+				Body:       "I'm a reasonable man, get off my case.",
+				Title:      "Tin can",
+				Points:     42,
+				Comments:   3,
+				PostedBy:   "Bellamy",
+				PostedTime: time.Date(2019, 11, 13, 0, 0, 0, 0, time.UTC),
+			},
+		}, nil
+	}
+
+	return []models.ArticleInfo{}, nil
+}
+
+// GetByUser will only return a result if username=Jonny, sortedBy=new, limit=25.
+func (m *ArticleModel) GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
+	if username == "Jonny" && sortedBy == "new" && limit == 25 {
+		return []models.ArticleInfo{
+			{
+				Subreddit:  "a",
+				ArticleID:  "a",
+				Type:       "text",
+				Body:       "a",
+				Title:      "a",
+				Points:     -12,
+				Comments:   0,
+				PostedBy:   "Freeman",
+				PostedTime: time.Date(2019, 11, 13, 0, 0, 0, 0, time.UTC),
+			},
+		}, nil
+	}
+
+	return []models.ArticleInfo{}, nil
+}
+
+// GetSavedByUser will only return a result if username=Albarn, sortedBy=old, limit=2.
+func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
+	if username == "Albarn" && sortedBy == "old" && limit == 2 {
+		return []models.ArticleInfo{
+			{
+				Subreddit:  "b",
+				ArticleID:  "b",
+				Type:       "text",
+				Body:       "b",
+				Title:      "b",
+				Points:     420,
+				Comments:   69,
+				PostedBy:   "mememan",
+				PostedTime: time.Date(2019, 11, 13, 0, 0, 0, 0, time.UTC),
+			},
+		}, nil
+	}
+
+	return []models.ArticleInfo{}, nil
 }

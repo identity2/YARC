@@ -71,8 +71,3 @@ func (m *CommentModel) GetByUsername(username, afterCommentID string, limit int)
 		},
 	}, nil
 }
-
-// GetPoints TODO.
-func (m *CommentModel) GetPoints(commentID string) (int, error) {
-	return 666, nil
-}

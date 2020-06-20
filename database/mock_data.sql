@@ -323,6 +323,24 @@ INSERT INTO save_article (username, sub_name, aid) VALUES (
 );
 
 INSERT INTO save_article (username, sub_name, aid) VALUES (
+    'Jonny',
+    'dankmeme',
+    '246o19'
+);
+
+INSERT INTO save_article (username, sub_name, aid) VALUES (
+    'Jonny',
+    'meirl',
+    't09o3'
+);
+
+INSERT INTO save_article (username, sub_name, aid) VALUES (
+    'Jonny',
+    'PHP',
+    'IpX177'
+);
+
+INSERT INTO save_article (username, sub_name, aid) VALUES (
     'Albarn',
     'PHP',
     'IpX177'
@@ -338,6 +356,18 @@ INSERT INTO save_article (username, sub_name, aid) VALUES (
     'Albarn',
     'PHP',
     'RgMG_RTSvkQ'
+);
+
+INSERT INTO save_article (username, sub_name, aid) VALUES (
+    'Albarn',
+    'PHP',
+    'RgMG_RTSvkQ9'
+);
+
+INSERT INTO save_article (username, sub_name, aid) VALUES (
+    'Albarn',
+    'dankmeme',
+    '246o19'
 );
 
 -- vote_article

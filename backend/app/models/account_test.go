@@ -249,7 +249,7 @@ func TestAccountGet(t *testing.T) {
 		wantUserInfo UserInfo
 		wantError    error
 	}{
-		{"Valid User 1", "Jonny", UserInfo{"Jonny", -1, "Pop is dead, long live pop.", time.Date(1971, 11, 5, 10, 33, 52, 0, time.UTC)}, nil},
+		{"Valid User 1", "Jonny", UserInfo{"Jonny", 2, "Pop is dead, long live pop.", time.Date(1971, 11, 5, 10, 33, 52, 0, time.UTC)}, nil},
 		{"Valid User 2", "Morrissey", UserInfo{"Morrissey", 2, "Oh mother, I can feel, the soil falling.", time.Date(1959, 5, 22, 10, 23, 54, 0, time.UTC)}, nil},
 		{"Invalid Username", "Bowie", UserInfo{}, ErrUsernameNotExist},
 	}

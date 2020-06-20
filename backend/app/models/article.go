@@ -85,6 +85,7 @@ type ArticleInfo struct {
 	Body       string    `json:"body"`
 	Title      string    `json:"title"`
 	Points     int       `json:"points"`
+	Comments   int       `json:"comments"`
 	PostedBy   string    `json:"postedBy"`
 	PostedTime time.Time `json:"postedTime"`
 }
@@ -182,19 +183,32 @@ func (m *ArticleModel) Delete(articleID, username string) error {
 func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 	a := ArticleInfo{}
 	stmt := `SELECT
-	ART.sub_name, ART.aid, ART.type, ART.body, ART.title, COALESCE(SUM(VA.point), 0) AS points, ART.posted_by, ART.posted_time
-	FROM article ART LEFT JOIN vote_article VA ON ART.aid = VA.aid
-	WHERE ART.aid = $1
-	GROUP BY ART.sub_name, ART.aid`
+	ART.sub_name, ART.aid, ART.type, ART.body, ART.title, COALESCE(VA.points, 0) AS points, COALESCE(COM.comments, 0) AS comments, ART.posted_by, ART.posted_time
+	FROM article ART
+	LEFT JOIN (SELECT aid, SUM(point) AS points FROM vote_article GROUP BY sub_name, aid) VA ON ART.aid = VA.aid
+	LEFT JOIN (SELECT aid, COUNT(*) AS comments FROM comment GROUP BY aid) COM ON COM.aid = ART.aid
+	WHERE ART.aid = $1`
 	row := m.DB.QueryRow(stmt, articleID)
 
-	err := row.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.PostedBy, &a.PostedTime)
+	err := row.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.Comments, &a.PostedBy, &a.PostedTime)
 	if err != nil {
 		return a, ErrArticleNotExist
 	}
 
 	// Successfully selected the article.
 	return a, nil
+}
+
+// GetAll returns a list of articles in all subreddits limited by a number, sorted by hot/new/old.
+func (m *ArticleModel) GetAll(afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
+	return m.getList(sortedBy, ``, `TRUE = $1`, `TRUE`, afterArticleID, limit)
+}
+
+// GetBySubscribed returns a list of articles in subreddits subscribed by a user,
+// limited by a number, sorted by hot/new/old.
+func (m *ArticleModel) GetBySubscribed(username, afterArticleID, sortedBy string, limit int) ([]ArticleInfo, error) {
+	firstWhere := `A.sub_name IN (SELECT sub_name FROM join_sub WHERE username = $1)`
+	return m.getList(sortedBy, ``, firstWhere, username, afterArticleID, limit)
 }
 
 // GetBySubreddit returns a list of articles in the subreddit continued after an article,
@@ -235,9 +249,13 @@ func (m *ArticleModel) getList(sortedBy, join, firstWhere, firstParam, afterArti
 	// $1 should be the first selecting criterion in the where clause.
 	// $2 should be the aid marking the start of the selecting range.
 	// $3 is the limit.
-	stmt := fmt.Sprintf(`WITH temp AS (SELECT A.sub_name, A.aid, A.type, A.body, A.title, COALESCE(SUM(VA.point), 0) AS points, A.posted_by, A.posted_time
-		FROM article A LEFT JOIN vote_article VA ON A.aid = VA.aid %s WHERE %s GROUP BY A.sub_name, A.aid)
-		SELECT sub_name, aid, type, body, title, points, posted_by, posted_time FROM temp
+	stmt := fmt.Sprintf(`WITH temp AS
+		(SELECT A.sub_name, A.aid, A.type, A.body, A.title, COALESCE(VA.points, 0) AS points, COALESCE(COM.comments, 0) AS comments, A.posted_by, A.posted_time
+		FROM article A
+		LEFT JOIN (SELECT aid, SUM(point) AS points FROM vote_article GROUP BY sub_name, aid) VA ON A.aid = VA.aid
+		LEFT JOIN (SELECT aid, COUNT(*) AS comments FROM comment GROUP BY aid) COM ON A.aid = COM.aid
+		%s WHERE %s)
+		SELECT sub_name, aid, type, body, title, points, comments, posted_by, posted_time FROM temp
 		WHERE %s ORDER BY %s LIMIT $3`, join, firstWhere, clauses.where, clauses.orderBy)
 
 	rows, err := m.DB.Query(stmt, firstParam, afterArticleID, limit)
@@ -246,7 +264,7 @@ func (m *ArticleModel) getList(sortedBy, join, firstWhere, firstParam, afterArti
 	}
 	for rows.Next() {
 		a := ArticleInfo{}
-		err = rows.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.PostedBy, &a.PostedTime)
+		err = rows.Scan(&a.Subreddit, &a.ArticleID, &a.Type, &a.Body, &a.Title, &a.Points, &a.Comments, &a.PostedBy, &a.PostedTime)
 		if err != nil {
 			return []ArticleInfo{}, err
 		}

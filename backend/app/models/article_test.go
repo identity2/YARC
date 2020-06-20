@@ -122,7 +122,8 @@ func TestArticleGet(t *testing.T) {
 		wantError   error
 	}{
 		{"Invalid ArticleID", "abcde", ArticleInfo{}, ErrArticleNotExist},
-		{"Valid", "246o1", ArticleInfo{"dankmeme", "246o1", "link", "http://www.google.com.tw/", "This is a nice website I discovered.", -1, "Jonny", time.Date(2012, 12, 12, 12, 12, 12, 0, time.UTC)}, nil},
+		{"Valid", "246o1", ArticleInfo{"dankmeme", "246o1", "link", "http://www.google.com.tw/", "This is a nice website I discovered.", -1, 3, "Jonny", time.Date(2012, 12, 12, 12, 12, 12, 0, time.UTC)}, nil},
+		{"Valid No Comments No points", "RgMG_RTSvkQa", ArticleInfo{"PHP", "RgMG_RTSvkQa", "text", "Abominations, I think Visual Basic is just too good to be real!", "One of my dominations", 0, 0, "Jonny", time.Date(2020, 11, 21, 19, 20, 2, 0, time.UTC)}, nil},
 	}
 
 	// Perform tests.
@@ -144,6 +145,113 @@ func TestArticleGet(t *testing.T) {
 
 			if err != tc.wantError {
 				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+		})
+	}
+}
+
+func TestArticleGetAll(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name           string
+		afterArticleID string
+		sortedBy       string
+		limit          int
+		wantArticleIDs []string
+		wantError      error
+	}{
+		{"Exceed Max Limit", "RgMG_RTSvkQ6", "hot", 101, []string{}, ErrLimitInvalid},
+		{"Exceed Min Limit", "RgMG_RTSvkQ6", "new", -1, []string{}, ErrLimitInvalid},
+		{"Invalid sortedBy", "RgMG_RTSvkQ6", "hey", 20, []string{}, ErrSortedByInvalid},
+		{"Sort by hot in range", "RgMG_RTSvkQ7", "hot", 3, []string{"RgMG_RTSvkQ8", "IpX1779", "t09o39"}, nil},
+		{"Sort by hot from start", "", "hot", 2, []string{"IpX177", "WX-78"}, nil},
+		{"Sort by hot pass end", "RgMG_RTSvkQ", "hot", 5, []string{"246o1"}, nil},
+		{"Sort by new in range", "t09o39", "new", 3, []string{"t09o3", "246o19", "246o1"}, nil},
+		{"Sort by new from start", "", "new", 3, []string{"RgMG_RTSvkQa", "RgMG_RTSvkQ6", "RgMG_RTSvkQ7"}, nil},
+		{"Sort by new pass end", "WX-789", "new", 3, []string{"WX-78"}, nil},
+		{"Sort by old in range", "t09o3", "old", 4, []string{"t09o39", "IpX177", "IpX1779", "RgMG_RTSvkQ"}, nil},
+		{"Sort by old from start", "", "old", 4, []string{"WX-78", "WX-789", "246o1", "246o19"}, nil},
+		{"Sort by old pass end", "RgMG_RTSvkQ6", "old", 4, []string{"RgMG_RTSvkQa"}, nil},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			res, err := m.GetAll(tc.afterArticleID, tc.sortedBy, tc.limit)
+
+			// Want.
+			if tc.wantError != err {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+
+			if len(tc.wantArticleIDs) != len(res) {
+				t.Fatalf("want len %v; got len %v", len(tc.wantArticleIDs), len(res))
+			}
+			for i := range tc.wantArticleIDs {
+				if tc.wantArticleIDs[i] != res[i].ArticleID {
+					t.Errorf("want %v; got %v", tc.wantArticleIDs[i], res[i].ArticleID)
+				}
+			}
+		})
+	}
+}
+
+func TestArticleGetBySubscribed(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name           string
+		username       string
+		afterArticleID string
+		sortedBy       string
+		limit          int
+		wantArticleIDs []string
+		wantError      error
+	}{
+		{"Exceed Max Limit", "Morrissey", "RgMG_RTSvkQ6", "hot", 101, []string{}, ErrLimitInvalid},
+		{"Exceed Min Limit", "Morrissey", "RgMG_RTSvkQ6", "new", -1, []string{}, ErrLimitInvalid},
+		{"Invalid sortedBy", "Morrissey", "RgMG_RTSvkQ6", "hey", 20, []string{}, ErrSortedByInvalid},
+		{"Sort by hot in range", "Jonny", "t09o3", "hot", 3, []string{"246o19", "WX-789", "246o1"}, nil},
+		{"Sort by hot from start", "Jonny", "", "hot", 2, []string{"WX-78", "t09o39"}, nil},
+		{"Sort by hot pass end", "Jonny", "246o19", "hot", 5, []string{"WX-789", "246o1"}, nil},
+		{"Sort by new in range", "Albarn", "RgMG_RTSvkQa", "new", 2, []string{"RgMG_RTSvkQ6", "RgMG_RTSvkQ7"}, nil},
+		{"Sort by new from start", "Albarn", "", "new", 3, []string{"RgMG_RTSvkQa", "RgMG_RTSvkQ6", "RgMG_RTSvkQ7"}, nil},
+		{"Sort by new pass end", "Albarn", "IpX1779", "new", 3, []string{"IpX177"}, nil},
+		{"Sort by old in range", "Albarn", "IpX177", "old", 4, []string{"IpX1779", "RgMG_RTSvkQ", "RgMG_RTSvkQ9", "RgMG_RTSvkQ8"}, nil},
+		{"Sort by old from start", "Albarn", "", "old", 4, []string{"IpX177", "IpX1779", "RgMG_RTSvkQ", "RgMG_RTSvkQ9"}, nil},
+		{"Sort by old pass end", "Albarn", "RgMG_RTSvkQ6", "old", 4, []string{"RgMG_RTSvkQa"}, nil},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			res, err := m.GetBySubscribed(tc.username, tc.afterArticleID, tc.sortedBy, tc.limit)
+
+			// Want.
+			if tc.wantError != err {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+
+			if len(tc.wantArticleIDs) != len(res) {
+				t.Fatalf("want len %v; got len %v", len(tc.wantArticleIDs), len(res))
+			}
+			for i := range tc.wantArticleIDs {
+				if tc.wantArticleIDs[i] != res[i].ArticleID {
+					t.Errorf("want %v; got %v", tc.wantArticleIDs[i], res[i].ArticleID)
+				}
 			}
 		})
 	}
@@ -204,11 +312,111 @@ func TestArticleGetBySubreddit(t *testing.T) {
 }
 
 func TestArticleGetByUser(t *testing.T) {
-	// TODO
+	// Testcases.
+	tests := []struct {
+		name           string
+		username       string
+		afterArticleID string
+		sortedBy       string
+		limit          int
+		wantArticleIDs []string
+		wantError      error
+	}{
+		{"Exceed Max Limit", "Jonny", "RgMG_RTSvkQ6", "hot", 101, []string{}, ErrLimitInvalid},
+		{"Exceed Min Limit", "Jonny", "RgMG_RTSvkQ6", "new", -1, []string{}, ErrLimitInvalid},
+		{"Invalid sortedBy", "Jonny", "RgMG_RTSvkQ6", "hey", 20, []string{}, ErrSortedByInvalid},
+		{"Sort by hot in range", "Jonny", "IpX1779", "hot", 3, []string{"246o19", "RgMG_RTSvkQ", "246o1"}, nil},
+		{"Sort by hot from start", "Jonny", "", "hot", 2, []string{"IpX177", "RgMG_RTSvkQ9"}, nil},
+		{"Sort by hot pass end", "Jonny", "246o19", "hot", 5, []string{"RgMG_RTSvkQ", "246o1"}, nil},
+		{"Sort by new in range", "Jonny", "IpX1779", "new", 2, []string{"IpX177", "246o19"}, nil},
+		{"Sort by new from start", "Jonny", "", "new", 3, []string{"RgMG_RTSvkQa", "RgMG_RTSvkQ6", "RgMG_RTSvkQ7"}, nil},
+		{"Sort by new pass end", "Jonny", "246o19", "new", 3, []string{"246o1"}, nil},
+		{"Sort by old in range", "Morrissey", "WX-78", "old", 1, []string{"WX-789"}, nil},
+		{"Sort by old from start", "Morrissey", "", "old", 2, []string{"WX-78", "WX-789"}, nil},
+		{"Sort by old pass end", "Morrissey", "WX-78", "old", 4, []string{"WX-789"}, nil},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			res, err := m.GetByUser(tc.username, tc.afterArticleID, tc.sortedBy, tc.limit)
+
+			// Want.
+			if tc.wantError != err {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+
+			if len(tc.wantArticleIDs) != len(res) {
+				t.Fatalf("want len %v; got len %v", len(tc.wantArticleIDs), len(res))
+			}
+			for i := range tc.wantArticleIDs {
+				if tc.wantArticleIDs[i] != res[i].ArticleID {
+					t.Errorf("want %v; got %v", tc.wantArticleIDs[i], res[i].ArticleID)
+				}
+			}
+		})
+	}
 }
 
 func TestArticleGetSavedByUser(t *testing.T) {
-	// TODO
+	// Testcases.
+	tests := []struct {
+		name           string
+		username       string
+		afterArticleID string
+		sortedBy       string
+		limit          int
+		wantArticleIDs []string
+		wantError      error
+	}{
+		{"Exceed Max Limit", "Morrissey", "RgMG_RTSvkQ6", "hot", 101, []string{}, ErrLimitInvalid},
+		{"Exceed Min Limit", "Morrissey", "RgMG_RTSvkQ6", "new", -1, []string{}, ErrLimitInvalid},
+		{"Invalid sortedBy", "Morrissey", "RgMG_RTSvkQ6", "hey", 20, []string{}, ErrSortedByInvalid},
+		{"Sort by hot in range", "Albarn", "t09o3", "hot", 2, []string{"246o19", "RgMG_RTSvkQ"}, nil},
+		{"Sort by hot from start", "Albarn", "", "hot", 3, []string{"IpX177", "RgMG_RTSvkQ9", "t09o3"}, nil},
+		{"Sort by hot pass end", "Albarn", "246o19", "hot", 5, []string{"RgMG_RTSvkQ"}, nil},
+		{"Sort by new in range", "Jonny", "t09o3", "new", 2, []string{"246o19", "246o1"}, nil},
+		{"Sort by new from start", "Jonny", "", "new", 2, []string{"IpX177", "t09o3"}, nil},
+		{"Sort by new pass end", "Jonny", "246o19", "new", 3, []string{"246o1"}, nil},
+		{"Sort by old in range", "Albarn", "IpX177", "old", 1, []string{"RgMG_RTSvkQ"}, nil},
+		{"Sort by old from start", "Albarn", "", "old", 3, []string{"246o19", "t09o3", "IpX177"}, nil},
+		{"Sort by old pass end", "Albarn", "RgMG_RTSvkQ", "old", 4, []string{"RgMG_RTSvkQ9"}, nil},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			res, err := m.GetSavedByUser(tc.username, tc.afterArticleID, tc.sortedBy, tc.limit)
+
+			// Want.
+			if tc.wantError != err {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+
+			if len(tc.wantArticleIDs) != len(res) {
+				t.Fatalf("want len %v; got len %v", len(tc.wantArticleIDs), len(res))
+			}
+			for i := range tc.wantArticleIDs {
+				if tc.wantArticleIDs[i] != res[i].ArticleID {
+					t.Errorf("want %v; got %v", tc.wantArticleIDs[i], res[i].ArticleID)
+				}
+			}
+		})
+	}
 }
 
 // Combination test.
