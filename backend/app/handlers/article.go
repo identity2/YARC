@@ -148,9 +148,7 @@ func (h *Handler) NewArticle(w http.ResponseWriter, r *http.Request) {
 	// Respond with the inserted articleID.
 	resp := struct {
 		ArticleID string `json:"articleID"`
-	}{
-		ArticleID: articleID,
-	}
+	}{articleID}
 
 	jsonResponse(w, http.StatusCreated, resp)
 }

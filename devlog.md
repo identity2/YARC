@@ -109,5 +109,8 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Completed all the routes in article handler. Also wrote tests for it.
 * Did some manual tests.
 
+# 2020.06.22
+* Completed the comment model and handler. Also wrote tests for them.
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

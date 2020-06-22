@@ -27,8 +27,8 @@ func TestListArticle(t *testing.T) {
 		{"Criterion Empty Key not empty", "/article?key=good", http.StatusOK, getAllBody},
 		{"Criterion not empty Key empty", "/article?criterion=nice", http.StatusOK, getAllBody},
 		{"Wrong criterion", "/article?criterion=doom&key=ok", http.StatusBadRequest, `{"error":"the criterion query string should be either 'sub', 'by', or 'savedBy'"}`},
-		{"Empty sort (=hot) criterion=sub limit=1", "/article?criterion=sub&key=radiohead&limit=1", http.StatusOK, hotSubRadioheadLimit1Body},
-		{"sort=new criterion=by Empty limit (=25)", "/article?sort=new&criterion=by&key=Jonny", http.StatusOK, newByJonnyLimit25Body},
+		{"Empty sort (=hot) criterion=sub limit=1", "/article?after=ok&criterion=sub&key=radiohead&limit=1", http.StatusOK, hotSubRadioheadLimit1Body},
+		{"sort=new criterion=by Empty limit (=25)", "/article?sort=new&after=bad&criterion=by&key=Jonny", http.StatusOK, newByJonnyLimit25Body},
 		{"sort=old criterion=savedBy limit=2", "/article?sort=old&criterion=savedBy&key=Albarn&limit=2", http.StatusOK, oldSavedByAlbarnLimit2Body},
 	}
 

@@ -9,7 +9,7 @@ import (
 // ArticleModel is the mock model for article.
 type ArticleModel struct{}
 
-// Insert returns errSubredditNotExist if the subreddit is "dankmeme",
+// Insert returns ErrSubredditNotExist if the subreddit is "dankmeme",
 // otherwise it returns "WX-78", nil.
 func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (string, error) {
 	if subName == "dankmeme" {
@@ -19,7 +19,7 @@ func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (
 	return "WX-78", nil
 }
 
-// ModifyBody returns errArticleNotExist if articleID is "Dijkstra",
+// ModifyBody returns ErrArticleNotExist if articleID is "Dijkstra",
 // other it returns nil.
 func (m *ArticleModel) ModifyBody(articleID, username, body string) error {
 	if articleID == "Dijkstra" {
@@ -29,7 +29,7 @@ func (m *ArticleModel) ModifyBody(articleID, username, body string) error {
 	return nil
 }
 
-// Delete returns errArticleNotExist if articleID is "Dijkstra",
+// Delete returns ErrArticleNotExist if articleID is "Dijkstra",
 // otherwise it returns nil.
 func (m *ArticleModel) Delete(articleID, username string) error {
 	if articleID == "Dijkstra" {
@@ -91,9 +91,9 @@ func (m *ArticleModel) GetBySubscribed(username, afterArticleID, sortedBy string
 	return []models.ArticleInfo{}, nil
 }
 
-// GetBySubreddit will only return a result if subName=radiohead, sortedBy=hot, limit=1.
+// GetBySubreddit will only return a result if subName=radiohead, sortedBy=hot, limit=1, afterArticleID=ok.
 func (m *ArticleModel) GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
-	if subName == "radiohead" && sortedBy == "hot" && limit == 1 {
+	if afterArticleID == "ok" && subName == "radiohead" && sortedBy == "hot" && limit == 1 {
 		return []models.ArticleInfo{
 			{
 				Subreddit:  "radiohead",
@@ -112,9 +112,9 @@ func (m *ArticleModel) GetBySubreddit(subName, afterArticleID, sortedBy string, 
 	return []models.ArticleInfo{}, nil
 }
 
-// GetByUser will only return a result if username=Jonny, sortedBy=new, limit=25.
+// GetByUser will only return a result if username=Jonny, sortedBy=new, limit=25, afterArticleID=bad.
 func (m *ArticleModel) GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
-	if username == "Jonny" && sortedBy == "new" && limit == 25 {
+	if afterArticleID == "bad" && username == "Jonny" && sortedBy == "new" && limit == 25 {
 		return []models.ArticleInfo{
 			{
 				Subreddit:  "a",
@@ -133,9 +133,9 @@ func (m *ArticleModel) GetByUser(username, afterArticleID, sortedBy string, limi
 	return []models.ArticleInfo{}, nil
 }
 
-// GetSavedByUser will only return a result if username=Albarn, sortedBy=old, limit=2.
+// GetSavedByUser will only return a result if username=Albarn, sortedBy=old, limit=2, afterArticleID="".
 func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error) {
-	if username == "Albarn" && sortedBy == "old" && limit == 2 {
+	if afterArticleID == "" && username == "Albarn" && sortedBy == "old" && limit == 2 {
 		return []models.ArticleInfo{
 			{
 				Subreddit:  "b",

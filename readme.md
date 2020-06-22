@@ -50,7 +50,7 @@ I like Reddit.
 ## Backend Milestones
 - [x] Design API and database schema.
 - [ ] Subreddit APIs.
-- [ ] Article APIs.
-- [ ] Comment APIs.
+- [x] Article APIs.
+- [x] Comment APIs.
 - [ ] Karma APIs.
 - [ ] Search API.

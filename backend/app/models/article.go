@@ -134,7 +134,7 @@ func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (
 		return "", err
 	}
 
-	// Successfully inserted to the database.
+	// Successfully inserted into the database.
 	return articleID, nil
 }
 

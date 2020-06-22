@@ -246,8 +246,10 @@ Request query strings:
 | ------------ | ----------- | ------- | --------------------------------------- |
 | after        | commentID   |         | Return comments succeeded by commentID. |
 | limit        | integer     | 25      | The number of comments to be returned.  |
-| postedBy     | username    |         | Return comments posted by username.     |
 | ofArticle    | articleID   |         | Return comments of the articleID.       |
+| postedBy     | username    |         | Return comments posted by username.     |
+
+*The the `ofArticle` and `postedBy` query string cannot coexist. If they both appear, `ofArticle` will be executed and `postedBy` will be discarded.*
 
 *When `after` is the blank string "", it returns the list from the start.*
 
@@ -296,10 +298,8 @@ Request Body:
 
 ```
 {
-    "subreddit": "The subreddit the comment is in.",
     "articleID": "The article the comment is in.",
-    "body": "Comment text body.",
-    "postedBy": "username"
+    "body": "Comment text body."
 }
 ```
 

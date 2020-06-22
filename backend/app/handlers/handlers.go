@@ -36,9 +36,10 @@ type SubredditModel interface {
 
 // CommentModel defines the operations related to comment.
 type CommentModel interface {
-	Insert(subName, articleID, body, postedBy string) (string, error)
+	Insert(articleID, body, postedBy string) (string, error)
 	ModifyBody(commentID, username, newBody string) error
 	Delete(commentID, username string) error
+	Get(commentID string) (models.CommentInfo, error)
 	GetByArticle(articleID, afterCommentID string, limit int) ([]models.CommentInfo, error)
 	GetByUsername(username, afterCommentID string, limit int) ([]models.CommentInfo, error)
 }
