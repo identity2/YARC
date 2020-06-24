@@ -113,6 +113,41 @@ func TestArticleDelete(t *testing.T) {
 	}
 }
 
+func TestArticleVote(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		articleID string
+		point     int
+		wantError error
+	}{
+		{"Valid", "Morrissey", "WX-78", 1, nil},
+		{"Change Vote", "Jonny", "WX-78", 0, nil},
+		{"Invalid Article", "Jonny", "77777", 0, ErrArticleNotExist},
+		{"Invalid Username", "Kurt", "WX-78", 1, ErrUsernameNotExist},
+	}
+
+	// Perform Tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			err := m.Vote(tc.username, tc.articleID, tc.point)
+
+			// Want.
+			if err != tc.wantError {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+		})
+	}
+}
+
 func TestArticleGet(t *testing.T) {
 	// Testcases.
 	tests := []struct {
@@ -476,4 +511,45 @@ func TestInsertGetModifyDelete(t *testing.T) {
 		t.Errorf("want %v; got %v", ErrArticleNotExist, err)
 	}
 
+}
+
+func TestVoteGet(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		articleID string
+		point     int
+		wantPoint int
+	}{
+		{"New Vote", "Morrissey", "WX-78", -1, 1},
+		{"Change Vote", "Jonny", "246o1", -1, -3},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			err := m.Vote(tc.username, tc.articleID, tc.point)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			article, err := m.Get(tc.articleID)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			// Want.
+			if article.Points != tc.wantPoint {
+				t.Errorf("want %v; got %v", tc.wantPoint, article.Points)
+			}
+		})
+	}
 }

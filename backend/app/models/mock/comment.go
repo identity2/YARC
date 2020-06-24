@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/YuChaoGithub/YARC/backend/app/models"
@@ -34,6 +35,15 @@ func (m *CommentModel) Delete(commentID, username string) error {
 	}
 
 	return nil
+}
+
+// Vote returns nil only if username=Jonny, commentID=88888, point=-1.
+func (m *CommentModel) Vote(username, commentID string, point int) error {
+	if username == "Jonny" && commentID == "88888" && point == -1 {
+		return nil
+	}
+
+	return fmt.Errorf("")
 }
 
 // Get has only the comment with ID 12345. It returns ErrCommentNotExist otherwise.

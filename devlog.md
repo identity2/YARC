@@ -112,5 +112,12 @@ I like to keep a chronological development log, so that I can regain my motivati
 # 2020.06.22
 * Completed the comment model and handler. Also wrote tests for them.
 
+# 2020.06.24
+* Completed the models and handlers related to Karma System. Also wrote tests for them.
+* Completed the search model and handler. Also wrote tests for them.
+* Added Redis connection and implemented the `/trending` subreddit API.
+
+**Backend API is completed, now moving back into Frontend and write API-consuming code.**
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

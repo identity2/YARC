@@ -21,7 +21,11 @@ func (m *SubredditModel) Get(name string) (models.SubredditInfo, error) {
 	return models.SubredditInfo{}, models.ErrSubredditNotExist
 }
 
-// GetTrending TODO.
+// IncrVisitCount does nothing.
+func (m *SubredditModel) IncrVisitCount(name string) {
+}
+
+// GetTrending returns a result if limit=2.
 func (m *SubredditModel) GetTrending(limit int) ([]models.SubredditInfo, error) {
 	return []models.SubredditInfo{
 		{

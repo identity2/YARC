@@ -179,6 +179,26 @@ func (m *ArticleModel) Delete(articleID, username string) error {
 	return nil
 }
 
+// Vote inserts a vote entry for the articleID by the username.
+func (m *ArticleModel) Vote(username, articleID string, point int) error {
+	stmt := `INSERT INTO vote_article (username, sub_name, aid, point) VALUES
+		($1, (SELECT sub_name FROM article WHERE aid = $2), $2, $3)
+		ON CONFLICT (username, sub_name, aid) DO UPDATE SET point = $3`
+
+	_, err := m.DB.Exec(stmt, username, articleID, point)
+	if err, ok := err.(*pq.Error); ok {
+		if strings.Contains(err.Message, "sub_name") || strings.Contains(err.Message, "aid") {
+			return ErrArticleNotExist
+		} else if strings.Contains(err.Message, "username") {
+			return ErrUsernameNotExist
+		}
+		return err
+	}
+
+	// Successfully inserted into the database.
+	return nil
+}
+
 // Get returns the article specified by the articleID.
 func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 	a := ArticleInfo{}

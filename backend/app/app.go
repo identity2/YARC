@@ -11,6 +11,7 @@ import (
 	"github.com/YuChaoGithub/YARC/backend/app/handlers"
 	"github.com/YuChaoGithub/YARC/backend/app/models"
 	"github.com/YuChaoGithub/YARC/backend/config"
+	"github.com/go-redis/redis"
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq" // PostgreSQL driver.
@@ -41,10 +42,23 @@ func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 		log.Fatal(err)
 	}
 	defer db.Close()
+
+	// Redis connection.
+	rdb := redis.NewClient(&redis.Options{
+		Addr:     config.MemStore.Addr,
+		Password: config.MemStore.Password,
+		DB:       config.MemStore.DB,
+	})
+	if _, err = rdb.Ping().Result(); err != nil {
+		log.Fatal(err)
+	}
+	defer rdb.Close()
+
+	// Inject the DBs into the models.
 	a.handler = &handlers.Handler{
 		Accounts:     &models.AccountModel{DB: db},
 		Comments:     &models.CommentModel{DB: db},
-		Subreddits:   &models.SubredditModel{DB: db},
+		Subreddits:   &models.SubredditModel{DB: db, RDB: rdb},
 		Articles:     &models.ArticleModel{DB: db},
 		Searches:     &models.SearchModel{DB: db},
 		JWTSecretKey: jwtSecretKey,
@@ -109,11 +123,14 @@ func (a *App) setRouters() {
 	// Subreddit.
 	a.Get("/subreddit/{name}", a.handler.Subreddit)
 	a.Post("/subreddit", auth(a.handler.NewSubreddit))
-	a.Get("/trending", auth(a.handler.TrendingSubreddit))
+	a.Get("/trending", a.handler.TrendingSubreddit)
 
 	// Karma.
 	a.Post("/karma/article/{id}", auth(a.handler.VoteArticle))
 	a.Post("/karma/comment/{id}", auth(a.handler.VoteComment))
+
+	// Search.
+	a.Get("/search", a.handler.Search)
 }
 
 // Get wraps the gorilla mux for GET method.

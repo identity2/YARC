@@ -106,6 +106,9 @@ func (h *Handler) JoinSubreddit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Increment the subreddit visit count.
+	h.Subreddits.IncrVisitCount(subName)
+
 	// Successfully inserted.
 	w.WriteHeader(http.StatusCreated)
 }

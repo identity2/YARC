@@ -192,6 +192,10 @@ Searches for both articles and subreddits.
 #### GET `/search`
 Return the search result according to the query string.
 
+The result is limited to be at most 5 subreddits and at most 50 articles.
+
+(P.S. This is an extremely primitive search engine. Since search engine is a huge topic in itself, and I'm only demonstrating my CRUD web app development skills for this project, I didn't bother diving into the topic.)
+
 Request query strings:
 
 | Query String | Value        |
@@ -441,6 +445,8 @@ Request query strings:
 | ------------ | ----------- | ------- | ---------------------------------------- |
 | limit        | integer     | 5       | The number of subreddits to be returned. |
 
+*The `limit` should be a number between 1 and 20.*
+
 Response Body:
 
 ```
@@ -463,28 +469,16 @@ Upvote and downvote.
 | POST   | /karma/article/{articleID}  | Upvote or downvote an article.           | Yes            |
 | POST   | /karma/comment/{commentID}  | Upvote or downvote a comment.            | Yes            |
 
-#### POST `/karma/article/{articleID}`
+#### POST `/karma/article/{articleID}?action={action}`
 Upvote or downvote an article.
 
-Request body:
-```
-{
-    "articleID": "The id of the article.",
-    "action": "upvote"
-}
-```
+The query string `action` is required. It is either `up`, `down` or `cancel`.
 
-Response body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
+Response body: Empty if success (`204`), otherwise (`401`) or (`400`) with error message.
 
-#### POST `/karma/comment/{commentID}`
+#### POST `/karma/comment/{commentID}?action={action}`
 Upvote or downvote a comment.
 
-Request body:
-```
-{
-    "commentID": "The id of the comment.",
-    "action": "upvote"
-}
-```
+The query string `action` is required. It is either `up`, `down` or `cancel`.
 
-Response body: Empty if success (`201`), otherwise (`401`) or (`400`) with error message.
+Response body: Empty if success (`204`), otherwise (`401`) or (`400`) with error message.

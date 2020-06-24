@@ -113,6 +113,9 @@ func (h *Handler) Article(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Increment the subreddit visit count.
+	h.Subreddits.IncrVisitCount(resp.Subreddit)
+
 	jsonResponse(w, http.StatusOK, resp)
 }
 

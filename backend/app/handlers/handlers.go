@@ -32,6 +32,7 @@ type SubredditModel interface {
 	Insert(name, description string) error
 	Get(name string) (models.SubredditInfo, error)
 	GetTrending(limit int) ([]models.SubredditInfo, error)
+	IncrVisitCount(name string)
 }
 
 // CommentModel defines the operations related to comment.
@@ -39,6 +40,7 @@ type CommentModel interface {
 	Insert(articleID, body, postedBy string) (string, error)
 	ModifyBody(commentID, username, newBody string) error
 	Delete(commentID, username string) error
+	Vote(username, commentID string, point int) error
 	Get(commentID string) (models.CommentInfo, error)
 	GetByArticle(articleID, afterCommentID string, limit int) ([]models.CommentInfo, error)
 	GetByUsername(username, afterCommentID string, limit int) ([]models.CommentInfo, error)
@@ -49,6 +51,7 @@ type ArticleModel interface {
 	Insert(subName, postType, body, title, postedBy string) (string, error)
 	ModifyBody(articleID, username, body string) error
 	Delete(articleID, username string) error
+	Vote(username, articleID string, point int) error
 	Get(articleID string) (models.ArticleInfo, error)
 	GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 	GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)

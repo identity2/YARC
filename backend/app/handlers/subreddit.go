@@ -5,8 +5,14 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strconv"
 
+	"github.com/YuChaoGithub/YARC/backend/app/models"
 	"github.com/gorilla/mux"
+)
+
+const (
+	defaultTrendingLimit = 5
 )
 
 type subredditReq struct {
@@ -23,6 +29,9 @@ func (h *Handler) Subreddit(w http.ResponseWriter, r *http.Request) {
 		respondWithError(w, http.StatusNotFound, err)
 		return
 	}
+
+	// Increment the subreddit visit count.
+	h.Subreddits.IncrVisitCount(resp.Name)
 
 	jsonResponse(w, http.StatusOK, resp)
 }
@@ -60,5 +69,23 @@ func (h *Handler) NewSubreddit(w http.ResponseWriter, r *http.Request) {
 // TrendingSubreddit returns a list of trending subreddits.
 // Routed from GET "/trending".
 func (h *Handler) TrendingSubreddit(w http.ResponseWriter, r *http.Request) {
-	// TODO
+	// Retrieve the limit query.
+	limit, err := strconv.Atoi(r.URL.Query().Get("limit"))
+	if err != nil || limit <= 0 {
+		limit = defaultTrendingLimit
+	}
+
+	// Get the trending subreddits.
+	subs, err := h.Subreddits.GetTrending(limit)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	res := struct {
+		Subreddits []models.SubredditInfo `json:"subreddits"`
+	}{subs}
+
+	// Successfully get the subreddit list.
+	jsonResponse(w, http.StatusOK, res)
 }

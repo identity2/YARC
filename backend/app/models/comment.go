@@ -107,6 +107,28 @@ func (m *CommentModel) Delete(commentID, username string) error {
 	return nil
 }
 
+// Vote inserts a vote entry for the commentID by the username.
+func (m *CommentModel) Vote(username, commentID string, point int) error {
+	stmt := `INSERT INTO vote_comment SELECT $1, sub_name, aid, cid, $3
+		FROM comment WHERE cid = $2
+		ON CONFLICT (username, sub_name, aid, cid) DO UPDATE SET point = $3`
+
+	res, err := m.DB.Exec(stmt, username, commentID, point)
+	if err, ok := err.(*pq.Error); ok {
+		if strings.Contains(err.Message, "username") {
+			return ErrUsernameNotExist
+		}
+		return err
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil || rowsAffected == 0 {
+		return ErrCommentNotExist
+	}
+
+	// Successfully inserted into the database.
+	return nil
+}
+
 // Get returns a comment by the commentID.
 func (m *CommentModel) Get(commentID string) (CommentInfo, error) {
 	c := CommentInfo{}

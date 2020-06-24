@@ -6,8 +6,9 @@ import "time"
 
 // Config contains ServerConfig and DBConfig.
 type Config struct {
-	Server ServerConfig
-	DB     DBConfig
+	Server   ServerConfig
+	DB       DBConfig
+	MemStore RedisConfig
 }
 
 // ServerConfig defines the configurations related to the web server.
@@ -28,6 +29,13 @@ type DBConfig struct {
 	Name     string
 }
 
+// RedisConfig defines the configurations related to Redis.
+type RedisConfig struct {
+	Addr     string
+	Password string
+	DB       int
+}
+
 // GetConfig returns the configurations of the app, including
 // ServerConfig and DBConfig.
 func GetConfig() *Config {
@@ -45,6 +53,11 @@ func GetConfig() *Config {
 			Username: "postgres",
 			Password: "password",
 			Name:     "yarc",
+		},
+		MemStore: RedisConfig{
+			Addr:     "127.0.0.1:6379",
+			Password: "",
+			DB:       0,
 		},
 	}
 }

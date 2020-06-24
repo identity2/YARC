@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/go-redis/redis"
 	"github.com/lib/pq"
 )
 
@@ -17,7 +18,8 @@ const (
 
 // SubredditModel defines the database which the functions operate on.
 type SubredditModel struct {
-	DB *sql.DB
+	DB  *sql.DB
+	RDB *redis.Client
 }
 
 // ErrSubNameInvalid means the subreddit name contains invalid characters or is too long/short.
@@ -82,8 +84,30 @@ func (m *SubredditModel) Get(name string) (SubredditInfo, error) {
 	return subInfo, nil
 }
 
+// IncrVisitCount increments the visit count of the subreddit which affects the trending rankings.
+func (m *SubredditModel) IncrVisitCount(name string) {
+	// Does nothing if this goes wrong. (aka. no error check)
+	m.RDB.ZIncrBy("subreddit", 1, name)
+}
+
 // GetTrending returns a list of trending subreddits limited by a number.
 func (m *SubredditModel) GetTrending(limit int) ([]SubredditInfo, error) {
-	// TODO, probably use Redis.
-	return []SubredditInfo{}, nil
+	res := []SubredditInfo{}
+
+	// Get the top trending subreddits from Redis.
+	subs, err := m.RDB.ZRevRange("subreddit", 0, int64(limit)-1).Result()
+	if err != nil {
+		return res, err
+	}
+
+	// Get the sub info from the persistent database.
+	for _, val := range subs {
+		s, err := m.Get(val)
+		if err != nil {
+			return []SubredditInfo{}, err
+		}
+		res = append(res, s)
+	}
+
+	return res, nil
 }

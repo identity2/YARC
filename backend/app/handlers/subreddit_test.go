@@ -77,5 +77,21 @@ func TestNewSubreddit(t *testing.T) {
 }
 
 func TestTrending(t *testing.T) {
-	// TODO
+	// Stub and driver.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/trending", h.TrendingSubreddit)
+
+	// When.
+	code, body := r.testGet(t, "/trending?limit=2")
+
+	// Want.
+	wantCode := http.StatusOK
+	wantBody := `{"subreddits":[{"name":"radiohead","description":"Dedicated to all human beings."},{"name":"underrated","description":"Let down and hanging around."}]}`
+	if code != wantCode {
+		t.Errorf("want %v; got %v", wantCode, code)
+	}
+
+	if body != wantBody {
+		t.Errorf("want\n%v\ngot\n%v", wantBody, body)
+	}
 }

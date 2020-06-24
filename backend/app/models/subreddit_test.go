@@ -25,7 +25,7 @@ func TestSubredditInsert(t *testing.T) {
 			db, teardown := newTestDB(t)
 			defer teardown()
 
-			m := SubredditModel{db}
+			m := SubredditModel{db, nil}
 
 			// When.
 			err := m.Insert(tc.subName, tc.description)
@@ -58,7 +58,7 @@ func TestSubredditGet(t *testing.T) {
 			db, teardown := newTestDB(t)
 			defer teardown()
 
-			m := SubredditModel{db}
+			m := SubredditModel{db, nil}
 
 			// When.
 			subreddit, err := m.Get(tc.subName)
@@ -75,10 +75,6 @@ func TestSubredditGet(t *testing.T) {
 	}
 }
 
-func TestSubredditGetTrending(t *testing.T) {
-	// TODO
-}
-
 func TestInsertAndGet(t *testing.T) {
 	wantSubreddit := SubredditInfo{"news", "Which do you want to hear first?"}
 
@@ -86,7 +82,7 @@ func TestInsertAndGet(t *testing.T) {
 	db, teardown := newTestDB(t)
 	defer teardown()
 
-	m := SubredditModel{db}
+	m := SubredditModel{db, nil}
 
 	// When.
 	err := m.Insert(wantSubreddit.Name, wantSubreddit.Description)
@@ -99,5 +95,33 @@ func TestInsertAndGet(t *testing.T) {
 	// Want.
 	if !reflect.DeepEqual(subreddit, wantSubreddit) {
 		t.Errorf("want:\n%v\ngot:\n%v", wantSubreddit, subreddit)
+	}
+}
+
+func TestSubredditGetTrending(t *testing.T) {
+	// Stub and driver.
+	db, teardown := newTestDB(t)
+	defer teardown()
+
+	rdb, rTeardown := newTestRedis(t)
+	defer rTeardown()
+
+	m := SubredditModel{db, rdb}
+
+	// When.
+	subreddits, err := m.GetTrending(3)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Want.
+	wantSubreddits := []SubredditInfo{
+		{Name: "dankmeme", Description: "The dankest meme of the world!"},
+		{Name: "golang", Description: "Hey, ho! Let's go!"},
+		{Name: "PHP", Description: "The best programming language in the world!"},
+	}
+
+	if !reflect.DeepEqual(subreddits, wantSubreddits) {
+		t.Errorf("want:\n%v\ngot:\n%v", subreddits, wantSubreddits)
 	}
 }

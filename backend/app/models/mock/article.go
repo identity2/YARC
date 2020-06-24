@@ -1,6 +1,7 @@
 package mock
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/YuChaoGithub/YARC/backend/app/models"
@@ -37,6 +38,15 @@ func (m *ArticleModel) Delete(articleID, username string) error {
 	}
 
 	return nil
+}
+
+// Vote returns nil only if username=Jonny, articleID=88888, point=1.
+func (m *ArticleModel) Vote(username, articleID string, point int) error {
+	if username == "Jonny" && articleID == "88888" && point == 1 {
+		return nil
+	}
+
+	return fmt.Errorf("")
 }
 
 // Get has only the article with ID WX-78.

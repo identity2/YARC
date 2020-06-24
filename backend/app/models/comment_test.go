@@ -117,6 +117,41 @@ func TestCommentDelete(t *testing.T) {
 	}
 }
 
+func TestCommentVote(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		commentID string
+		point     int
+		wantError error
+	}{
+		{"Valid", "Morrissey", "007op", 1, nil},
+		{"Change Vote", "Jonny", "WhipP", 0, nil},
+		{"Invalid Comment", "Jonny", "77777", 0, ErrCommentNotExist},
+		{"Invalid Username", "Kurt", "007op", 1, ErrUsernameNotExist},
+	}
+
+	// Perform Tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := CommentModel{db}
+
+			// When.
+			err := m.Vote(tc.username, tc.commentID, tc.point)
+
+			// Want.
+			if err != tc.wantError {
+				t.Errorf("want %v; got %v", tc.wantError, err)
+			}
+		})
+	}
+}
+
 func TestCommentGet(t *testing.T) {
 	// Testcases.
 	tests := []struct {
@@ -255,6 +290,47 @@ func TestCommentGetByUsername(t *testing.T) {
 				if res[i].CommentID != tc.wantCommentIDs[i] {
 					t.Errorf("want %v; got %v", tc.wantCommentIDs[i], res[i].CommentID)
 				}
+			}
+		})
+	}
+}
+
+func TestCommentVoteGet(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		commentID string
+		point     int
+		wantPoint int
+	}{
+		{"New Vote", "Morrissey", "007op", -1, 0},
+		{"Change Vote", "Jonny", "WhipP", 1, -1},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := CommentModel{db}
+
+			// When.
+			err := m.Vote(tc.username, tc.commentID, tc.point)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			comment, err := m.Get(tc.commentID)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			// Want.
+			if comment.Points != tc.wantPoint {
+				t.Errorf("want %v; got %v", tc.wantPoint, comment.Points)
 			}
 		})
 	}
