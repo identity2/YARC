@@ -119,5 +119,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 
 **Backend API is completed, now moving back into Frontend and write API-consuming code.**
 
+# 2020.06.26
+* Completed the "Page Not Found" page.
+* Added the catch-all OPTIONS route to handle pre-flight CORS requests.
+* Connected the backend API to the frontend login, register page.
+
 ## TODO
 * Change the sorting UI of the article list in frontend to radio buttons.

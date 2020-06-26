@@ -8,6 +8,7 @@ import CreateSubreddit from './components/page/CreateSubreddit';
 import UserProfile from './components/page/UserProfile';
 import LogInRegister from './components/page/LogInRegister';
 import SearchResult from './components/page/SearchResult';
+import PageNotFound from './components/page/PageNotFound';
 
 Vue.use(VueRouter);
 
@@ -53,6 +54,11 @@ export const router = new VueRouter({
       name: 'search',
       path: '/search',
       component: SearchResult
+    },
+    {
+      name: 'page not found',
+      path: '*',
+      component: PageNotFound
     }
   ]
 });

@@ -131,6 +131,9 @@ func (a *App) setRouters() {
 
 	// Search.
 	a.Get("/search", a.handler.Search)
+
+	// Options.
+	a.router.PathPrefix("/").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}).Methods("OPTIONS")
 }
 
 // Get wraps the gorilla mux for GET method.

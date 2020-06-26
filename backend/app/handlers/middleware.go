@@ -14,7 +14,8 @@ import (
 
 const (
 	jwtTokenLifetimeInDays   = 7
-	allowAccessControlOrigin = "http://127.0.0.1:80"
+	allowAccessControlOrigin = "http://localhost:8081"
+	accessControlMaxAge      = "86400"
 )
 
 type contextKey string
@@ -33,6 +34,9 @@ func LogRequest(next http.Handler) http.Handler {
 func AddCORSHeader(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", allowAccessControlOrigin)
+		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+		w.Header().Set("Access-Control-Allow-Headers", "*")
+		// w.Header().Set("Access-Control-Max-Age", accessControlMaxAge)
 		next.ServeHTTP(w, r)
 	})
 }

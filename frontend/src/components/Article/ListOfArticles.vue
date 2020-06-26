@@ -3,24 +3,22 @@
     <!-- Sort, Create Post -->
     <div class="q-pt-md q-pl-md q-pr-md text-white">
       <q-list dark bordered class="bg-grey-10 rounded-borders">
-        <q-item class="q-mt-sm q-mb-sm">          
-            <q-btn-dropdown color="blue" label="Sort">
-              <q-list>
-                <q-item clickable v-close-popup>Hot</q-item>
-                <q-item clickable v-close-popup>New</q-item>
-                <q-item clickable v-close-popup>Old</q-item>
-              </q-list>
-            </q-btn-dropdown>
+        <q-item class="q-mt-sm q-mb-sm">
+          <div class="q-gutter-sm">
+            <q-radio dark v-model="sortBy" val="hot" label="Hot" />
+            <q-radio dark v-model="sortBy" val="new" label="New" />
+            <q-radio dark v-model="sortBy" val="old" label="Old" />
+          </div>
 
-            <template v-if="canCreatePost">
-              <q-input @click="createPost('text')" class="col q-ml-lg q-mr-sm" dark clearable outlined dense standout label="Create Post" />
-              <q-btn @click="createPost('image')" flat round color="grey" icon="insert_photo">
-                <q-tooltip>Create Image Post</q-tooltip>
-              </q-btn>
-              <q-btn @click="createPost('link')" flat round color="grey" icon="insert_link">
-                <q-tooltip>Create Link Post</q-tooltip>
-              </q-btn>
-            </template>
+          <template v-if="canCreatePost">
+            <q-input @click="createPost('text')" class="col q-ml-lg q-mr-sm" dark clearable outlined dense standout label="Create Post" />
+            <q-btn @click="createPost('image')" flat round color="grey" icon="insert_photo">
+              <q-tooltip>Create Image Post</q-tooltip>
+            </q-btn>
+            <q-btn @click="createPost('link')" flat round color="grey" icon="insert_link">
+              <q-tooltip>Create Link Post</q-tooltip>
+            </q-btn>
+          </template>
         </q-item>
       </q-list>
     </div>
@@ -62,6 +60,11 @@ export default {
       type: Boolean,
       default: true
     }
+  },
+  data() {
+    return {
+      sortBy: "hot"
+    };
   },
   methods: {
     articleClicked(article) {
