@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"strings"
 
 	"github.com/YuChaoGithub/YARC/backend/app/models"
 	"github.com/gorilla/mux"
@@ -50,10 +49,10 @@ func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 	// subreddits if the user is logged in.
 	if criterion == "" || key == "" {
 		// Check if the user is logged in.
-		if authHeader, ok := r.Header["Authorization"]; ok {
+		if authHeader, ok := r.Header["Authorization"]; ok && len(authHeader[0]) > 10 {
 			// This block inside the if-condition is not included in the unit tests,
 			// it is only manually tested, so modify with care...need to find a way to test it.
-			username, err := decodeJWT(strings.Split(authHeader[0], " ")[1], h.JWTSecretKey)
+			username, err := decodeJWT(authHeader[0][7:], h.JWTSecretKey)
 			if err == nil {
 				// The user is logged in.
 				resp.Articles, err = h.Articles.GetBySubscribed(username, after, sortedBy, limit)
@@ -62,9 +61,11 @@ func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				// Successfully get the article lists.
-				jsonResponse(w, http.StatusOK, resp)
-				return
+				// Successfully get the article lists, if the list is empty, get treat the user as not logged in.
+				if len(resp.Articles) != 0 {
+					jsonResponse(w, http.StatusOK, resp)
+					return
+				}
 			}
 		}
 

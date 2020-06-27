@@ -28,19 +28,45 @@
       <q-list dark bordered separator class="bg-grey-10 rounded-borders">
         <article-entry
           v-for="article in articles"
-          :key="article.id"
+          :key="article.articleID"
           :title="article.title"
-          :postType="article.postType"
-          :imageUrl="article.imageUrl"
-          :linkUrl="article.linkUrl"
-          :textBody="article.textBody"
+          :postType="article.type"
+          :imageUrl="article.type == 'image' ? article.body : ''"
+          :linkUrl="article.type == 'link' ? article.body : ''"
+          :textBody="article.type == 'text' ? article.body : ''"
           :points="article.points"
           :postedBy="article.postedBy"
           :comments="article.comments"
           :subreddit="article.subreddit"
-          :postedDate="article.postedDate"
+          :postedDate="article.postedTime"
           @click.native="articleClicked(article)"
         />
+
+        <!-- Loading Indicator -->
+        <div v-if="loading">
+          <q-item v-for="i in 15" :key="i">
+              <q-item-section avatar>
+                <q-skeleton type="QAvatar" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label><q-skeleton type="text" /></q-item-label>
+              </q-item-section>
+          </q-item>
+        </div>
+        
+        <!-- Error Indicator -->
+        <q-banner v-if="errOccurred" class="text-white bg-red">
+            Error fetching the article list, please try again.
+        </q-banner>
+        
+        <!-- Empty Indicator -->
+        <q-item v-if="articles.length == 0 && !errOccurred" class="column">
+          <div class="q-ma-lg">
+            <div class="text-h3 q-mb-md">Wow, such empty!</div>
+            <div class="text-h6">{{emptyText}}</div>
+          </div>
+        </q-item>
+
       </q-list>
     </div>
   </div>
@@ -48,10 +74,22 @@
 
 <script>
 import ArticleEntry from '../article/ArticleEntry';
+import ArticleService from '../../services/article';
 
 export default {
   props: {
-    articles: Array,
+    emptyText: {
+      type: String,
+      default: ''
+    },
+    criterion: {
+      type: String,
+      default: ''
+    },
+    criterionKey: {
+      type: String,
+      default: ''
+    },
     subreddit: {
       type: String,
       default: ''
@@ -63,8 +101,35 @@ export default {
   },
   data() {
     return {
-      sortBy: "hot"
+      articles: [],
+      sortBy: "hot",
+      articlesPerRequest: 10,
+      errOccurred: false,
+      loading: true
     };
+  },
+  watch: {
+    async sortBy() {
+      // Refetch the articles since the sort criterion has changed.
+      this.loading = true;
+      this.articles = [];
+      try {
+        this.articles = await this.fetchArticleLists("");
+        this.errOccurred = false;
+      } catch (e) {
+        this.errOccurred = true;
+      }
+      this.loading = false;
+    }
+  },
+  async mounted() {
+    try {
+      this.articles = await this.fetchArticleLists("");
+      this.errOccurred = false;
+    } catch (e) {
+      this.errOccurred = true;
+    }
+    this.loading = false;
   },
   methods: {
     articleClicked(article) {
@@ -80,6 +145,10 @@ export default {
           postType: type
         }
       });
+    },
+    async fetchArticleLists(after) {
+      let user = this.$store.state.auth.user;
+      return await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, user ? user.authHeader : null);
     }
   },
   components: {

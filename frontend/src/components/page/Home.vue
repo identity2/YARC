@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <list-of-articles :articles="articles" />
+    <list-of-articles :criterion="''" :criterionKey="''" :emptyText="'There are currently no articles on YARC :('" />
 
     <!-- Right Panel -->
     <div class="col-3 q-pr-md q-pt-md gt-sm">
@@ -16,14 +16,8 @@ import NewSubreddit from '../rightPanel/NewSubreddit';
 import TrendingSubreddits from '../rightPanel/TrendingSubreddits';
 import Advertisement from '../rightPanel/Advertisement';
 import ListOfArticles from '../article/ListOfArticles';
-import mock_articles from '../../mock_data/mock_articles';
 
 export default {
-  data() {
-    return {
-      articles: mock_articles
-    };
-  },
   mounted() {
     window.scrollTo(0, 0);
     document.title = 'YARC';

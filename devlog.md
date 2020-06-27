@@ -124,5 +124,9 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Added the catch-all OPTIONS route to handle pre-flight CORS requests.
 * Connected the backend API to the frontend login, register page.
 
-## TODO
-* Change the sorting UI of the article list in frontend to radio buttons.
+# 2020.06.27
+* Handle malformed Authorization header in the backend.
+* Changed the `GET /article` of backend so that when the user subscribes to no subreddits, it will still return a list of articles.
+* Connected the backend API to the frontend home page. (Not completed yet.)
+* Refactored code, putting the article API call down into the ArticleList component.
+* Completed all services code, using axios.

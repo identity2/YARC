@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"runtime/debug"
-	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -67,8 +66,12 @@ func (h *Handler) Authorize(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		// The string is in "bearer tokenStringHere", so the token needs to be extracted.
-		tokenStr := strings.Split(authHeader[0], " ")[1]
-		username, err := decodeJWT(tokenStr, h.JWTSecretKey)
+		authStr := authHeader[0]
+		if len(authStr) < 10 {
+			respondWithError(w, http.StatusUnauthorized, fmt.Errorf("invalid authorization header"))
+			return
+		}
+		username, err := decodeJWT(authStr[7:], h.JWTSecretKey)
 		if err != nil {
 			respondWithError(w, http.StatusUnauthorized, err)
 			return
