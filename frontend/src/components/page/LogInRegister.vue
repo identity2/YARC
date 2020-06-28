@@ -8,8 +8,8 @@
       <!-- Log In / Register Box -->
       <q-card dark class="q-mt-lg">
         <q-tabs v-model="formType">
-          <q-tab name="login" label="Log In" />
-          <q-tab name="register" label="Register" />
+          <q-tab name="login" label="Log In" :disabled="loading" />
+          <q-tab name="register" label="Register" :disabled="loading" />
         </q-tabs>
 
         <q-separator color="grey-9" />
@@ -21,10 +21,10 @@
             </q-banner>
             
             <div class="q-mb-sm text-subtitle">Username:</div>
-            <q-input class="q-mb-lg" dark outlined dense standout v-model="username" />
+            <q-input class="q-mb-lg" dark outlined dense standout v-model="username" :disabled="loading" />
 
             <div class="q-mb-sm text-subtitle">Password:</div>
-            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="password" />
+            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="password" :disabled="loading" />
 
             <q-card-actions align="right">
               <q-btn @click="loginClicked" style="background: white; color: black; width: 100px" label="Log In" :loading="loading" />
@@ -40,19 +40,19 @@
               Username:
               <span class="text-grey">({{usernameMinLen}} to {{usernameMaxLen}} alpha-numeric or underscore characters)</span>
             </div>
-            <q-input class="q-mb-md" dark outlined dense standout v-model="username" counter :maxlength="usernameMaxLen" />
+            <q-input class="q-mb-md" dark outlined dense standout v-model="username" counter :maxlength="usernameMaxLen" :disabled="loading" />
             
             <div class="q-mb-sm text-subtitle">Email Address:</div>
-            <q-input class="q-mb-xl" dark outlined dense standout v-model="emailAddress" maxlength="256" />
+            <q-input class="q-mb-xl" dark outlined dense standout v-model="emailAddress" maxlength="256" :disabled="loading" />
             
             <div class="q-mb-sm text-subtitle">
               Password:
               <span class="text-grey">({{passwordMinLen}} to {{passwordMaxLen}} alpha-numeric or underscore characters)</span>
             </div>
-            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="password" counter :maxlength="passwordMaxLen" />
+            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="password" counter :maxlength="passwordMaxLen" :disabled="loading" />
             
             <div class="q-mb-sm text-subtitle">Reenter Password:</div>
-            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="passwordConfirm" :maxlength="passwordMaxLen" />
+            <q-input class="q-mb-md" type="password" dark outlined dense standout v-model="passwordConfirm" :maxlength="passwordMaxLen" :disabled="loading" />
             
             <q-card-actions align="right">
               <q-btn @click="registerClicked" style="background: white; color: black; width: 100px" label="Register" :loading="loading" />

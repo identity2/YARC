@@ -7,7 +7,8 @@ I plan to get a web backend job after university, but I have zero web projects t
 * Article list with new/old/hot sorting.
 * Register, login by JWT.
 * Create, join subreddits.
-* Post, edit, delete, vote, save articles.
+* Post text, image, link articles. (Using Imgur API for image posts.)
+* Edit, delete, vote, save articles.
 * Post, edit, delete, vote comments.
 * View user info: short bio, comments, articles, saved article.
 * Karma system.

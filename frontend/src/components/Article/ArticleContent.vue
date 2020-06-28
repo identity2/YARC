@@ -48,7 +48,11 @@ export default {
   },
   methods: {
     saveClicked() {
-
+      // Inform the parent for the change
+      this.$emit('saveEdit', this.textPostBody, () => {
+        // Failure method.
+        this.textPostBody = this.textBody;  // Reset to the original content.
+      });
     },
     cancelClicked() {
       this.textPostBody = this.textBody;  // Reset to the original content.

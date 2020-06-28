@@ -5,6 +5,11 @@
       <div class="text-h6 text-white">Create a post</div>
       <q-separator color="grey" />
 
+      <!-- Error Indicator -->
+      <q-banner v-if="errMsg != ''" class="text-white bg-red q-mt-xs">
+          Error: {{errMsg}}.
+      </q-banner>
+
       <!-- Subreddit Selector -->
       <q-select
         class="q-mt-lg"
@@ -32,33 +37,47 @@
       <!-- Create Article Box -->
       <q-card dark class="q-mt-lg">
         <q-tabs v-model="postType">
-          <q-tab name="text" label="Text" />
-          <q-tab name="image" label="Image" />
-          <q-tab name="link" label="Link" />
+          <q-tab name="text" label="Text" :disabled="loading" />
+          <q-tab name="image" label="Image" :disabled="loading" />
+          <q-tab name="link" label="Link" :disabled="loading" />
         </q-tabs>
 
         <q-separator color="grey-9" />
 
         <q-tab-panels class="bg-grey-10" v-model="postType" animated>
           <q-tab-panel name="text">
-            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" />
-            <q-input dark outlined standout v-model="textPostBody" type="textarea" placeholder="Text (optional)" counter :maxlength="textPostMaxLen" />
+            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" :disabled="loading" />
+            <q-input dark outlined standout v-model="textPostBody" type="textarea" placeholder="Text (optional)" counter :maxlength="textPostMaxLen" :disabled="loading" />
           </q-tab-panel>
 
           <q-tab-panel name="image">
-            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" />
-            <q-uploader bordered flat dark color="grey-9" :url="imageUploadUrl" label="Upload Image" style="width: 100%" />
+            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" :disabled="loading" />
+            <q-uploader
+              v-if="imagePostUrl == ''"
+              bordered
+              flat
+              dark
+              color="grey-9"
+              :max-files="1"
+              :max-file-size="10*1024*1024"
+              label="Upload Image (< 10 MB)"
+              accept=".jpg, image/*"
+              style="width: 100%"
+              :factory="imageUploadFactory"
+              @rejected="onImageRejected"
+            />
+            <img v-if="imagePostUrl != ''" :src="imagePostUrl" style="max-width: 600px; max-height: 600px; border:2px white solid" />
           </q-tab-panel>
 
           <q-tab-panel name="link">
-            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" />
-            <q-input class="q-mb-md" dark outlined dense standout v-model="linkPostUrl" label="Url" counter :maxlength="linkPostUrlMaxLen" />
+            <q-input class="q-mb-md" dark outlined dense standout v-model="title" label="title" counter :maxlength="titleMaxLen" :disabled="loading" />
+            <q-input class="q-mb-md" dark outlined dense standout v-model="linkPostUrl" label="Url" counter :maxlength="linkPostUrlMaxLen" :disabled="loading" />
           </q-tab-panel>
         </q-tab-panels>
 
         <q-card-actions class="bg-grey-10 q-pr-lg q-pb-lg" align="right">
-          <q-btn @click="cancelClicked" outline class="q-mr-sm" style="color: white; width: 100px" label="Cancel" />
-          <q-btn @click="postClicked" :disabled="!validPost" style="background: white; color: black; width: 100px" label="Post" />
+          <q-btn :disabled="loading" @click="cancelClicked" outline class="q-mr-sm" style="color: white; width: 100px" label="Cancel" />
+          <q-btn :loading="loading" @click="postClicked" :disabled="!validPost" style="background: white; color: black; width: 100px" label="Post" />
         </q-card-actions>
 
       </q-card>
@@ -83,9 +102,9 @@
         title="Posting Rules"
         :tips="[
           '1. You do not talk about YARC.',
-          '2. Do not post something important here, this site will not be persistent.',
+          '2. Do not post something important here, this site is not resposible of keeping your contents alive.',
           '3. Do not post offensive or NSFW contents, or I will simply reset the database.',
-          '4. The forth rule doesn\'t exist.'
+          '4. The fourth rule doesn\'t exist.'
         ]"
       />
       <advertisement />
@@ -94,15 +113,29 @@
 </template>
 
 <script>
-const allSubreddits = ['radiohead', 'news', 'vuejs']; // Mock data.
-
 import Tips from '../rightPanel/Tips';
 import Advertisement from '../rightPanel/Advertisement';
 import Limits from '../../limits';
+import SubredditService from '../../services/subreddit';
+import ArticleService from '../../services/article';
+import ImgurService from '../../services/imgur';
 
 export default {
-  mounted() {
+  async mounted() {
     document.title = 'Submit Post - YARC';
+
+    // Redirect to the log in page if the user isn't logged in.
+    if (!this.$store.state.auth.loggedIn) {
+      this.$router.push('/account?login');
+    }
+
+    // Load the subreddit list.
+    try {
+      this.allSubreddits = await SubredditService.getList();
+      this.subredditOptions = this.allSubreddits;
+    } catch {
+      this.errMsg = 'Failed to load the subreddit list. Refresh the page and try again.'
+    }
   },
   computed: {
     validPost() {
@@ -110,8 +143,7 @@ export default {
         return false;
       }
 
-      if (this.postType === 'image') {
-        // TODO: Check if image is uploaded successfully.
+      if (this.postType === 'image' && this.imagePostUrl === '') {
         return false;
       }
 
@@ -132,10 +164,12 @@ export default {
       linkPostUrlMaxLen: Limits.linkPostUrlMaxLen,
       textPostBody: '',
       linkPostUrl: '',
-      imagePostFile: '',
-      imageUploadUrl: '',
+      imagePostUrl: '',
       showDiscardDialog: false,
-      subredditOptions: allSubreddits
+      allSubreddits: [],
+      subredditOptions: [],
+      loading: false,
+      errMsg: ''
     };
   },
   watch: {
@@ -168,7 +202,31 @@ export default {
       this.showDiscardDialog = true;
     },
     postClicked() {
-      // TODO: Post the article.
+      this.loading = true;
+      
+      let body = this.textPostBody;
+      if (this.postType === 'link') {
+        body = this.linkPostUrl;
+      } else if (this.postType === 'image') {
+        body = this.imagePostUrl;
+      }
+
+      // Send request.
+      ArticleService.create(this.subreddit, this.postType, body, this.title, this.$store.state.auth.user.authHeader).then(articleID => {
+        // Successful, redirect to the newly created article.
+        this.$router.push('/r/'+this.subreddit+'/p/'+articleID);
+      }).catch(error => {
+        if (error.response.status == 401) {
+          this.errMsg = 'your login credentials have expired, please log in again';
+          this.$store.commit('logout');
+          localStorage.removeItem("user");
+        } else if (this.postType === 'link') {
+          this.errMsg = 'the link URL is invalid (make sure to include http(s)://)'
+        } else {
+          this.errMsg = 'failed to create the post, try again later';
+        }
+        this.loading = false;
+      });
     },
     discardClicked() {
       this.$router.push('/');
@@ -176,9 +234,19 @@ export default {
     filterFn(val, update) {
       update(() => {
         const needle = val.toLowerCase();
-        this.subredditOptions = allSubreddits.filter(v => v.toLowerCase().indexOf(needle) > -1);
+        this.subredditOptions = this.allSubreddits.filter(v => v.toLowerCase().indexOf(needle) > -1);
       });
-    }
+    },
+    onImageRejected() {
+      this.errMsg = 'only one image is allowed, and it should be below 10 MB';
+    },
+    async imageUploadFactory(files) {
+      try {
+        this.imagePostUrl = await ImgurService.upload(this.title, files[0]);
+      } catch {
+        this.errMsg = 'failed to upload image, try again later';
+      }
+    },
   },
   components: {
     tips: Tips,

@@ -130,3 +130,10 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Connected the backend API to the frontend home page. (Not completed yet.)
 * Refactored code, putting the article API call down into the ArticleList component.
 * Completed all services code, using axios.
+
+# 2020.06.28
+* Added `GET /subreddit`, `GET /me/karma/article/{id}` and `GET /me/karma/comment/{id}` paths in the backend API.
+* Added a `members` field in the response body of the subreddit APIs.
+* Added services/imgur to upload images to Imgur for creating image posts.
+* Connected the `TrendingSubreddits` and `CreateArticle` components to the backend API.
+* Kind of tired...but I have to finish this project because it's almost finished and I really need this on my resume. Ha.

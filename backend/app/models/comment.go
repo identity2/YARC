@@ -129,6 +129,19 @@ func (m *CommentModel) Vote(username, commentID string, point int) error {
 	return nil
 }
 
+// GetVote gets the voting action of the currently user.
+// If the query fails, it returns 0.
+func (m *CommentModel) GetVote(username, commentID string) int {
+	res := 0
+	stmt := `SELECT point FROM vote_comment WHERE username = $1 AND cid = $2`
+	row := m.DB.QueryRow(stmt, username, commentID)
+	err := row.Scan(&res)
+	if err != nil {
+		return 0
+	}
+	return res
+}
+
 // Get returns a comment by the commentID.
 func (m *CommentModel) Get(commentID string) (CommentInfo, error) {
 	c := CommentInfo{}

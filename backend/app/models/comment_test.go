@@ -152,6 +152,39 @@ func TestCommentVote(t *testing.T) {
 	}
 }
 
+func TestCommentGetVote(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		commentID string
+		wantPoint int
+	}{
+		{"Valid", "Albarn", "WhipP", -1},
+		{"Non Exist Article", "Albarn", "77777", 0},
+		{"Non Exist Username", "Sumner", "007op", 0},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := CommentModel{db}
+
+			// When.
+			point := m.GetVote(tc.username, tc.commentID)
+
+			// Want.
+			if point != tc.wantPoint {
+				t.Errorf("want %v; got %v", tc.wantPoint, point)
+			}
+		})
+	}
+}
+
 func TestCommentGet(t *testing.T) {
 	// Testcases.
 	tests := []struct {

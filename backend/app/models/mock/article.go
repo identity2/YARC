@@ -49,6 +49,14 @@ func (m *ArticleModel) Vote(username, articleID string, point int) error {
 	return fmt.Errorf("")
 }
 
+// GetVote returns 1 if username=Jonny, articleID=88888.
+func (m *ArticleModel) GetVote(username, articleID string) int {
+	if username == "Jonny" && articleID == "88888" {
+		return 1
+	}
+	return 0
+}
+
 // Get has only the article with ID WX-78.
 func (m *ArticleModel) Get(articleID string) (models.ArticleInfo, error) {
 	if articleID == "WX-78" {

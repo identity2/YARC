@@ -199,6 +199,19 @@ func (m *ArticleModel) Vote(username, articleID string, point int) error {
 	return nil
 }
 
+// GetVote gets the voting action of the user.
+// If the query fails, it returns 0.
+func (m *ArticleModel) GetVote(username, articleID string) int {
+	res := 0
+	stmt := `SELECT point FROM vote_article WHERE username = $1 AND aid = $2`
+	row := m.DB.QueryRow(stmt, username, articleID)
+	err := row.Scan(&res)
+	if err != nil {
+		return 0
+	}
+	return res
+}
+
 // Get returns the article specified by the articleID.
 func (m *ArticleModel) Get(articleID string) (ArticleInfo, error) {
 	a := ArticleInfo{}

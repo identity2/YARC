@@ -22,7 +22,7 @@ func TestSearch(t *testing.T) {
 			"Valid",
 			"/search?q=ghost+town",
 			http.StatusOK,
-			`{"subreddits":[{"name":"PHP","description":"$_POST['cool']"},{"name":"golang","description":"if err != nil"}],` +
+			`{"subreddits":[{"name":"PHP","members":0,"description":"$_POST['cool']"},{"name":"golang","members":0,"description":"if err != nil"}],` +
 				`"articles":[{"subreddit":"Python","articleID":"1","type":"text","body":"","title":"title","points":3,"comments":1,"postedBy":"Collin",` +
 				`"postedTime":"1995-11-24T00:00:00Z"}]}`,
 		},

@@ -148,6 +148,39 @@ func TestArticleVote(t *testing.T) {
 	}
 }
 
+func TestArticleGetVote(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		articleID string
+		wantPoint int
+	}{
+		{"Valid", "Albarn", "246o1", -1},
+		{"Non Exist Article", "Albarn", "77777", 0},
+		{"Non Exist Username", "Sumner", "246o1", 0},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := ArticleModel{db}
+
+			// When.
+			point := m.GetVote(tc.username, tc.articleID)
+
+			// Want.
+			if point != tc.wantPoint {
+				t.Errorf("want %v; got %v", tc.wantPoint, point)
+			}
+		})
+	}
+}
+
 func TestArticleGet(t *testing.T) {
 	// Testcases.
 	tests := []struct {

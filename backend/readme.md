@@ -11,7 +11,7 @@ This is the backend of YARC developed with Go.
 Some of the requests require the user to be logged in. After logging in using `POST /login`, the user would request a token string. When performing login-required requests, the user should add the authorization header as follows:
 
 ```
-Authorization: bearer theTokenGoesHere
+Authorization: Bearer theTokenGoesHere
 ```
 
 ### GET `/`
@@ -406,9 +406,20 @@ All actions related to subreddits, a subreddit can be uniquely identified by its
 
 | Method | URL                  | Description                              | Login Required |
 | ------ | -------------------- | ---------------------------------------- | -------------- |
+| GET    | /subreddit           | Get a list of all subreddits.            | No             |
 | GET    | /subreddit/{name}    | Return the subreddit {name}.             | No             |
 | POST   | /subreddit           | Add a new subreddit.                     | Yes            |
 | GET    | /trending            | Return the a list of trending subreddits.| No             |
+
+#### GET `/subreddit`
+Return the list of all subreddit names.
+
+Response Body:
+```
+{
+    subreddits: ["sub1", "sub2", sub3", ...]
+}
+```
 
 #### GET `/subreddit/{name}`
 Return the subreddit info of {name}.
@@ -418,6 +429,7 @@ Response Body:
 ```
 {
     "name": "The name of the subreddit.",
+    "members": 420,
     "description": "The description of the subreddit."
 }
 ```
@@ -454,6 +466,7 @@ Response Body:
     subreddits: [
         {
             "name": "The name of the subreddit.",
+            "members": 42,
             "description": "The description of the subreddit."
         },
         ...
@@ -464,10 +477,34 @@ Response Body:
 ### Karma
 Upvote and downvote.
 
-| Method | URL                         | Description                              | Login Required |
-| ------ | --------------------------- | ---------------------------------------- | -------------- |
-| POST   | /karma/article/{articleID}  | Upvote or downvote an article.           | Yes            |
-| POST   | /karma/comment/{commentID}  | Upvote or downvote a comment.            | Yes            |
+| Method | URL                            | Description                                   | Login Required |
+| ------ | ------------------------------ | --------------------------------------------- | -------------- |
+| GET    | /me/karma/article/{articleID}  | Check the user's karma action on the article. | Yes            |
+| GET    | /me/karma/comment/{commentID}  | Check the user's karma action on the comment. | Yes            |
+| POST   | /karma/article/{articleID}     | Upvote or downvote an article.                | Yes            |
+| POST   | /karma/comment/{commentID}     | Upvote or downvote a comment.                 | Yes            |
+
+#### GET `/me/karma/article/{articleID}
+Check the currently logged in user's karma action of the article.
+
+Response body:
+
+```
+{"action": "up"}
+```
+
+*The action can be `up`, `down`, or `cancel`.*
+
+#### GET `/me/karma/comment/{commentID}
+Check the currently logged in user's karma action of the comment.
+
+Response body:
+
+```
+{"action": "up"}
+```
+
+*The action can be `up`, `down`, or `cancel`.*
 
 #### POST `/karma/article/{articleID}?action={action}`
 Upvote or downvote an article.

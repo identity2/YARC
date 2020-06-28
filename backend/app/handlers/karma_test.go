@@ -5,10 +5,78 @@ import (
 	"testing"
 )
 
+func TestGetArticleVote(t *testing.T) {
+	// Stubs and drivers.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/me/karma/article/{id}", h.GetArticleVote)
+
+	// Testcases.
+	tests := []struct {
+		name     string
+		urlPath  string
+		wantCode int
+		wantBody string
+	}{
+		{"Valid", "/me/karma/article/88888", http.StatusOK, `{"action":"up"}`},
+		{"Invalid", "/me/karma/article/77777", http.StatusOK, `{"action":"cancel"}`},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// When.
+			code, body := r.testHTTP(t, "GET", tc.urlPath, ``, "Jonny")
+
+			// Want.
+			if code != tc.wantCode {
+				t.Errorf("want %v; got %v", tc.wantCode, code)
+			}
+
+			if body != tc.wantBody {
+				t.Errorf("want %v; got %v", tc.wantBody, body)
+			}
+		})
+	}
+}
+
+func TestGetCommentVote(t *testing.T) {
+	// Stubs and drivers.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/me/karma/comment/{id}", h.GetCommentVote)
+
+	// Testcases.
+	tests := []struct {
+		name     string
+		urlPath  string
+		wantCode int
+		wantBody string
+	}{
+		{"Valid", "/me/karma/comment/88888", http.StatusOK, `{"action":"down"}`},
+		{"Invalid", "/me/karma/comment/77777", http.StatusOK, `{"action":"cancel"}`},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// When.
+			code, body := r.testHTTP(t, "GET", tc.urlPath, ``, "Jonny")
+
+			// Want.
+			if code != tc.wantCode {
+				t.Errorf("want %v; got %v", tc.wantCode, code)
+			}
+
+			if body != tc.wantBody {
+				t.Errorf("want %v; got %v", tc.wantBody, body)
+			}
+		})
+	}
+}
+
 func TestVoteArticle(t *testing.T) {
 	// Stubs and drivers.
 	h := newTestHandler(t)
-	r := newTestRouter(t, "POST", "/karma/article/{articleID}", h.VoteArticle)
+	r := newTestRouter(t, "POST", "/karma/article/{id}", h.VoteArticle)
 
 	// Testcases.
 	tests := []struct {
@@ -38,7 +106,7 @@ func TestVoteArticle(t *testing.T) {
 func TestVoteComment(t *testing.T) {
 	// Stubs and drivers.
 	h := newTestHandler(t)
-	r := newTestRouter(t, "POST", "/karma/comment/{commentID}", h.VoteComment)
+	r := newTestRouter(t, "POST", "/karma/comment/{id}", h.VoteComment)
 
 	// Testcases.
 	tests := []struct {

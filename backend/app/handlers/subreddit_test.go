@@ -5,13 +5,33 @@ import (
 	"testing"
 )
 
+func TestListSubreddit(t *testing.T) {
+	// Stubs and drivers.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/subreddit", h.ListSubreddit)
+
+	// When.
+	code, body := r.testGet(t, "/subreddit")
+
+	// Want.
+	wantCode := http.StatusOK
+	wantBody := `{"subreddits":["meirl","dankmeme"]}`
+	if wantCode != code {
+		t.Errorf("want %v; got %v", wantCode, code)
+	}
+
+	if wantBody != body {
+		t.Errorf("want %v; got %v", wantBody, body)
+	}
+}
+
 func TestSubreddit(t *testing.T) {
 	// Stubs and drivers.
 	h := newTestHandler(t)
 	r := newTestRouter(t, "GET", "/subreddit/{name}", h.Subreddit)
 
 	// Response body.
-	validResp := `{"name":"radiohead","description":"Dedicated to all human beings."}`
+	validResp := `{"name":"radiohead","members":3,"description":"Dedicated to all human beings."}`
 	notFoundResp := `{"error":"the subreddit does not exist"}`
 
 	// Testcases.
@@ -86,7 +106,7 @@ func TestTrending(t *testing.T) {
 
 	// Want.
 	wantCode := http.StatusOK
-	wantBody := `{"subreddits":[{"name":"radiohead","description":"Dedicated to all human beings."},{"name":"underrated","description":"Let down and hanging around."}]}`
+	wantBody := `{"subreddits":[{"name":"radiohead","members":0,"description":"Dedicated to all human beings."},{"name":"underrated","members":4,"description":"Let down and hanging around."}]}`
 	if code != wantCode {
 		t.Errorf("want %v; got %v", wantCode, code)
 	}

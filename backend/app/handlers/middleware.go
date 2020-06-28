@@ -65,7 +65,7 @@ func (h *Handler) Authorize(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		// The string is in "bearer tokenStringHere", so the token needs to be extracted.
+		// The string is in "Bearer tokenStringHere", so the token needs to be extracted.
 		authStr := authHeader[0]
 		if len(authStr) < 10 {
 			respondWithError(w, http.StatusUnauthorized, fmt.Errorf("invalid authorization header"))

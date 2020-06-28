@@ -4,8 +4,10 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 // user should contain an authHeader and a username.
+const expireTime = 1000 * 60 * 60 * 24 * 7; // 7 days.
 const user = JSON.parse(localStorage.getItem("user"));
-const initialAuthState = user ? {loggedIn: true, user: user} : {loggedIn: false, user: null};
+const currTime = new Date().getTime();
+const initialAuthState = user && currTime - user.timestamp < expireTime ? {loggedIn: true, user: user} : {loggedIn: false, user: null};
 
 export const store = new Vuex.Store({
   state: {

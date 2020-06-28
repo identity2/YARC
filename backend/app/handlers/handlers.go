@@ -29,6 +29,7 @@ type AccountModel interface {
 
 // SubredditModel defines the operations related to subreddit.
 type SubredditModel interface {
+	List() []string
 	Insert(name, description string) error
 	Get(name string) (models.SubredditInfo, error)
 	GetTrending(limit int) ([]models.SubredditInfo, error)
@@ -41,6 +42,7 @@ type CommentModel interface {
 	ModifyBody(commentID, username, newBody string) error
 	Delete(commentID, username string) error
 	Vote(username, commentID string, point int) error
+	GetVote(username, commentID string) int
 	Get(commentID string) (models.CommentInfo, error)
 	GetByArticle(articleID, afterCommentID string, limit int) ([]models.CommentInfo, error)
 	GetByUsername(username, afterCommentID string, limit int) ([]models.CommentInfo, error)
@@ -52,6 +54,7 @@ type ArticleModel interface {
 	ModifyBody(articleID, username, body string) error
 	Delete(articleID, username string) error
 	Vote(username, articleID string, point int) error
+	GetVote(username, articleID string) int
 	Get(articleID string) (models.ArticleInfo, error)
 	GetBySubreddit(subName, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)
 	GetByUser(username, afterArticleID, sortedBy string, limit int) ([]models.ArticleInfo, error)

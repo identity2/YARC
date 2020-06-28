@@ -46,6 +46,14 @@ func (m *CommentModel) Vote(username, commentID string, point int) error {
 	return fmt.Errorf("")
 }
 
+// GetVote returns -1 if username=Jonny, commentID=88888.
+func (m *CommentModel) GetVote(username, commentID string) int {
+	if username == "Jonny" && commentID == "88888" {
+		return -1
+	}
+	return 0
+}
+
 // Get has only the comment with ID 12345. It returns ErrCommentNotExist otherwise.
 func (m *CommentModel) Get(commentID string) (models.CommentInfo, error) {
 	if commentID == "12345" {

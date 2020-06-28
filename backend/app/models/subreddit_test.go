@@ -5,6 +5,22 @@ import (
 	"testing"
 )
 
+func TestSubredditList(t *testing.T) {
+	db, teardown := newTestDB(t)
+	defer teardown()
+
+	m := SubredditModel{db, nil}
+
+	// When.
+	res := m.List()
+
+	// Want.
+	wantRes := []string{"PHP", "ZZZ", "dankmeme", "golang", "meirl"}
+	if !reflect.DeepEqual(res, wantRes) {
+		t.Errorf("want %v; got %v", wantRes, res)
+	}
+}
+
 func TestSubredditInsert(t *testing.T) {
 	// Testcases.
 	tests := []struct {
@@ -47,7 +63,8 @@ func TestSubredditGet(t *testing.T) {
 		wantSubreddit SubredditInfo
 		wantError     error
 	}{
-		{"Valid", "golang", SubredditInfo{"golang", "Hey, ho! Let's go!"}, nil},
+		{"Valid", "golang", SubredditInfo{"golang", 2, "Hey, ho! Let's go!"}, nil},
+		{"Valid zero member", "ZZZ", SubredditInfo{"ZZZ", 0, "The sleeping sub."}, nil},
 		{"Not Exist", "subsifellfor", SubredditInfo{}, ErrSubredditNotExist},
 	}
 
@@ -76,7 +93,7 @@ func TestSubredditGet(t *testing.T) {
 }
 
 func TestInsertAndGet(t *testing.T) {
-	wantSubreddit := SubredditInfo{"news", "Which do you want to hear first?"}
+	wantSubreddit := SubredditInfo{"news", 0, "Which do you want to hear first?"}
 
 	// Stub and driver.
 	db, teardown := newTestDB(t)
@@ -116,9 +133,9 @@ func TestSubredditGetTrending(t *testing.T) {
 
 	// Want.
 	wantSubreddits := []SubredditInfo{
-		{Name: "dankmeme", Description: "The dankest meme of the world!"},
-		{Name: "golang", Description: "Hey, ho! Let's go!"},
-		{Name: "PHP", Description: "The best programming language in the world!"},
+		{Name: "dankmeme", Members: 1, Description: "The dankest meme of the world!"},
+		{Name: "golang", Members: 2, Description: "Hey, ho! Let's go!"},
+		{Name: "PHP", Members: 1, Description: "The best programming language in the world!"},
 	}
 
 	if !reflect.DeepEqual(subreddits, wantSubreddits) {

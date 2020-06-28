@@ -9,7 +9,8 @@ export default {
     }).then((response) => {
       var user = {
         username,
-        authHeader: "bearer " + response.data.token
+        authHeader: "Bearer " + response.data.token,
+        timestamp: new Date().getTime() // For token invalidation.
       };
       
       // Save to the local storage, so the user don't need to log in again.

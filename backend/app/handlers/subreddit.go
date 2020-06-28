@@ -20,6 +20,20 @@ type subredditReq struct {
 	Description string `json:"description"`
 }
 
+// ListSubreddit responds with the list of all subreddits.
+// Routed from GET "/subreddit".
+func (h *Handler) ListSubreddit(w http.ResponseWriter, r *http.Request) {
+	// Get the list from the database.
+	res := h.Subreddits.List()
+
+	// Respond to the client.
+	resp := struct {
+		Subreddits []string `json:"subreddits"`
+	}{res}
+
+	jsonResponse(w, http.StatusOK, resp)
+}
+
 // Subreddit responds with the information of a subreddit according to the subreddit name.
 // Routed from GET "/subreddit/{name}".
 func (h *Handler) Subreddit(w http.ResponseWriter, r *http.Request) {

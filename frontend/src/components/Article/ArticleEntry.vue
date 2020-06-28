@@ -88,8 +88,6 @@ export default {
   methods: {
     expandClicked() {
       this.expanded = !this.expanded;
-
-      // TODO: Expand the article.
     },
     openLinkInNewTab() {
       window.open(this.linkUrl, '_blank');

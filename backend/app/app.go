@@ -121,11 +121,14 @@ func (a *App) setRouters() {
 	a.Delete("/me/join/{subreddit}", auth(a.handler.LeaveSubreddit))
 
 	// Subreddit.
+	a.Get("/subreddit", a.handler.ListSubreddit)
 	a.Get("/subreddit/{name}", a.handler.Subreddit)
 	a.Post("/subreddit", auth(a.handler.NewSubreddit))
 	a.Get("/trending", a.handler.TrendingSubreddit)
 
 	// Karma.
+	a.Get("/me/karma/article/{id}", auth(a.handler.GetArticleVote))
+	a.Get("/me/karma/comment/{id}", auth(a.handler.GetCommentVote))
 	a.Post("/karma/article/{id}", auth(a.handler.VoteArticle))
 	a.Post("/karma/comment/{id}", auth(a.handler.VoteComment))
 

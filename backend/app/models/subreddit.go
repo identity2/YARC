@@ -39,7 +39,30 @@ var subnameRegExp = regexp.MustCompile("^[a-zA-Z0-9_]*$")
 // SubredditInfo is the public info of a subreddit.
 type SubredditInfo struct {
 	Name        string `json:"name"`
+	Members     int    `json:"members"`
 	Description string `json:"description"`
+}
+
+// List returns a list of all subreddit names.
+func (m *SubredditModel) List() []string {
+	var res []string
+
+	stmt := `SELECT sub_name FROM subreddit ORDER BY sub_name ASC`
+	rows, err := m.DB.Query(stmt)
+	if err != nil {
+		return res
+	}
+
+	for rows.Next() {
+		var name string
+		err = rows.Scan(&name)
+		if err != nil {
+			return res
+		}
+		res = append(res, name)
+	}
+
+	return res
 }
 
 // Insert adds a new subreddit to the database.
@@ -73,10 +96,12 @@ func (m *SubredditModel) Insert(name, description string) error {
 func (m *SubredditModel) Get(name string) (SubredditInfo, error) {
 	subInfo := SubredditInfo{}
 
-	stmt := `SELECT sub_name, description FROM subreddit WHERE sub_name = $1`
+	stmt := `SELECT S.sub_name, COALESCE(J.members, 0) AS members, S.description FROM subreddit S
+	LEFT JOIN (SELECT sub_name, COUNT(*) AS members FROM join_sub GROUP BY sub_name) J ON S.sub_name = J.sub_name
+	WHERE S.sub_name = $1`
 	row := m.DB.QueryRow(stmt, name)
 
-	err := row.Scan(&subInfo.Name, &subInfo.Description)
+	err := row.Scan(&subInfo.Name, &subInfo.Members, &subInfo.Description)
 	if err != nil {
 		return subInfo, ErrSubredditNotExist
 	}

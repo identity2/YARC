@@ -14,8 +14,8 @@ func (m *SearchModel) GetResult(query string) (models.SearchResults, error) {
 	if query == "ghost town" {
 		return models.SearchResults{
 			Subreddits: []models.SubredditInfo{
-				{Name: "PHP", Description: "$_POST['cool']"},
-				{Name: "golang", Description: "if err != nil"},
+				{Name: "PHP", Members: 0, Description: "$_POST['cool']"},
+				{Name: "golang", Members: 0, Description: "if err != nil"},
 			},
 			Articles: []models.ArticleInfo{
 				{

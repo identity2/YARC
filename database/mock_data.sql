@@ -23,6 +23,14 @@ INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
     '1968-03-23 10:10:10'
 );
 
+INSERT INTO account (username, hashed_password, email, bio, join_time) VALUES (
+    'Rnoi',
+    '$2a$12$hkuxonzFkayzlECMua.l5.Cl8AHPgJ/vIBUvugFvZ7m7OXWjuT/xa',
+    'rnoi@blur.com.uk',
+    'I am an actress!',
+    '1993-11-23 10:10:10'
+);
+
 -- subreddit
 INSERT INTO subreddit (sub_name, description) VALUES (
     'dankmeme',
@@ -44,6 +52,11 @@ INSERT INTO subreddit (sub_name, description) VALUES (
     'The best programming language in the world!'
 );
 
+INSERT INTO subreddit (sub_name, description) VALUES (
+    'ZZZ',
+    'The sleeping sub.'
+);
+
 -- join_sub
 INSERT INTO join_sub (username, sub_name) VALUES (
     'Morrissey',
@@ -63,6 +76,16 @@ INSERT INTO join_sub (username, sub_name) VALUES (
 INSERT INTO join_sub (username, sub_name) VALUES (
     'Albarn',
     'PHP'
+);
+
+INSERT INTO join_sub (username, sub_name) VALUES (
+    'Rnoi',
+    'golang'
+);
+
+INSERT INTO join_sub (username, sub_name) VALUES (
+    'Rnoi',
+    'meirl'
 );
 
 -- article
