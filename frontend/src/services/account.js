@@ -28,6 +28,14 @@ export default {
       }
     });
   },
+  getJoinState(subreddit, authHeader) {
+    console.log('+'+subreddit);
+    return axios.get(API_URL+"/me/join/"+subreddit, {
+      headers: {
+        Authorization: authHeader
+      }
+    }).then(response => response.data.joined);
+  },
   joinSubreddit(subreddit, authHeader) {
     return axios.post(API_URL+"/me/join/"+subreddit, {}, {
       headers: {

@@ -45,7 +45,7 @@ type SubredditInfo struct {
 
 // List returns a list of all subreddit names.
 func (m *SubredditModel) List() []string {
-	var res []string
+	res := []string{}
 
 	stmt := `SELECT sub_name FROM subreddit ORDER BY sub_name ASC`
 	rows, err := m.DB.Query(stmt)

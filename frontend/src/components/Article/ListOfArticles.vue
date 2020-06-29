@@ -26,21 +26,29 @@
     <!-- Article Lists -->
     <div class="q-pa-md text-white">
       <q-list dark bordered separator class="bg-grey-10 rounded-borders">
-        <article-entry
-          v-for="article in articles"
-          :key="article.articleID"
-          :title="article.title"
-          :postType="article.type"
-          :imageUrl="article.type == 'image' ? article.body : ''"
-          :linkUrl="article.type == 'link' ? article.body : ''"
-          :textBody="article.type == 'text' ? article.body : ''"
-          :points="article.points"
-          :postedBy="article.postedBy"
-          :comments="article.comments"
-          :subreddit="article.subreddit"
-          :postedDate="article.postedTime"
-          @click.native="articleClicked(article)"
-        />
+        <q-infinite-scroll @load="loadMoreArticles" :offset="250" ref="infiniteScroll">
+          <article-entry
+            v-for="article in articles"
+            :key="article.articleID"
+            :title="article.title"
+            :postType="article.type"
+            :imageUrl="article.type == 'image' ? article.body : ''"
+            :linkUrl="article.type == 'link' ? article.body : ''"
+            :textBody="article.type == 'text' ? article.body : ''"
+            :points="article.points"
+            :postedBy="article.postedBy"
+            :comments="article.comments"
+            :subreddit="article.subreddit"
+            :postedDate="article.postedTime"
+            @click.native="articleClicked(article)"
+          />
+
+          <template v-slot:loading>
+            <div class="row justify-center q-my-md">
+              <q-spinner-dots color="white" size="40px" />
+            </div>
+          </template> 
+        </q-infinite-scroll>
 
         <!-- Loading Indicator -->
         <div v-if="loading">
@@ -109,27 +117,18 @@ export default {
     };
   },
   watch: {
-    async sortBy() {
-      // Refetch the articles since the sort criterion has changed.
-      this.loading = true;
-      this.articles = [];
-      try {
-        this.articles = await this.fetchArticleLists("");
-        this.errOccurred = false;
-      } catch (e) {
-        this.errOccurred = true;
-      }
-      this.loading = false;
+    sortBy() {
+      this.reloadArticles();
+    },
+    criterion() {
+      this.reloadArticles();
+    },
+    criterionKey() {
+      this.reloadArticles();
     }
   },
-  async mounted() {
-    try {
-      this.articles = await this.fetchArticleLists("");
-      this.errOccurred = false;
-    } catch (e) {
-      this.errOccurred = true;
-    }
-    this.loading = false;
+  mounted() {
+    this.reloadArticles();
   },
   methods: {
     articleClicked(article) {
@@ -148,7 +147,40 @@ export default {
     },
     async fetchArticleLists(after) {
       let user = this.$store.state.auth.user;
-      return await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, user ? user.authHeader : null);
+      let fetchedArticles = await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, user ? user.authHeader : null);
+      
+      // Check if it is the end of the article list. If it is, stop the scroll.
+      if (fetchedArticles.length < this.articlesPerRequest) {
+        this.$refs.infiniteScroll.stop();
+      }
+
+      return fetchedArticles;
+    },
+    async reloadArticles() {
+      // Refetch the articles since the sort criterion has changed.
+      this.loading = true;
+      this.articles = [];
+      try {
+        this.$refs.infiniteScroll.resume(); // Make the infinite scroller work again.
+        this.articles = await this.fetchArticleLists("");
+        this.errOccurred = false;
+      } catch (e) {
+        this.errOccurred = true;
+      }
+      this.loading = false;
+    },
+    loadMoreArticles(_, done) {
+      // Fetch more articles.
+      let after = this.articles.length == 0 ? "" : this.articles[this.articles.length-1].articleID;
+      this.fetchArticleLists(after).then(fetchedArticles => {
+          for (const art of fetchedArticles) {
+            this.articles.push(art);
+          }
+          done();
+      }).catch(() => {
+        this.errOccurred = true;
+        done(true);
+      });
     }
   },
   components: {

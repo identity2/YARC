@@ -136,6 +136,40 @@ func TestUnsaveArticle(t *testing.T) {
 	}
 }
 
+func TestJoinState(t *testing.T) {
+	// Stub and driver.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/me/join/{subreddit}", h.JoinState)
+
+	// Testcases.
+	tests := []struct {
+		name     string
+		urlPath  string
+		wantCode int
+		wantBody string
+	}{
+		{"Joined", "/me/join/Nirvana", http.StatusOK, `{"joined":true}`},
+		{"Not Joined", "/me/join/meirl", http.StatusOK, `{"joined":false}`},
+	}
+
+	// Perform Tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// When.
+			code, body := r.testHTTP(t, "GET", tc.urlPath, ``, "Kurt")
+
+			// Want.
+			if code != tc.wantCode {
+				t.Errorf("want %v; got %v", tc.wantCode, code)
+			}
+
+			if body != tc.wantBody {
+				t.Errorf("want %v; got %v", tc.wantBody, body)
+			}
+		})
+	}
+}
+
 func TestJoinSubreddit(t *testing.T) {
 	// Stub and driver.
 	h := newTestHandler(t)

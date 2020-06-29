@@ -22,6 +22,7 @@ type AccountModel interface {
 	ModifyBio(username, newBio string) error
 	SaveArticle(articleID, username string) error
 	UnsaveArticle(articleID, username string) error
+	GetJoinState(username, subName string) bool
 	JoinSubreddit(subName, username string) error
 	LeaveSubreddit(subName, username string) error
 	Get(username string) (models.UserInfo, error)

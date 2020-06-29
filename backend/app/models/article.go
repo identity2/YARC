@@ -265,7 +265,7 @@ func (m *ArticleModel) GetSavedByUser(username, afterArticleID, sortedBy string,
 
 // getList validates and perform the select query to list articles according to the SQL clauses provided.
 func (m *ArticleModel) getList(sortedBy, join, firstWhere, firstParam, afterArticleID string, limit int) ([]ArticleInfo, error) {
-	var res []ArticleInfo
+	res := []ArticleInfo{}
 
 	// Validate sortedBy.
 	clauses, ok := sortQuery[sortedBy]

@@ -173,7 +173,7 @@ func (m *CommentModel) GetByUsername(username, afterCommentID string, limit int)
 // getList perform the select query to list comments according to the SQL clauses provided.
 // The list is always sorted by hot (i.e. by points DESC, posted_time DESC).
 func (m *CommentModel) getList(where, firstParam, afterCommentID string, limit int) ([]CommentInfo, error) {
-	var res []CommentInfo
+	res := []CommentInfo{}
 
 	// Validate limit.
 	if limit < listLimitMin || limit > listLimitMax {

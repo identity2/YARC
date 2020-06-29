@@ -92,6 +92,20 @@ func (h *Handler) UnsaveArticle(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// JoinState responds with the joining state of the user in the current subreddit.
+func (h *Handler) JoinState(w http.ResponseWriter, r *http.Request) {
+	// Retreive the currently logged in user and the subName.
+	username := r.Context().Value(usernameCtxKey).(string)
+	subName := mux.Vars(r)["subreddit"]
+
+	// Get the state from the database.
+	resp := struct {
+		Joined bool `json:"joined"`
+	}{h.Accounts.GetJoinState(username, subName)}
+
+	jsonResponse(w, http.StatusOK, resp)
+}
+
 // JoinSubreddit adds the current user in the subscribe list of a subreddit.
 // Routed from POST /me/join/{subreddit}
 func (h *Handler) JoinSubreddit(w http.ResponseWriter, r *http.Request) {

@@ -56,6 +56,14 @@ func (m *AccountModel) UnsaveArticle(articleID, username string) error {
 	return nil
 }
 
+// GetJoinState returns true only when username is "Kurt" and subName is "Nirvana".
+func (m *AccountModel) GetJoinState(username, subName string) bool {
+	if username == "Kurt" && subName == "Nirvana" {
+		return true
+	}
+	return false
+}
+
 // JoinSubreddit returns ErrSubAlreadyJoined when subName is "gamedev" and username is "nirvana".
 func (m *AccountModel) JoinSubreddit(subName, username string) error {
 	if subName == "gamedev" && username == "nirvana" {

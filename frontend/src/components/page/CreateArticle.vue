@@ -219,7 +219,7 @@ export default {
         if (error.response.status == 401) {
           this.errMsg = 'your login credentials have expired, please log in again';
           this.$store.commit('logout');
-          localStorage.removeItem("user");
+          localStorage.removeItem('user');
         } else if (this.postType === 'link') {
           this.errMsg = 'the link URL is invalid (make sure to include http(s)://)'
         } else {

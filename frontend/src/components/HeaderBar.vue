@@ -74,6 +74,10 @@ export default {
       location.href = this.$route.fullPath;
     },
     submitSearch() {
+      if (this.searchText.trim() === '') {
+        return
+      }
+
       this.$router.push({
         name: 'search',
         query: {

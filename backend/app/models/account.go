@@ -194,6 +194,15 @@ func (m *AccountModel) UnsaveArticle(articleID, username string) error {
 	return nil
 }
 
+// GetJoinState returns true if the user is a member of the subreddit, else it returns false.
+func (m *AccountModel) GetJoinState(username, subName string) bool {
+	stmt := `SELECT TRUE FROM join_sub WHERE username = $1 AND sub_name = $2`
+	row := m.DB.QueryRow(stmt, username, subName)
+	res := false
+	row.Scan(&res)
+	return res
+}
+
 // JoinSubreddit lets the user join a subreddit.
 func (m *AccountModel) JoinSubreddit(subName, username string) error {
 	stmt := `INSERT INTO join_sub (username, sub_name) VALUES ($1, $2)`

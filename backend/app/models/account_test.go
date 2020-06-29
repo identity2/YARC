@@ -175,6 +175,39 @@ func TestAccountUnsaveArticle(t *testing.T) {
 	}
 }
 
+func TestAccountGetJoinState(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name     string
+		username string
+		subName  string
+		wantRes  bool
+	}{
+		{"Valid", "Jonny", "meirl", true},
+		{"Not Joined", "Morrissey", "meirl", false},
+		{"Invalid", "Brandon", "Sanderson", false},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := AccountModel{db}
+
+			// When.
+			res := m.GetJoinState(tc.username, tc.subName)
+
+			// Want.
+			if res != tc.wantRes {
+				t.Errorf("want %v; got %v", tc.wantRes, res)
+			}
+		})
+	}
+}
+
 func TestAccountJoinSubreddit(t *testing.T) {
 	// Testcases.
 	tests := []struct {

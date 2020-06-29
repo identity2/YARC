@@ -2,15 +2,20 @@
   <div>
     <!-- Title -->
     <div class="text-h6 text-white q-mt-md q-ml-lg">
-      Welcome to <span class="text-blue">r/{{subreddit}}</span>!
+      Welcome to <span class="text-blue">r/{{subInfo.name}}</span>!
     </div>
 
+    <!-- Error Indicator -->
+    <q-banner v-if="errOccurred" class="text-white bg-red">
+        Error: failed to load the subreddit, please try again.
+    </q-banner>
+
     <div class="row">
-      <list-of-articles :articles="articles" :subreddit="subreddit" />
+      <list-of-articles :criterion="'sub'" :criterionKey="subInfo.name" :subreddit="subInfo.name" />
 
       <!-- Right Panel -->
       <div class="col-3 q-pr-md q-pt-md gt-sm">
-        <about-subreddit :subreddit="subreddit" :members="members" :description="description" />
+        <about-subreddit :subreddit="subInfo.name" :members="subInfo.members" :description="subInfo.description" />
         <trending-subreddits />
         <advertisement />
       </div>
@@ -23,15 +28,13 @@ import AboutSubreddit from '../rightPanel/AboutSubreddit';
 import TrendingSubreddits from '../rightPanel/TrendingSubreddits';
 import Advertisement from '../rightPanel/Advertisement';
 import ListOfArticles from '../article/ListOfArticles';
-import mock_articles from '../../mock_data/mock_articles';
+import SubredditService from '../../services/subreddit';
 
 export default {
   data() {
     return {
-      subreddit: '',
-      members: 20,
-      description: 'This is the description of this subreddit!',
-      articles: mock_articles.slice(1, -1)
+      subInfo: {name: '', members: 0, description: ''},
+      errOccurred: false
     };
   },
   watch: {
@@ -43,11 +46,21 @@ export default {
     this.reloadPage(this.$route.params.subreddit);
   },
   methods: {
-    reloadPage(subreddit) {
+    async reloadPage(subreddit) {
       window.scrollTo(0, 0);
-      this.subreddit = subreddit;
+      this.subInfo.name = subreddit;
       document.title = 'r/' + subreddit + ' - YARC';
-      // TODO: Load the articles.
+      
+      // Load the subreddit information.
+      try {
+        this.subInfo = await SubredditService.get(subreddit);
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.$router.replace({name: 'page not found'});
+        } else {
+          this.errOccurred = true;
+        }
+      }
     }
   },
   components: {

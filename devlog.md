@@ -137,3 +137,12 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Added services/imgur to upload images to Imgur for creating image posts.
 * Connected the `TrendingSubreddits` and `CreateArticle` components to the backend API.
 * Kind of tired...but I have to finish this project because it's almost finished and I really need this on my resume. Ha.
+
+# 2020.06.29
+* Fixed a backend bug that get list returned null instead of an empty array when no entries were to be returned.
+* Added `GET /me/join/{subreddit}` path to the backend.
+* Applied infinite scroll to the `ListOfArticles` component, completing the implementation of it.
+* Connected the `CreateSubreddit`, `SearchResult`, `Subreddit`, and `AboutSubreddit` components to the backend API.
+
+# TODO
+Components to be connected to the backend: ArticleContent, ArticleEntry, CommentContent, ListOfComments, Voter, UserProfile, ViewArticle, AboutUser, Advertisement.

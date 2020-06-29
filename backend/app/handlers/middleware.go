@@ -35,7 +35,7 @@ func AddCORSHeader(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Origin", allowAccessControlOrigin)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
 		w.Header().Set("Access-Control-Allow-Headers", "*")
-		// w.Header().Set("Access-Control-Max-Age", accessControlMaxAge)
+		w.Header().Set("Access-Control-Max-Age", accessControlMaxAge)
 		next.ServeHTTP(w, r)
 	})
 }

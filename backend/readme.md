@@ -346,6 +346,7 @@ All actions related to user accounts, an account can be uniquely identified by t
 | PUT    | /me/bio                | Modify the bio of the current user.       | Yes            |
 | POST   | /me/save/{articleID}   | Save the article for the current user.    | Yes            |
 | DELETE | /me/save/{articleID}   | Unsave the article for the current user.  | Yes            |
+| GET    | /me/join/{subreddit}   | Get the join state of the current user.   | Yes            |
 | POST   | /me/join/{subreddit}   | Join the subreddit for the current user.  | Yes            |
 | DELETE | /me/join/{subreddit}   | Leave the subreddit for the current user. | Yes            |
 
@@ -386,6 +387,14 @@ Unsave the article {articleID} for the current user.
 Request Body: Empty
 
 Response Body: Empty if succeeded (`204`), otherwise (`404`) or (`400`) with error message.
+
+#### GET `/me/join/{subreddit}`
+Check if the current user has joined the subreddit.
+
+Response Body:
+```
+{"joined": true}
+```
 
 #### POST `/me/join/{subreddit}`
 Join the subreddit {subreddit} for the current user.
