@@ -4,6 +4,7 @@
 
     <!-- Right Panel -->
     <div class="col-3 q-pr-md q-pt-md gt-sm">
+      <source-code />
       <new-subreddit />
       <trending-subreddits />
       <advertisement />
@@ -16,6 +17,7 @@ import NewSubreddit from '../rightPanel/NewSubreddit';
 import TrendingSubreddits from '../rightPanel/TrendingSubreddits';
 import Advertisement from '../rightPanel/Advertisement';
 import ListOfArticles from '../article/ListOfArticles';
+import SourceCode from '../rightPanel/SourceCode';
 
 export default {
   mounted() {
@@ -26,7 +28,8 @@ export default {
     listOfArticles: ListOfArticles,
     newSubreddit: NewSubreddit,
     trendingSubreddits: TrendingSubreddits,
-    advertisement: Advertisement
+    advertisement: Advertisement,
+    sourceCode: SourceCode
   }
 }
 </script>

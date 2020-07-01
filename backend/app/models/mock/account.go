@@ -38,6 +38,14 @@ func (m *AccountModel) ModifyBio(username, newBio string) error {
 	return nil
 }
 
+// GetSaveState returns true if username is "Kurt" and articleID is "666".
+func (m *AccountModel) GetSaveState(username, articleID string) bool {
+	if username == "Kurt" && articleID == "666" {
+		return true
+	}
+	return false
+}
+
 // SaveArticle returns ErrArticleAlreadySaved if articleID is "77777" and username is "PatrickStar".
 func (m *AccountModel) SaveArticle(articleID, username string) error {
 	if articleID == "77777" && username == "PatrickStar" {

@@ -2,7 +2,7 @@
   <div>
     <!-- Title -->
     <div class="text-h6 text-white q-mt-md q-ml-lg">
-      Welcome to <span class="text-blue">r/{{subInfo.name}}</span>!
+      Welcome to <span class="text-blue">r/{{subreddit}}</span>!
     </div>
 
     <!-- Error Indicator -->
@@ -11,11 +11,11 @@
     </q-banner>
 
     <div class="row">
-      <list-of-articles :criterion="'sub'" :criterionKey="subInfo.name" :subreddit="subInfo.name" />
+      <list-of-articles :criterion="'sub'" :criterionKey="subreddit" :subreddit="subreddit" />
 
       <!-- Right Panel -->
       <div class="col-3 q-pr-md q-pt-md gt-sm">
-        <about-subreddit :subreddit="subInfo.name" :members="subInfo.members" :description="subInfo.description" />
+        <about-subreddit :subreddit="subreddit" />
         <trending-subreddits />
         <advertisement />
       </div>
@@ -33,6 +33,7 @@ import SubredditService from '../../services/subreddit';
 export default {
   data() {
     return {
+      subreddit: '',
       subInfo: {name: '', members: 0, description: ''},
       errOccurred: false
     };
@@ -48,18 +49,14 @@ export default {
   methods: {
     async reloadPage(subreddit) {
       window.scrollTo(0, 0);
-      this.subInfo.name = subreddit;
+      this.subreddit = subreddit;
       document.title = 'r/' + subreddit + ' - YARC';
       
-      // Load the subreddit information.
+      // Check if the subreddit exist.
       try {
-        this.subInfo = await SubredditService.get(subreddit);
+        await SubredditService.get(subreddit);
       } catch (error) {
-        if (error.response.status === 404) {
-          this.$router.replace({name: 'page not found'});
-        } else {
-          this.errOccurred = true;
-        }
+        this.$router.replace({name: 'page not found'});
       }
     }
   },

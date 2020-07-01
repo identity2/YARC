@@ -144,5 +144,13 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Applied infinite scroll to the `ListOfArticles` component, completing the implementation of it.
 * Connected the `CreateSubreddit`, `SearchResult`, `Subreddit`, and `AboutSubreddit` components to the backend API.
 
+# 2020.07.01
+* Added `GET /me/save/{articleID}` path to the backend.
+* Refactored `AboutSubreddit` and `Subreddit` components.
+* Refactored and connected the `ArticleContent`, `ViewArticle`, `ArticleEntry`, and `CreateComment` components to the backend API.
+* Added Moment.js library for date formatting.
+* Added a `SourceCode` component to the right panel of the home page.
+
+
 # TODO
-Components to be connected to the backend: ArticleContent, ArticleEntry, CommentContent, ListOfComments, Voter, UserProfile, ViewArticle, AboutUser, Advertisement.
+Components to be connected to the backend: CommentContent, ListOfComments, Voter, UserProfile, AboutUser, Advertisement.

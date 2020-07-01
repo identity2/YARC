@@ -125,7 +125,7 @@ export default {
     document.title = 'Submit Post - YARC';
 
     // Redirect to the log in page if the user isn't logged in.
-    if (!this.$store.state.auth.loggedIn) {
+    if (!this.$store.state.auth) {
       this.$router.push('/account?login');
     }
 
@@ -212,7 +212,7 @@ export default {
       }
 
       // Send request.
-      ArticleService.create(this.subreddit, this.postType, body, this.title, this.$store.state.auth.user.authHeader).then(articleID => {
+      ArticleService.create(this.subreddit, this.postType, body, this.title, this.$store.state.auth.authHeader).then(articleID => {
         // Successful, redirect to the newly created article.
         this.$router.push('/r/'+this.subreddit+'/p/'+articleID);
       }).catch(error => {

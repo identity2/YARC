@@ -57,6 +57,20 @@ func (h *Handler) ModifyBio(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// SaveState responds with the saving state of the user for the article.
+func (h *Handler) SaveState(w http.ResponseWriter, r *http.Request) {
+	// Retreive the currently logged in user and the subName.
+	username := r.Context().Value(usernameCtxKey).(string)
+	articleID := mux.Vars(r)["articleID"]
+
+	// Get the state from the database.
+	resp := struct {
+		Saved bool `json:"saved"`
+	}{h.Accounts.GetSaveState(username, articleID)}
+
+	jsonResponse(w, http.StatusOK, resp)
+}
+
 // SaveArticle saves the article for the current user.
 // Routed from POST "/me/save/{articleID}".
 func (h *Handler) SaveArticle(w http.ResponseWriter, r *http.Request) {

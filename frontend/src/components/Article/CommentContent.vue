@@ -10,20 +10,20 @@
         
         <div class="col">
           <div class="text-caption text-grey">
-            <router-link :to="'/u/' + commentedBy">
-              <span class="text-grey-5">u/{{commentedBy}}</span>
+            <router-link :to="'/u/' + comment.postedBy">
+              <span class="text-grey-5">u/{{comment.postedBy}}</span>
             </router-link>
-            <span>．{{points}} points．{{commentedDate}}</span>
+            <span>．{{comment.points}} points．{{comment.postedTime | formatDate}}</span>
           </div>
 
           <!-- Comment Text -->
           <div v-if="!editMode" class="text-white q-mt-xs q-mr-sm">
-            {{commentBody}}
+            {{comment.body}}
           </div>
 
           <div v-if="editMode" class="q-mt-sm q-mr-sm q-mb-md">
             <div class="q-ml-xs q-mb-sm">Editing comment:</div>
-            <q-input dark outlined standout v-model="commentBody" type="textarea" counter :maxlength="commentMaxLen" />
+            <q-input dark outlined standout v-model="comment.body" type="textarea" counter :maxlength="commentMaxLen" />
             <q-btn class="q-mr-md" @click="saveClicked" style="background: white; color: black" label="Save" />
             <q-btn outline @click="cancelClicked" style="color: red" label="Cancel" />
           </div>
@@ -44,16 +44,13 @@ import Limits from '../../limits';
 
 export default {
   props: {
-    commentedBy: String,
-    points: Number,
-    commentedDate: String,
-    commentText: String
+    comment: Object
   },
   data() {
     return {
       editMode: false,
       commentMaxLen: Limits.commentMaxLen,
-      commentBody: this.commentText
+      currBody: this.comment.body
     };
   },
   methods: {
@@ -71,7 +68,7 @@ export default {
     },
     cancelClicked() {
       this.editMode = false;
-      this.commentBody = this.commentText; // Store to the original comment text.
+      this.currBody = this.comment.body; // Change to the original comment text.
     }
   }
 }

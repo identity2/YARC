@@ -103,7 +103,7 @@ import AuthService from '../../services/authorization';
 export default {
   created() {
     // If already logged in, redirect to the home page.
-    if (this.$store.state.auth.loggedIn) {
+    if (this.$store.state.auth) {
       this.$router.push('/');
     }
 

@@ -16,7 +16,7 @@
     <q-btn v-if="showLoginRegister" @click="loginRegisterClicked('register')" stretch flat label="Register" />
     
     <!-- Profile, Log out -->
-    <q-btn no-caps v-if="!showLoginRegister" @click="showProfileClicked()" stretch flat :label="$store.state.auth.user.username" />
+    <q-btn no-caps v-if="!showLoginRegister" @click="showProfileClicked()" stretch flat :label="$store.state.auth.username" />
     <q-btn v-if="!showLoginRegister" @click="logoutClicked()" stretch flat label="Log out" />
   </q-toolbar>
 </template>
@@ -29,14 +29,13 @@ export default {
   data() {
     return {
       searchText: '',
-      searchTermMaxLen: Limits.searchTermMaxLen,
-
+      searchTermMaxLen: Limits.searchTermMaxLen
     };
   },
   computed: {
     showLoginRegister() {
       // Check if the user is logged in.
-      if (this.$store.state.auth.loggedIn) {
+      if (this.$store.state.auth) {
         return false;
       }
 
@@ -63,7 +62,7 @@ export default {
     },
     showProfileClicked() {
       this.$router.push({
-        path: '/u/' + this.$store.state.auth.user.username
+        path: '/u/' + this.$store.state.auth.username
       });
     },
     logoutClicked() {

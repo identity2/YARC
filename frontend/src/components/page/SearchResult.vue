@@ -68,16 +68,7 @@
             <article-entry
               v-for="article in result.articles"
               :key="article.articleID"
-              :title="article.title"
-              :postType="article.type"
-              :imageUrl="article.type == 'image' ? article.body : ''"
-              :linkUrl="article.type == 'link' ? article.body : ''"
-              :textBody="article.type == 'text' ? article.body : ''"
-              :points="article.points"
-              :postedBy="article.postedBy"
-              :comments="article.comments"
-              :subreddit="article.subreddit"
-              :postedDate="article.postedTime"
+              :article="article"
               @click.native="articleClicked(article)"
             />
           </q-list>
@@ -134,6 +125,7 @@ export default {
       // Fetch the search results.
       try {
         this.result = await SearchService.search(this.query);
+        this.errOccurred = false;
       } catch {
         this.errOccurred = true;
       }

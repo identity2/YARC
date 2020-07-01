@@ -7,7 +7,7 @@ Vue.use(Vuex);
 const expireTime = 1000 * 60 * 60 * 24 * 7; // 7 days.
 const user = JSON.parse(localStorage.getItem("user"));
 const currTime = new Date().getTime();
-const initialAuthState = user && currTime - user.timestamp < expireTime ? {loggedIn: true, user: user} : {loggedIn: false, user: null};
+const initialAuthState = user && currTime - user.timestamp < expireTime ? user : null;
 
 export const store = new Vuex.Store({
   state: {
@@ -15,12 +15,10 @@ export const store = new Vuex.Store({
   },
   mutations: {
     logout(state) {
-      state.auth.loggedIn = false;
-      state.auth.user = null;
+      state.auth = null;
     },
     loginSuccess(state, user) {
-      state.auth.loggedIn = true;
-      state.auth.user = user;
+      state.auth = user;
     }
   }
 });

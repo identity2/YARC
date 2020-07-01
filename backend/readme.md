@@ -344,6 +344,7 @@ All actions related to user accounts, an account can be uniquely identified by t
 | ------ | ---------------------- | ----------------------------------------- | -------------- |
 | GET    | /user/{username}       | Return the info of a user.                | No             |
 | PUT    | /me/bio                | Modify the bio of the current user.       | Yes            |
+| GET    | /me/save/{articleID}   | Check if the user is saving the article.  | Yes            |
 | POST   | /me/save/{articleID}   | Save the article for the current user.    | Yes            |
 | DELETE | /me/save/{articleID}   | Unsave the article for the current user.  | Yes            |
 | GET    | /me/join/{subreddit}   | Get the join state of the current user.   | Yes            |
@@ -373,6 +374,15 @@ Request Body:
 ```
 
 Response Body: Empty if succeeded (`204`), otherwise (`401`) or (`400`) with error message.
+
+#### GET `/me/save/{articleID}`
+Check if the currently logged in user is saving the article.
+
+Response Body:
+
+```
+{"saved": true}
+```
 
 #### POST `/me/save/{articleID}`
 Save the article {articleID} for the current user.

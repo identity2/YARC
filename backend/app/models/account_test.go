@@ -108,6 +108,39 @@ func TestAccountModifyBio(t *testing.T) {
 	}
 }
 
+func TestAccountGetSaveState(t *testing.T) {
+	// Testcases.
+	tests := []struct {
+		name      string
+		username  string
+		articleID string
+		wantRes   bool
+	}{
+		{"Valid", "Jonny", "246o1", true},
+		{"Not Saved", "Morrissey", "246o1", false},
+		{"Invalid", "Brandon", "Sanderson", false},
+	}
+
+	// Perform tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// Stub and driver.
+			db, teardown := newTestDB(t)
+			defer teardown()
+
+			m := AccountModel{db}
+
+			// When.
+			res := m.GetSaveState(tc.username, tc.articleID)
+
+			// Want.
+			if res != tc.wantRes {
+				t.Errorf("want %v; got %v", tc.wantRes, res)
+			}
+		})
+	}
+}
+
 func TestAccountSaveArticle(t *testing.T) {
 	// Testcases.
 	tests := []struct {

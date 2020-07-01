@@ -158,6 +158,15 @@ func (m *AccountModel) ModifyBio(username, newBio string) error {
 	return nil
 }
 
+// GetSaveState returns true if the user is saving the article.
+func (m *AccountModel) GetSaveState(username, articleID string) bool {
+	stmt := `SELECT TRUE FROM save_article WHERE username = $1 AND aid = $2`
+	row := m.DB.QueryRow(stmt, username, articleID)
+	res := false
+	row.Scan(&res)
+	return res
+}
+
 // SaveArticle saves an article for the user.
 func (m *AccountModel) SaveArticle(articleID, username string) error {
 	stmt := `INSERT INTO save_article (username, sub_name, aid) VALUES ($1, (SELECT sub_name FROM article WHERE aid = $2), $2)`

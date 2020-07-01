@@ -30,16 +30,7 @@
           <article-entry
             v-for="article in articles"
             :key="article.articleID"
-            :title="article.title"
-            :postType="article.type"
-            :imageUrl="article.type == 'image' ? article.body : ''"
-            :linkUrl="article.type == 'link' ? article.body : ''"
-            :textBody="article.type == 'text' ? article.body : ''"
-            :points="article.points"
-            :postedBy="article.postedBy"
-            :comments="article.comments"
-            :subreddit="article.subreddit"
-            :postedDate="article.postedTime"
+            :article="article"
             @click.native="articleClicked(article)"
           />
 
@@ -133,7 +124,7 @@ export default {
   methods: {
     articleClicked(article) {
       this.$router.push({
-        path: '/r/' + article.subreddit + '/p/' + article.id
+        path: '/r/' + article.subreddit + '/p/' + article.articleID
       });
     },
     createPost(type) {
@@ -146,8 +137,8 @@ export default {
       });
     },
     async fetchArticleLists(after) {
-      let user = this.$store.state.auth.user;
-      let fetchedArticles = await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, user ? user.authHeader : null);
+      let auth = this.$store.state.auth;
+      let fetchedArticles = await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, auth ? auth.authHeader : null);
       
       // Check if it is the end of the article list. If it is, stop the scroll.
       if (fetchedArticles.length < this.articlesPerRequest) {
@@ -164,7 +155,7 @@ export default {
         this.$refs.infiniteScroll.resume(); // Make the infinite scroller work again.
         this.articles = await this.fetchArticleLists("");
         this.errOccurred = false;
-      } catch (e) {
+      } catch {
         this.errOccurred = true;
       }
       this.loading = false;

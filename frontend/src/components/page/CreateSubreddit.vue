@@ -50,7 +50,7 @@ export default {
     document.title = 'Create Subreddit - YARC';
 
     // Redirect to the log in page if the user isn't logged in.
-    if (!this.$store.state.auth.loggedIn) {
+    if (!this.$store.state.auth) {
       this.$router.push('/account?login');
     }
   },
@@ -81,7 +81,7 @@ export default {
       this.loading = true;
       
       // Send request.
-      SubredditService.create(this.subreddit, this.description, this.$store.state.auth.user.authHeader).then(() => {
+      SubredditService.create(this.subreddit, this.description, this.$store.state.auth.authHeader).then(() => {
         // Successful, redirect to the newly created subreddit.
         this.$router.push('/r/'+this.subreddit);
       }).catch(error => {

@@ -115,6 +115,7 @@ func (a *App) setRouters() {
 	// Account.
 	a.Get("/user/{username}", a.handler.User)
 	a.Put("/me/bio", auth(a.handler.ModifyBio))
+	a.Get("/me/save/{articleID}", auth(a.handler.SaveState))
 	a.Post("/me/save/{articleID}", auth(a.handler.SaveArticle))
 	a.Delete("/me/save/{articleID}", auth(a.handler.UnsaveArticle))
 	a.Get("/me/join/{subreddit}", auth(a.handler.JoinState))

@@ -30,43 +30,56 @@
 
 <script>
 import AccountService from '../../services/account';
+import SubredditService from '../../services/subreddit';
 
 export default {
   props: {
-    subreddit: String,
-    members: Number,
-    description: String,
+    subreddit: String
   },
   data() {
     return {
       loggedInUser: null,
+      members: 0,
+      description: '',
       joined: false,
       loading: false,
       errMsg: ''
     }
   },
   mounted() {
-    this.loggedInUser = this.$store.state.auth.user;
+    this.loggedInUser = this.$store.state.auth;
   },
   watch: {
     // We need to fetch the join state using watch because the parent component
     // fetches the subreddit name asynchronizedly, making this.subreddit become ''
     // when mounted.
     async subreddit() {
-      // Check if the user is joined.
       this.loading = true;
+      this.errMsg = '';
+      // Fetch the subreddit information.
       try {
-        this.joined = await AccountService.getJoinState(this.subreddit, this.loggedInUser.authHeader);
+        let subInfo = await SubredditService.get(this.subreddit);
+        this.members = subInfo.members;
+        this.description = subInfo.description;
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Invalid token.
-          this.$store.commit('logout');
-          localStorage.removeItem('user');
-        }
-        this.loggedInUser = null;
-        this.errMsg = 'Failed to fetch the state of joining.'
+        this.errMsg = 'Failed to fetch subreddit information.';
       }
-      this.loading = false;
+
+      // If a user is logged in, check if the user is joined.
+      if (this.loggedInUser) {
+        try {
+          this.joined = await AccountService.getJoinState(this.subreddit, this.loggedInUser.authHeader);
+        } catch (error) {
+          if (error.response && error.response.status === 401) {
+            // Invalid token.
+            this.$store.commit('logout');
+            localStorage.removeItem('user');
+          }
+          this.loggedInUser = null;
+          this.errMsg = 'Failed to fetch the state of joining.';
+        }
+        this.loading = false;
+      }
     }
   },
   methods: {
@@ -83,8 +96,10 @@ export default {
       try {
         if (this.joined) {
           await AccountService.leaveSubreddit(this.subreddit, this.loggedInUser.authHeader);
+          this.members--;
         } else {
           await AccountService.joinSubreddit(this.subreddit, this.loggedInUser.authHeader);
+          this.members++;
         }
         this.joined = !this.joined;
       } catch (error) {

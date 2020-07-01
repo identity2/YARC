@@ -14,6 +14,13 @@ export default {
       }
     });
   },
+  getSaveState(articleID, authHeader) {
+    return axios.get(API_URL+"/me/save/"+articleID, {
+      headers: {
+        Authorization: authHeader
+      }
+    }).then(response => response.data.saved);
+  },
   saveArticle(articleID, authHeader) {
     return axios.post(API_URL+"/me/save/"+articleID, {}, {
       headers: {
@@ -29,7 +36,6 @@ export default {
     });
   },
   getJoinState(subreddit, authHeader) {
-    console.log('+'+subreddit);
     return axios.get(API_URL+"/me/join/"+subreddit, {
       headers: {
         Authorization: authHeader

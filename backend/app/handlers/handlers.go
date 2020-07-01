@@ -20,6 +20,7 @@ type AccountModel interface {
 	Insert(username, email, password string) error
 	Authenticate(username, password string) error
 	ModifyBio(username, newBio string) error
+	GetSaveState(username, articleID string) bool
 	SaveArticle(articleID, username string) error
 	UnsaveArticle(articleID, username string) error
 	GetJoinState(username, subName string) bool

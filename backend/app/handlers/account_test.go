@@ -78,6 +78,40 @@ func TestModifyBio(t *testing.T) {
 	}
 }
 
+func TestSaveState(t *testing.T) {
+	// Stub and driver.
+	h := newTestHandler(t)
+	r := newTestRouter(t, "GET", "/me/save/{articleID}", h.SaveState)
+
+	// Testcases.
+	tests := []struct {
+		name     string
+		urlPath  string
+		wantCode int
+		wantBody string
+	}{
+		{"Saved", "/me/save/666", http.StatusOK, `{"saved":true}`},
+		{"Not Saved", "/me/save/111", http.StatusOK, `{"saved":false}`},
+	}
+
+	// Perform Tests.
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// When.
+			code, body := r.testHTTP(t, "GET", tc.urlPath, ``, "Kurt")
+
+			// Want.
+			if code != tc.wantCode {
+				t.Errorf("want %v; got %v", tc.wantCode, code)
+			}
+
+			if body != tc.wantBody {
+				t.Errorf("want %v; got %v", tc.wantBody, body)
+			}
+		})
+	}
+}
+
 func TestSaveArticle(t *testing.T) {
 	// Stub and driver.
 	h := newTestHandler(t)

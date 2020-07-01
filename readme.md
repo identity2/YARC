@@ -20,10 +20,12 @@ I plan to get a web backend job after university, but I have zero web projects t
 * Database: PostgreSQL + Redis
 * Container: Docker
 
-### Vue Package Used
+### Vue & npm Package Used
 * Vuex
 * Vue-Router
 * Quasar
+* Axios
+* Moment
 
 ### Go Package Used
 * gorilla/mux

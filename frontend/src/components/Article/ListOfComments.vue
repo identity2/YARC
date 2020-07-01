@@ -1,3 +1,4 @@
+<!-- This is for the list of comments on a user's profile, not for the article. -->
 <template>
   <div class="col">
     <div class="q-pa-md text-white">
