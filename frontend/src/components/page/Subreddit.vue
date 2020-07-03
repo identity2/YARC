@@ -52,7 +52,7 @@ export default {
       this.subreddit = subreddit;
       document.title = 'r/' + subreddit + ' - YARC';
       
-      // Check if the subreddit exist.
+      // Check if the subreddit exists.
       try {
         await SubredditService.get(subreddit);
       } catch (error) {

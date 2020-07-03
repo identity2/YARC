@@ -54,13 +54,24 @@ Its logo is an elephant, and elephants are our friends.
 
 Also, I think relational databases are still better than NoSQLs in general cases (especially in traditional forum sites like Reddit). It models the data in a more rigorous fashion, and makes it easier to perform complex updates and selects.
 
-(I don't understand why people say NoSQLs "scale" better? I consider NoSQLs as useful in only very special scenarios.)
+(I don't understand why people say NoSQL "scales" better? I consider NoSQL as useful in only special scenarios where a complementary data store is needed.)
 
 ### Why Redis?
-Just testing the usage of Redis. The usage of Redis in this app is minimal.
+Just testing the usage of Redis. The usage of Redis in this app is minimal. Could definite explore Redis more on future projects.
 
 ### Why Docker?
-I browsed the job ads in my local area and it seemed to be a good plus to know Docker.
+It takes some time to make it work correctly, but saves more time in the long run. Also, I browsed the job ads in my local area and it seemed to be a good plus to know Docker.
 
-# Planned Completion Time
-Mid-to-Late-July, 2020
+## In Retrospect...
+### Database
+* The article entity and the comment entity could be merged into a single "post" entity with a "parent" field. This makes it easier to add new similar entities to the system and makes nested posts possible. Also, I wouldn't need to separate the vote_article and vote_comment into different tables by applying this approach.
+
+### Backend
+* There are still some N+1 problems using this API, for example, when the frontend fetches the article list of N articles, it then has to send N requests separately to fetch the voting state and the join state of each article. I could have added the vote state as well as the join state together with the article API.
+* I could use Redis to cache hot articles.
+
+### Frontend
+* The naming of the components could be better.
+* Many components could be merged and reused. I didn't plan too good at the beginner.
+
+(This is just a showcase project so I would not refactor the code. However, I will make sure I don't make the same design mistakes in future projects.)

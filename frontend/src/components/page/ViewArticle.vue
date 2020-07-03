@@ -212,8 +212,8 @@ export default {
       // Load the comments.
       this.comments = [];
       try {
-        this.$refs.infiniteScroll.resume();
         this.comments = await this.fetchCommentLists("");
+        this.$refs.infiniteScroll.resume();
         this.commentErrOccurred = false;
       } catch (error) {
         this.commentErrOccurred = true;
@@ -236,7 +236,7 @@ export default {
         return;
       }
 
-      let after = this.comments.length == 0 ? "" : this.comments[this.comments.length-1].commentID;
+      let after = this.comments.length === 0 ? "" : this.comments[this.comments.length-1].commentID;
       this.fetchCommentLists(after).then(fetchedComments => {
         for (const com of fetchedComments) {
           this.comments.push(com);

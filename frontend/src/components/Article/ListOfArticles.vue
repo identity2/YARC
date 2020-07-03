@@ -40,18 +40,6 @@
             </div>
           </template> 
         </q-infinite-scroll>
-
-        <!-- Loading Indicator -->
-        <div v-if="loading">
-          <q-item v-for="i in 15" :key="i">
-              <q-item-section avatar>
-                <q-skeleton type="QAvatar" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label><q-skeleton type="text" /></q-item-label>
-              </q-item-section>
-          </q-item>
-        </div>
         
         <!-- Error Indicator -->
         <q-banner v-if="errOccurred" class="text-white bg-red">
@@ -59,7 +47,7 @@
         </q-banner>
         
         <!-- Empty Indicator -->
-        <q-item v-if="articles.length == 0 && !errOccurred" class="column">
+        <q-item v-if="!loading && articles.length == 0 && !errOccurred" class="column">
           <div class="q-ma-lg">
             <div class="text-h3 q-mb-md">Wow, such empty!</div>
             <div class="text-h6">{{emptyText}}</div>
@@ -152,8 +140,8 @@ export default {
       this.loading = true;
       this.articles = [];
       try {
-        this.$refs.infiniteScroll.resume(); // Make the infinite scroller work again.
         this.articles = await this.fetchArticleLists("");
+        this.$refs.infiniteScroll.resume(); // Make the infinite scroller work again.
         this.errOccurred = false;
       } catch {
         this.errOccurred = true;

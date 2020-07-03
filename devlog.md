@@ -151,6 +151,9 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Added Moment.js library for date formatting.
 * Added a `SourceCode` component to the right panel of the home page.
 
+# 2020.07.04
+* Fixed bugs that duplicate articles were loaded in `ListOfArticles`, and duplicate comments were loaded in `ViewArticle`.
+* Connected the `ListOfComments`, `AboutUser`, and `UserProfile` components to the backend API.
 
 # TODO
-Components to be connected to the backend: CommentContent, ListOfComments, Voter, UserProfile, AboutUser, Advertisement.
+Components to be connected to the backend: CommentContent, Voter, UserProfile, Advertisement.

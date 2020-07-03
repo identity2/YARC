@@ -51,7 +51,7 @@ export default {
   },
   watch: {
     // We need to fetch the join state using watch because the parent component
-    // fetches the subreddit name asynchronizedly, making this.subreddit become ''
+    // fetches the subreddit name asynchronously, making this.subreddit become ''
     // when mounted.
     async subreddit() {
       this.loading = true;

@@ -2,7 +2,7 @@
   <div>
     <!-- Title -->
     <div class="text-h6 text-white q-mt-md q-ml-lg">
-      <span class="text-blue">r/{{username}}</span>'s profile.
+      <span class="text-blue">r/{{userInfo.username}}</span>'s profile.
     </div>
 
     <q-card dark class="q-mt-lg">
@@ -16,28 +16,28 @@
     <div class="row">
       <list-of-articles
         v-if="viewList === 'post'"
-        :articles="posts"
         :canCreatePost="false"
+        :criterion="'by'"
+        :criterionKey="this.$route.params.username"
+        :emptyText="'The user has not posted any articles.'"
       />
 
       <list-of-comments
         v-if="viewList === 'comment'"
-        :comments="comments"
+        :username="this.$route.params.username"
       />
 
       <list-of-articles
         v-if="viewList === 'saved'"
-        :articles="savedPosts"
         :canCreatePost="false"
+        :criterion="'savedBy'"
+        :criterionKey="this.$route.params.username"
+        :emptyText="'The user has not saved any articles.'"
       />
 
       <!-- Right Panel -->
       <div class="col-3 q-pr-md q-pt-md gt-sm">
-        <about-user
-          :username="username"
-          :karma="karma"
-          :joined="joined"
-        />
+        <about-user :userInfo="userInfo" @bioSaved="bioSaved"/>
         <advertisement />
       </div>
     </div>
@@ -49,18 +49,17 @@ import ListOfArticles from '../article/ListOfArticles';
 import ListOfComments from '../article/ListOfComments';
 import Advertisement from '../rightPanel/Advertisement';
 import AboutUser from '../rightPanel/AboutUser';
-import mock_articles from '../../mock_data/mock_articles';
-import mock_comments from '../../mock_data/mock_comments';
+import AccountService from '../../services/account';
 
 export default {
   data() {
     return {
-      posts: mock_articles,
-      comments: mock_comments,
-      savedPosts: mock_articles.slice(1, -1),
-      username: 'carbon_cop',
-      karma: 420,
-      joined: Date(),
+      userInfo: {
+        username: '',
+        karma: 0,
+        bio: '',
+        joinTime: '1995-11-24T00:00:00Z'
+      },
       viewList: 'post'
     };
   },
@@ -73,11 +72,21 @@ export default {
     }
   },
   methods: {
-    reloadPage(username) {
+    async reloadPage(username) {
+      this.userInfo.username = username;
+
       window.scrollTo(0, 0);
-      this.username = username;
       document.title = 'u/' + username + ' - YARC';
-      // TODO: Load user data.
+      
+      // Check if the user exists.
+      try {
+        this.userInfo = await AccountService.getUser(username);
+      } catch (error) {
+        this.$router.replace({name: 'page not found'});
+      }
+    },
+    bioSaved(bio) {
+      this.userInfo.bio = bio;
     }
   },
   components: {
