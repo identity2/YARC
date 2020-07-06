@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"time"
 
 	"github.com/YuChaoGithub/YARC/backend/app/handlers"
 	"github.com/YuChaoGithub/YARC/backend/app/models"
@@ -15,6 +17,11 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq" // PostgreSQL driver.
+)
+
+const (
+	reconnectionInterval = 3
+	reconnectionTimeout  = 30
 )
 
 // App has a Router and a Handler instance.
@@ -34,24 +41,57 @@ func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 		config.DB.Password,
 		config.DB.Name,
 	)
-	db, err := sql.Open(config.DB.Dialect, psqlInfo)
-	if err != nil {
-		log.Fatal(err)
+	var db *sql.DB
+
+	// Connect to PostgreSQL with retries.
+	dbTicker := time.NewTicker(reconnectionInterval * time.Second)
+	defer dbTicker.Stop()
+	dbTimeout := time.NewTimer(reconnectionTimeout * time.Second)
+	defer dbTimeout.Stop()
+
+Loop:
+	for {
+		select {
+		case <-dbTicker.C:
+			log.Println("Trying to establish connection with the database...")
+			var err error
+			db, err = sql.Open(config.DB.Dialect, psqlInfo)
+			if err == nil {
+				if err = db.Ping(); err == nil {
+					// Successful.
+					log.Println("Connection to the database succeeded.")
+					defer db.Close()
+					break Loop
+				}
+			}
+
+			if err != nil {
+				log.Println(err)
+			}
+		case <-dbTimeout.C:
+			log.Println("db connection failed after timeout ", reconnectionTimeout)
+			os.Exit(1)
+		}
 	}
-	if err = db.Ping(); err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
 
 	// Redis connection.
+	log.Println("Trying to establish connection with Redis...")
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.MemStore.Addr,
 		Password: config.MemStore.Password,
 		DB:       config.MemStore.DB,
 	})
-	if _, err = rdb.Ping().Result(); err != nil {
+
+	// Connect to Redis with retries.
+	redisTicker := time.NewTicker(reconnectionInterval * time.Second)
+	defer redisTicker.Stop()
+	redisTimer := time.NewTimer(reconnectionTimeout * time.Second)
+	defer redisTimer.Stop()
+
+	if _, err := rdb.Ping().Result(); err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Connection to Redis succeeded.")
 	defer rdb.Close()
 
 	// Inject the DBs into the models.
@@ -78,7 +118,7 @@ func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 	}
 
 	log.Printf("Starting YARC backend server on %s\n", config.Server.Port)
-	err = server.ListenAndServe()
+	err := server.ListenAndServe()
 	log.Fatal(err)
 }
 

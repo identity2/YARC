@@ -155,5 +155,13 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Fixed bugs that duplicate articles were loaded in `ListOfArticles`, and duplicate comments were loaded in `ViewArticle`.
 * Connected the `ListOfComments`, `AboutUser`, and `UserProfile` components to the backend API.
 
+# 2020.07.06
+* Changed to use environment variable instead of stdin to get the JWT secret key. Easier for Docker.
+* Modified some test cases due to the update of the SORT function in PostgreSQL. (Capitalized letter will not be consider as smaller than lower cased letters now.)
+* Make the backend reestablish connection to the database if failed. This is necessary because the database container may not be ready when the backend server starts up.
+* Added test scripts, Dockerfile and docker-compose.yml file. Difficult but rewarding. Kind of.
+* Updated node.js to the latest version.
+* *Having trouble running a hot-reload server on Docker, there seems to be something wrong with the quasar dependency on the container. (P.S. Please save me StackOverflow :::><:::)*
+
 # TODO
 Components to be connected to the backend: CommentContent, Voter, UserProfile, Advertisement.

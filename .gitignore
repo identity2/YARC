@@ -2,7 +2,7 @@
 .DS_Store
 node_modules
 /dist
-secret.js
+secret.env
 
 # local env files
 .env.local

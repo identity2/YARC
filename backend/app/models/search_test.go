@@ -7,7 +7,7 @@ func TestSearchGetResult(t *testing.T) {
 	query := "t"
 
 	// Want results.
-	wantSubreddits := []string{"PHP", "ZZZ", "dankmeme", "golang"}
+	wantSubreddits := []string{"dankmeme", "golang", "PHP", "ZZZ"}
 	wantArticles := []string{"IpX177", "WX-78", "RgMG_RTSvkQa", "RgMG_RTSvkQ6", "RgMG_RTSvkQ7", "IpX1779", "246o19", "WX-789", "246o1"}
 
 	// Stub and driver.

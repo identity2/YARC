@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:6.0.5
+    ports:
+      - "6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - backend
+  
+  db:
+    image: postgres:13
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=yarc
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ${PWD}/database/setup.sql:/docker-entrypoint-initdb.d/setup.sql  # For creating the tables.
+    networks:
+      - backend
+  
+  server:
+    build: ./backend
+    image: yarc_server
+    ports:
+      - "8080:8080"
+    env_file: secret.env
+    networks:
+      - backend
+
+
+networks:
+  backend:
+
+volumes:
+  db-data:
+  redis-data:

@@ -20,6 +20,23 @@ I plan to get a web backend job after university, but I have zero web projects t
 * Database: PostgreSQL + Redis
 * Container: Docker
 
+## Run the project
+Make sure the `docker` command is available in your environment.
+
+### Start Development Server
+* Backend server, database, and Redis: `docker-compose up -d` (Run `docker-compose down` to clean up afterwards.)
+* Frontend server: `npm run serve` (It would probably run on port `8081` since `8080` is occupied by the backend.)
+
+*(There seems to be a problem with the quasar dependency when running on Docker, making it impossible to run a hot-reload frontend server in the container ¯\\_(ツ)_/¯)*
+
+### Run Backend Tests
+```
+cd backend
+chmod +x test.sh clean_test.sh
+./test.sh && ./clean_test.sh
+cd ..
+``
+
 ### Vue & npm Package Used
 * Vuex
 * Vue-Router

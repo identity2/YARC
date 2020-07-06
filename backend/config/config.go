@@ -48,14 +48,14 @@ func GetConfig() *Config {
 		},
 		DB: DBConfig{
 			Dialect:  "postgres",
-			Host:     "localhost",
+			Host:     "db",
 			Port:     5432,
 			Username: "postgres",
 			Password: "password",
 			Name:     "yarc",
 		},
 		MemStore: RedisConfig{
-			Addr:     "127.0.0.1:6379",
+			Addr:     "redis:6379",
 			Password: "",
 			DB:       0,
 		},

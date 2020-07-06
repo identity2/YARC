@@ -2,8 +2,9 @@
 This is the backend of YARC developed with Go.
 
 ## Commands
-* Run project: `go run .`
-* Build project: `go build .`
+Docker is required to run these commands.
+
+* Run tests: `test.sh`, make sure to run `clean_test.sh` afterwards to remove the containers.
 
 ## API
 

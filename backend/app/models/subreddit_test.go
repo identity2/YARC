@@ -15,7 +15,7 @@ func TestSubredditList(t *testing.T) {
 	res := m.List()
 
 	// Want.
-	wantRes := []string{"PHP", "ZZZ", "dankmeme", "golang", "meirl"}
+	wantRes := []string{"dankmeme", "golang", "meirl", "PHP", "ZZZ"}
 	if !reflect.DeepEqual(res, wantRes) {
 		t.Errorf("want %v; got %v", wantRes, res)
 	}

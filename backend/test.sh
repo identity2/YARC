@@ -1,0 +1,3 @@
+docker container run -p 5432:5432 -d -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=yarc_test --name test_db postgres:13
+docker container run -p 6379:6379 -d --name test_redis redis:6.0.5
+go test ./...
