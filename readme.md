@@ -1,4 +1,8 @@
+![Backend Build and Test](https://github.com/YuChaoGithub/YARC/workflows/Backend%20Build%20and%20Test/badge.svg)
+
 # Yet Another Reddit Clone
+
+[Demo Video](https://youtu.be/BwcGhgvhw6k)
 
 ![Homepage](https://i.imgur.com/jvVG5yU.png)
 
@@ -15,6 +19,7 @@ I plan to get a web backend job after university, but I have zero web projects t
 * View user info: short bio, comments, articles, saved article.
 * Karma system.
 * Searching: subreddit and articles. (Very primitive searching.)
+* [Backend API](https://github.com/YuChaoGithub/YARC/blob/master/backend/readme.md)
 
 ## Tech Stack
 * Frontend: Vue
@@ -26,8 +31,8 @@ I plan to get a web backend job after university, but I have zero web projects t
 Make sure the `docker` command is available in your environment.
 
 ### Start Development Server
-* Backend server, database, and Redis: `docker-compose up` (Run `docker-compose down` to clean up afterwards.)
-* Frontend server: `npm run serve` (It would probably run on port `8081` since `8080` is occupied by the backend.)
+* Backend server, database, and Redis: `docker-compose up -d` (Run `docker-compose down` to clean up afterwards.)
+* Frontend server: `cd frontend` and `npm run serve` (It would probably run on port `8081` since `8080` is occupied by the backend.)
 
 *(There seems to be a problem with the quasar dependency when running on Docker, making it impossible to run a hot-reload frontend server in the container. ¯\\_(ツ)_/¯)*
 
