@@ -33,12 +33,6 @@
             :article="article"
             @click.native="articleClicked(article)"
           />
-
-          <template v-slot:loading>
-            <div class="row justify-center q-my-md">
-              <q-spinner-dots color="white" size="40px" />
-            </div>
-          </template> 
         </q-infinite-scroll>
         
         <!-- Error Indicator -->
@@ -84,6 +78,10 @@ export default {
     canCreatePost: {
       type: Boolean,
       default: true
+    },
+    loadOnMount: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -107,7 +105,7 @@ export default {
     }
   },
   mounted() {
-    this.reloadArticles();
+      this.reloadArticles();
   },
   methods: {
     articleClicked(article) {
@@ -149,6 +147,12 @@ export default {
       this.loading = false;
     },
     loadMoreArticles(_, done) {
+      // Wait for the initial articles to be loaded.
+      if (this.loading) {
+        done();
+        return;
+      }
+
       // Fetch more articles.
       let after = this.articles.length == 0 ? "" : this.articles[this.articles.length-1].articleID;
       this.fetchArticleLists(after).then(fetchedArticles => {

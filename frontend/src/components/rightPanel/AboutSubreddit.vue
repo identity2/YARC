@@ -1,8 +1,8 @@
 <template>
   <q-card dark flat bordered class="bg-grey-10 q-mb-md">
     <q-card-section>
-      <div class="text-h6 q-mb-md">r/{{subreddit}}</div>
-      <div>{{description}}</div>
+      <router-link :to="'/r/' + subreddit"><div class="text-h6 q-mb-md text-white">r/{{subreddit}}</div></router-link>
+      <div style="white-space: pre-wrap">{{description}}</div>
     </q-card-section>
 
     <q-separator dark inset />

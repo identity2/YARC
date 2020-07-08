@@ -13,7 +13,7 @@
             <div class="row">
               <!-- Upvote, Downvote -->
               <q-item-section class="q-mt-lg" thumbnail top>
-                <voter :votes="article ? article.points : 0" />
+                <voter v-if="article" :votes="article.points" :articleID="article.articleID" />
               </q-item-section>
 
               <q-item-section class="col">
@@ -64,6 +64,8 @@
                     v-for="comment in comments"
                     :key="comment.commentID"
                     :comment="comment"
+                    @commentEdited="commentEdited"
+                    @commentDeleted="commentDeleted(comment.commentID)"
                   />
 
                   <template v-slot:loading>
@@ -153,7 +155,8 @@ export default {
       saveBtnLoading: false,
       deleteLoading: false,
       showDeleteSuccessful: false,
-      showDeleteConfirm: false
+      showDeleteConfirm: false,
+      initialCommentLoaded: false
     };
   },
   computed: {
@@ -176,6 +179,8 @@ export default {
     async reload(articleID) {
       // Check the currently logged in user.
       this.loggedInUser = this.$store.state.auth;
+
+      this.initialCommentLoaded = false;
 
       // Load the article content.
       this.article = null;
@@ -215,6 +220,7 @@ export default {
         this.comments = await this.fetchCommentLists("");
         this.$refs.infiniteScroll.resume();
         this.commentErrOccurred = false;
+        this.initialCommentLoaded = true;
       } catch (error) {
         this.commentErrOccurred = true;
       }
@@ -231,7 +237,7 @@ export default {
     },
     loadMoreComments(_, done) {
       // Article not loaded yet.
-      if (!this.article) {
+      if (!this.article || !this.initialCommentLoaded) {
         done();
         return;
       }
@@ -302,6 +308,17 @@ export default {
     },
     commentCreated(comment) {
       this.comments.unshift(comment);
+    },
+    commentEdited(commentID, body) {
+      for (let com of this.comments) {
+        if (com.commentID === commentID) {
+          com.body = body;
+          break;
+        }
+      }
+    },
+    commentDeleted(commentID) {
+      this.comments = this.comments.filter(comment => comment.commentID != commentID);
     }
   },
   components: {

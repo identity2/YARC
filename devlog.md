@@ -161,7 +161,16 @@ I like to keep a chronological development log, so that I can regain my motivati
 * Make the backend reestablish connection to the database if failed. This is necessary because the database container may not be ready when the backend server starts up.
 * Added test scripts, Dockerfile and docker-compose.yml file. Difficult but rewarding. Kind of.
 * Updated node.js to the latest version.
-* *Having trouble running a hot-reload server on Docker, there seems to be something wrong with the quasar dependency on the container. (P.S. Please save me StackOverflow :::><:::)*
+* *Having trouble running a hot-reload server on Docker, there seems to be something wrong with the quasar dependency on the container. (P.S. Please save me StackOverflow :::><:::, spoilers: no one saved me)*
 
-# TODO
-Components to be connected to the backend: CommentContent, Voter, UserProfile, Advertisement.
+# 2020.07.08
+* Added `white-space: pre-wrap` to the content components so that line breaks are rendered.
+* Fixed the bug that the infinite scroller would start loading even before the first articles/comments were loaded, causing duplicate articles/comments.
+* Connected the `CommentContent` and `Voter` component to the backend API.
+* Completed the `Advertisement` component. Advertising my old projects haha.
+* Moved the `Access-Control-Allow-Origin` value to the environment variables so that it is easier to configure in docker compose.
+* Fixed a bug that the backend will continuously list articles not subscribed by the user after the list ended.
+
+**The project is finished. There's probably still some bugs, but it works pretty fine now.**
+
+TODO: Hosting. Share on Reddit, Twitter, maybe Instagram.

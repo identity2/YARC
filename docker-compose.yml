@@ -20,7 +20,8 @@ services:
       - POSTGRES_DB=yarc
     volumes:
       - db-data:/var/lib/postgresql/data
-      - ${PWD}/database/setup.sql:/docker-entrypoint-initdb.d/setup.sql  # For creating the tables.
+      - ${PWD}/database/setup.sql:/docker-entrypoint-initdb.d/a_setup.sql  # For creating the tables.
+      - ${PWD}/database/mock_data.sql:/docker-entrypoint-initdb.d/b_mock_data.sql # For mock data.
     networks:
       - backend
   
@@ -30,6 +31,8 @@ services:
     ports:
       - "8080:8080"
     env_file: secret.env
+    environment:
+      - FRONTEND_DOMAIN=http://192.168.1.101:8081
     networks:
       - backend
 

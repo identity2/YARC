@@ -109,7 +109,7 @@ func (m *ArticleModel) Insert(subName, postType, body, title, postedBy string) (
 	} else if postType == linkPost || postType == imagePost {
 		// Link or image post. (Image post is essentially a link to the image.)
 		u, err := url.Parse(body)
-		if err != nil || u.Scheme == "" || u.Host == "" || u.Path == "" {
+		if err != nil || u.Scheme == "" || u.Host == "" {
 			return "", ErrLinkBodyInvalid
 		}
 	} else {

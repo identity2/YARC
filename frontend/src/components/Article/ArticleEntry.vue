@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Upvote, Downvote -->
       <q-item-section thumbnail>
-        <voter :votes="article.points" />
+        <voter :votes="article.points" :articleID="article.articleID" />
       </q-item-section>
 
       <!-- Thumbnail -->
@@ -46,7 +46,7 @@
     <!-- Expanded article content -->
     <div v-if="expanded" class="row q-pt-lg q-pl-lg q-pr-lg q-pb-sm">
       <img v-if="article.type === 'image'" :src="article.body" />
-      <p v-if="article.type === 'text'">{{article.body}}</p>
+      <p v-if="article.type === 'text'" style="white-space: pre-wrap">{{article.body}}</p>
     </div>
   </q-item>
 </template>

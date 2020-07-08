@@ -26,7 +26,7 @@ func (m *SearchModel) GetResult(query string) (SearchResults, error) {
 	}
 
 	// Search for subreddit name and description.
-	stmt := `SELECT sub_name, description FROM subreddit WHERE sub_name LIKE '%' || $1 || '%' OR description ILIKE '%' ||  $1 || '%' ORDER BY sub_name ASC LIMIT $2`
+	stmt := `SELECT sub_name, description FROM subreddit WHERE sub_name ILIKE '%' || $1 || '%' OR description ILIKE '%' ||  $1 || '%' ORDER BY sub_name ASC LIMIT $2`
 	rows, err := m.DB.Query(stmt, query, searchSubredditResultLimit)
 	if err != nil {
 		return res, err

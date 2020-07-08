@@ -4,7 +4,7 @@
       <div class="text-h5">{{article.title}}</div>
       
       <!-- Text Post -->
-      <div v-if="!editMode && article.type === 'text'" class="q-mt-lg">{{article.body}}</div>
+      <div v-if="!editMode && article.type === 'text'" class="q-mt-lg" style="white-space: pre-wrap">{{article.body}}</div>
       <div v-if="editMode" class="q-mt-lg">
         <div class="q-ml-xs q-mb-sm">Editing post:</div>
         <q-input dark outlined standout v-model="currBody" type="textarea" counter :maxlength="textPostMaxLen" :disable="loading" />

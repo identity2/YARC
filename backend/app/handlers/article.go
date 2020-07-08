@@ -61,8 +61,8 @@ func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				// Successfully get the article lists, if the list is empty, get treat the user as not logged in.
-				if len(resp.Articles) != 0 {
+				// Successfully get the article lists, if the list is empty, treat the user as not logged in.
+				if after != "" || len(resp.Articles) != 0 {
 					jsonResponse(w, http.StatusOK, resp)
 					return
 				}

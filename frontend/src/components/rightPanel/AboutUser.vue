@@ -4,7 +4,7 @@
       <div class="text-h6 q-mb-md">About u/{{userInfo.username}}</div>
 
       <!-- Short Bio -->
-      <div v-if="!editMode">{{userInfo.bio}}</div>
+      <div v-if="!editMode" style="white-space: pre-wrap">{{userInfo.bio}}</div>
       <div v-if="editMode">
         <q-input dark outlined standout v-model="currBio" type="textarea" counter :maxlength="shortBioMaxLen" :disable="loading" />
       </div>

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"runtime/debug"
 	"time"
 
@@ -12,14 +13,22 @@ import (
 )
 
 const (
-	jwtTokenLifetimeInDays   = 7
-	allowAccessControlOrigin = "http://localhost:8081"
-	accessControlMaxAge      = "86400"
+	jwtTokenLifetimeInDays = 7
+	accessControlMaxAge    = "86400"
 )
 
 type contextKey string
 
 var usernameCtxKey = contextKey("username")
+var allowAccessControlOrigin = "http://localhost:8081"
+
+// Get the front end domain from the environment variable.
+func init() {
+	domain := os.Getenv("FRONTEND_DOMAIN")
+	if domain != "" {
+		allowAccessControlOrigin = domain
+	}
+}
 
 // LogRequest logs all the incoming requests.
 func LogRequest(next http.Handler) http.Handler {

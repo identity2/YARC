@@ -132,7 +132,7 @@ export default {
     },
     articleClicked(article) {
       this.$router.push({
-        path: '/r/' + article.subreddit + '/p/' + article.id
+        path: '/r/' + article.subreddit + '/p/' + article.articleID
       });
     }
   },

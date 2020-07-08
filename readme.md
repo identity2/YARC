@@ -1,5 +1,7 @@
 # Yet Another Reddit Clone
 
+![Homepage](https://i.imgur.com/jvVG5yU.png)
+
 ## What's the point?
 I plan to get a web backend job after university, but I have zero web projects to show off. Therefore, I figured I might as well start building a web project to demonstrate my web skills.
 
@@ -24,10 +26,10 @@ I plan to get a web backend job after university, but I have zero web projects t
 Make sure the `docker` command is available in your environment.
 
 ### Start Development Server
-* Backend server, database, and Redis: `docker-compose up -d` (Run `docker-compose down` to clean up afterwards.)
+* Backend server, database, and Redis: `docker-compose up` (Run `docker-compose down` to clean up afterwards.)
 * Frontend server: `npm run serve` (It would probably run on port `8081` since `8080` is occupied by the backend.)
 
-*(There seems to be a problem with the quasar dependency when running on Docker, making it impossible to run a hot-reload frontend server in the container ¯\\_(ツ)_/¯)*
+*(There seems to be a problem with the quasar dependency when running on Docker, making it impossible to run a hot-reload frontend server in the container. ¯\\_(ツ)_/¯)*
 
 ### Run Backend Tests
 ```
@@ -35,7 +37,7 @@ cd backend
 chmod +x test.sh clean_test.sh
 ./test.sh && ./clean_test.sh
 cd ..
-``
+```
 
 ### Vue & npm Package Used
 * Vuex
@@ -78,6 +80,22 @@ Just testing the usage of Redis. The usage of Redis in this app is minimal. Coul
 
 ### Why Docker?
 It takes some time to make it work correctly, but saves more time in the long run. Also, I browsed the job ads in my local area and it seemed to be a good plus to know Docker.
+
+## Screenshots
+### Search
+![Search](https://i.imgur.com/H21JMSO.png)
+
+### Posting
+![Posting](https://i.imgur.com/my7QdxU.png)
+
+### Text Article
+![Article Page (text article)](https://i.imgur.com/nYRDvol.png)
+
+### Link Article
+![Article Page (link article)](https://i.imgur.com/Fy0y0Dz.png)
+
+### Article List
+![Article List](https://i.imgur.com/018xBow.png)
 
 ## In Retrospect...
 ### Database

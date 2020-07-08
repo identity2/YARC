@@ -32,6 +32,13 @@ export default {
       headers: {
         Authorization: authHeader
       }
-    })
+    });
+  },
+  remove(id, authHeader) {
+    return axios.delete(API_URL+"/comment/"+id, {
+      headers: {
+        Authorization: authHeader
+      }
+    });
   }
 };

@@ -11,7 +11,7 @@
     </q-banner>
 
     <div class="row">
-      <list-of-articles :criterion="'sub'" :criterionKey="subreddit" :subreddit="subreddit" />
+      <list-of-articles :criterion="'sub'" :criterionKey="$route.params.subreddit" :subreddit="$route.params.subreddit" />
 
       <!-- Right Panel -->
       <div class="col-3 q-pr-md q-pt-md gt-sm">

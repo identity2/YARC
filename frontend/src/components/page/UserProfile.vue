@@ -18,7 +18,7 @@
         v-if="viewList === 'post'"
         :canCreatePost="false"
         :criterion="'by'"
-        :criterionKey="this.$route.params.username"
+        :criterionKey="$route.params.username"
         :emptyText="'The user has not posted any articles.'"
       />
 
@@ -31,7 +31,7 @@
         v-if="viewList === 'saved'"
         :canCreatePost="false"
         :criterion="'savedBy'"
-        :criterionKey="this.$route.params.username"
+        :criterionKey="$route.params.username"
         :emptyText="'The user has not saved any articles.'"
       />
 

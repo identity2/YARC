@@ -13,6 +13,8 @@
             </q-item-label>
             <comment-content
               :comment="comment"
+              @commentDeleted="commentDeleted(comment.commentID)"
+              @commentEdited="commentEdited"
             />
             <q-separator v-if="index !== comments.length-1" dark inset />
           </q-item>
@@ -40,14 +42,17 @@ export default {
     return {
       comments: [],
       commentsPerRequest: 8,
-      errOccurred: false
+      errOccurred: false,
+      commentsLoading: false
     };
   },
-  mounted() {    
+  mounted() {
+    this.commentsLoading = true;
     this.fetchCommentLists("").then(fetchedComments => {
       this.comments = fetchedComments;
       this.$refs.infiniteScroll.resume();
       this.errOccurred = false;
+      this.commentsLoading = false;
     }).catch(() => {
       this.errOccurred = true;
     });
@@ -67,7 +72,12 @@ export default {
       return fetchedComments;
     },
     loadMoreComments(_, done) {
-      let after =  this.comments.length === 0 ? "" : this.comments[this.comments.length-1].commentID;
+      if (this.commentsLoading) {
+        done();
+        return;
+      }
+
+      let after = this.comments.length === 0 ? "" : this.comments[this.comments.length-1].commentID;
       this.fetchCommentLists(after).then(fetchedComments => {
         for (const com of fetchedComments) {
           this.comments.push(com);
@@ -77,8 +87,18 @@ export default {
         this.errOccurred = true;
         done(true);
       });
+    },
+    commentEdited(commentID, body) {
+      for (let com of this.comments) {
+        if (com.commentID === commentID) {
+          com.body = body;
+          break;
+        }
+      }
+    },
+    commentDeleted(commentID) {
+      this.comments = this.comments.filter(comment => comment.commentID != commentID);
     }
-    
   },
   components: {
     commentContent: CommentContent
