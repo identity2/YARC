@@ -49,7 +49,7 @@ func init() {
 
 	conf = Config{
 		Server: ServerConfig{
-			Port:         os.Getenv("SERVER_PORT"),
+			Port:         ":" + os.Getenv("PORT"),
 			IdleTimeout:  time.Minute,
 			ReadTimeout:  5 * time.Second,
 			WriteTimeout: 10 * time.Second,

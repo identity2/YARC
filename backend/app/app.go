@@ -34,7 +34,7 @@ type App struct {
 // InitializeAndRun initializes the app with predefined configuration, and run the app.
 func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 	// PostgreSQL connection.
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
 		config.DB.Host,
 		config.DB.Port,
 		config.DB.Username,

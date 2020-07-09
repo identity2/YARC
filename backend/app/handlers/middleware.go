@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"runtime/debug"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -20,15 +20,7 @@ const (
 type contextKey string
 
 var usernameCtxKey = contextKey("username")
-var allowAccessControlOrigin = "http://localhost:8081"
-
-// Get the front end domain from the environment variable.
-func init() {
-	domain := os.Getenv("FRONTEND_ADDR")
-	if domain != "" {
-		allowAccessControlOrigin = domain
-	}
-}
+var allowAccessControlOriginContains = "yarc-29bed"
 
 // LogRequest logs all the incoming requests.
 func LogRequest(next http.Handler) http.Handler {
@@ -41,10 +33,14 @@ func LogRequest(next http.Handler) http.Handler {
 // AddCORSHeader adds the Access-Control-Allow-Origin header to the response.
 func AddCORSHeader(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Origin", allowAccessControlOrigin)
-		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
-		w.Header().Set("Access-Control-Allow-Headers", "*")
-		w.Header().Set("Access-Control-Max-Age", accessControlMaxAge)
+		origin := r.Header.Get("Origin")
+		log.Println("Origin: ", origin)
+		if strings.Contains(origin, allowAccessControlOriginContains) {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT")
+			w.Header().Set("Access-Control-Allow-Headers", "*")
+			w.Header().Set("Access-Control-Max-Age", accessControlMaxAge)
+		}
 		next.ServeHTTP(w, r)
 	})
 }
