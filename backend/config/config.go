@@ -2,13 +2,17 @@
 // of the web app.
 package config
 
-import "time"
+import (
+	"os"
+	"strconv"
+	"time"
+)
 
 // Config contains ServerConfig and DBConfig.
 type Config struct {
-	Server   ServerConfig
-	DB       DBConfig
-	MemStore RedisConfig
+	Server ServerConfig
+	DB     DBConfig
+	Redis  RedisConfig
 }
 
 // ServerConfig defines the configurations related to the web server.
@@ -36,28 +40,38 @@ type RedisConfig struct {
 	DB       int
 }
 
-// GetConfig returns the configurations of the app, including
-// ServerConfig and DBConfig.
-func GetConfig() *Config {
-	return &Config{
+var conf Config
+
+// Initialize the config struct from the environment variables.
+func init() {
+	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
+	rdbNumber, _ := strconv.Atoi(os.Getenv("RDB_DB_NUMBER"))
+
+	conf = Config{
 		Server: ServerConfig{
-			Port:         ":8080",
+			Port:         os.Getenv("SERVER_PORT"),
 			IdleTimeout:  time.Minute,
 			ReadTimeout:  5 * time.Second,
 			WriteTimeout: 10 * time.Second,
 		},
 		DB: DBConfig{
-			Dialect:  "postgres",
-			Host:     "db",
-			Port:     5432,
-			Username: "postgres",
-			Password: "password",
-			Name:     "yarc",
+			Dialect:  os.Getenv("DB_DIALECT"),
+			Host:     os.Getenv("DB_HOST"),
+			Port:     dbPort,
+			Username: os.Getenv("DB_USERNAME"),
+			Password: os.Getenv("DB_PASSWORD"),
+			Name:     os.Getenv("DB_NAME"),
 		},
-		MemStore: RedisConfig{
-			Addr:     "redis:6379",
-			Password: "",
-			DB:       0,
+		Redis: RedisConfig{
+			Addr:     os.Getenv("RDB_ADDR"),
+			Password: os.Getenv("RDB_PASSWORD"),
+			DB:       rdbNumber,
 		},
 	}
+}
+
+// GetConfig returns the configurations of the app, including
+// ServerConfig and DBConfig.
+func GetConfig() *Config {
+	return &conf
 }

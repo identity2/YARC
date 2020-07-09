@@ -24,7 +24,7 @@ var allowAccessControlOrigin = "http://localhost:8081"
 
 // Get the front end domain from the environment variable.
 func init() {
-	domain := os.Getenv("FRONTEND_DOMAIN")
+	domain := os.Getenv("FRONTEND_ADDR")
 	if domain != "" {
 		allowAccessControlOrigin = domain
 	}

@@ -173,4 +173,7 @@ I like to keep a chronological development log, so that I can regain my motivati
 
 **The project is finished. There's probably still some bugs, but it works pretty fine now.**
 
+# 2020.07.09
+* Moved all configs to the environment variables for the backend server.
+
 TODO: Hosting. Share on Reddit, Twitter, maybe Instagram.

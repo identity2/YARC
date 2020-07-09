@@ -2,6 +2,20 @@
 This is the backend of YARC developed with Go.
 [Image on Docker Hub](https://hub.docker.com/r/containerizedchao/yarc_server)
 
+## Environment Variables
+* `SERVER_PORT` is the port which the server will be listening to.
+* `DB_DIALECT` is the SQL dialect of the database in use (e.g. `postgres`).
+* `DB_HOST` is the domain name (or IP address) where the database runs on.
+* `DB_PORT` is the port where the database listens to.
+* `DB_USERNAME` is the username of the database.
+* `DB_PASSWORD` is the password of the database.
+* `DB_NAME` is the name of the database to be used.
+* `RDB_ADDR` is the address which Redis runs on, in the format of `[Domain Name or IP]:Port` (e.g. `localhost:6379`).
+* `RDB_PASSWORD` is the password of Redis.
+* `RDB_DB_NUMBER` is the index of the database to be used in Redis.
+* `JWT_SECRET` is the JWT secret key used for authorization.
+* `FRONTEND_ADDR` is the address where the frontend runs on, in the format of `[Protocol]://[Domain Name or IP]:[Port]` (e.g. `http://localhost:8080`). This address will be allowed to perform CORS requests.
+
 ## Commands
 Docker is required to run these commands.
 

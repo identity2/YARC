@@ -77,9 +77,9 @@ Loop:
 	// Redis connection.
 	log.Println("Trying to establish connection with Redis...")
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     config.MemStore.Addr,
-		Password: config.MemStore.Password,
-		DB:       config.MemStore.DB,
+		Addr:     config.Redis.Addr,
+		Password: config.Redis.Password,
+		DB:       config.Redis.DB,
 	})
 
 	// Connect to Redis with retries.

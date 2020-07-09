@@ -31,8 +31,6 @@ services:
     ports:
       - "8080:8080"
     env_file: secret.env
-    environment:
-      - FRONTEND_DOMAIN=http://192.168.1.101:8081
     networks:
       - backend
 
