@@ -2,12 +2,15 @@
 
 # Yet Another Reddit Clone
 
-[Demo Video](https://youtu.be/BwcGhgvhw6k)
+[Website](https://yarc-29bed.firebaseapp.com/) ． [Demo Video](https://youtu.be/BwcGhgvhw6k) ． [Blog Post](https://shinerightstudio.com/posts/project-yarc-cloning-reddit-using-go-and-vue/)
 
 ![Homepage](https://i.imgur.com/jvVG5yU.png)
 
 ## What's the point?
 I plan to get a web backend job after university, but I have zero web projects to show off. Therefore, I figured I might as well start building a web project to demonstrate my web skills.
+
+## Updated Features
+* You can now use the "subscribed only" toggle to choose between listing all articles or listing only articles from subscribed subreddits in the home page.
 
 ## Features
 * Article list with new/old/hot sorting.
@@ -26,6 +29,7 @@ I plan to get a web backend job after university, but I have zero web projects t
 * Backend: Go
 * Database: PostgreSQL + Redis
 * Container: Docker
+* Deployed on: Heroku (backend & database) + Firebase (frontend)
 
 ## Run the project
 Make sure the `docker` command is available in your environment.
@@ -59,10 +63,10 @@ cd ..
 * go-redis/redis
 
 ### Why Go?
-I am more comfortable with static-typed languages, and I already had projects written in Java and C#, so I wanted to try out the more modern Go language. In my opinion, static-typed languages speed up the development speed, increase the readability, and reduce bugs. (change my mind)
+I am more comfortable with static-typed languages, and I already had projects written in Java and C#, so I wanted to try out the more modern Go language. In my opinion, static-typed languages are less error-prone, more readable, and thus they speed up the development process. (change my mind)
 
 ### Why Vue?
-I love the way Vue divides a document into `<template>`, `<script>`, and `<style>` sections. This improves the readability and maintainability significantly.
+I love the way Vue divides a document into `<template>`, `<script>`, `<style>` sections, and the properties of a Vue object make developers organize code in a clear way. This improves the readability and maintainability significantly.
 
 React code is just a bunch of mess to me, Flutter is immature for web, and I never try Angular out because it seems old.
 
@@ -74,11 +78,9 @@ I like Reddit.
 (And I could demonstrate my skills on developing a medium-scaled CRUD web app by replicating it.)
 
 ### Why PostgreSQL?
-Its logo is an elephant, and elephants are our friends.
+Most relational databases work pretty much the same except in minor details. I went with PostgreSQL because it was arguably the most popular relational database these couple years.
 
-Also, I think relational databases are still better than NoSQLs in general cases (especially in traditional forum sites like Reddit). It models the data in a more rigorous fashion, and makes it easier to perform complex updates and selects.
-
-(I don't understand why people say NoSQL "scales" better? I consider NoSQL as useful in only special scenarios where a complementary data store is needed.)
+Why relational databases over NoSQL though? I argue that people should always stick to relational database as the main storage for their web app, only in very special cases should NoSQL come into the picture and *complements* the main relational database. Almost all data are relational, so relational databases simply model real world data better and more rigorously. It also makes it much simpler to perform complex updates and selects. All in all, I don't agree with the point of view that NoSQL "scales" better. To me, NoSQL is just a complementary tool for storing documents.
 
 ### Why Redis?
 Just testing the usage of Redis. The usage of Redis in this app is minimal. Could definite explore Redis more on future projects.

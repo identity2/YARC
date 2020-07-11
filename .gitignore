@@ -1,7 +1,8 @@
 .vscode
 .DS_Store
 node_modules
-/dist
+dist
+.firebase
 secret.env
 
 # local env files

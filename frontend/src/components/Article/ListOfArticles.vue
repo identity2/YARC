@@ -4,6 +4,14 @@
     <div class="q-pt-md q-pl-md q-pr-md text-white">
       <q-list dark bordered class="bg-grey-10 rounded-borders">
         <q-item class="q-mt-sm q-mb-sm">
+          <q-toggle
+            v-if="showSubscribedToggle && $store.state.auth"
+            class="q-mr-md"
+            color="blue"
+            dark v-model="subscribed"
+            val="xs"
+            label="Subscribed Only"
+          />
           <div class="q-gutter-sm">
             <q-radio dark v-model="sortBy" val="hot" label="Hot" />
             <q-radio dark v-model="sortBy" val="new" label="New" />
@@ -71,6 +79,10 @@ export default {
       type: String,
       default: ''
     },
+    showSubscribedToggle: { // null, true, or false. (The "subscribed" button won't show.)
+      type: Boolean,
+      default: false
+    },
     subreddit: {
       type: String,
       default: ''
@@ -90,7 +102,8 @@ export default {
       sortBy: "hot",
       articlesPerRequest: 10,
       errOccurred: false,
-      loading: true
+      loading: true,
+      subscribed: false
     };
   },
   watch: {
@@ -101,6 +114,9 @@ export default {
       this.reloadArticles();
     },
     criterionKey() {
+      this.reloadArticles();
+    },
+    subscribed() {
       this.reloadArticles();
     }
   },
@@ -124,7 +140,7 @@ export default {
     },
     async fetchArticleLists(after) {
       let auth = this.$store.state.auth;
-      let fetchedArticles = await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, auth ? auth.authHeader : null);
+      let fetchedArticles = await ArticleService.getList(this.sortBy, after, this.articlesPerRequest, this.criterion, this.criterionKey, this.subscribed, auth ? auth.authHeader : null);
       
       // Check if it is the end of the article list. If it is, stop the scroll.
       if (fetchedArticles.length < this.articlesPerRequest) {

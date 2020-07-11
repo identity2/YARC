@@ -30,7 +30,7 @@ type newArticleReq struct {
 func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 	// Get query parameters.
 	q := r.URL.Query()
-	sortedBy, after, criterion, key := q.Get("sort"), q.Get("after"), q.Get("criterion"), q.Get("key")
+	sortedBy, after, criterion, key, subscribed := q.Get("sort"), q.Get("after"), q.Get("criterion"), q.Get("key"), q.Get("subscribed")
 	if sortedBy == "" {
 		sortedBy = defaultListSort
 	}
@@ -49,7 +49,7 @@ func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 	// subreddits if the user is logged in.
 	if criterion == "" || key == "" {
 		// Check if the user is logged in.
-		if authHeader, ok := r.Header["Authorization"]; ok && len(authHeader[0]) > 10 {
+		if authHeader, ok := r.Header["Authorization"]; subscribed == "true" && ok && len(authHeader[0]) > 10 {
 			// This block inside the if-condition is not included in the unit tests,
 			// it is only manually tested, so modify with care...need to find a way to test it.
 			username, err := decodeJWT(authHeader[0][7:], h.JWTSecretKey)
@@ -62,10 +62,8 @@ func (h *Handler) ListArticle(w http.ResponseWriter, r *http.Request) {
 				}
 
 				// Successfully get the article lists, if the list is empty, treat the user as not logged in.
-				if after != "" || len(resp.Articles) != 0 {
-					jsonResponse(w, http.StatusOK, resp)
-					return
-				}
+				jsonResponse(w, http.StatusOK, resp)
+				return
 			}
 		}
 
