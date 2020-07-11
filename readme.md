@@ -9,6 +9,9 @@
 ## What's the point?
 I plan to get a web backend job after university, but I have zero web projects to show off. Therefore, I figured I might as well start building a web project to demonstrate my web skills.
 
+## Updated Features
+* You can now use the "subscribed only" toggle to choose between listing all articles or listing only articles from subscribed subreddits in the home page.
+
 ## Features
 * Article list with new/old/hot sorting.
 * Register, login by JWT.

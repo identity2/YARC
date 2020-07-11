@@ -106,15 +106,16 @@ Return a list of articles filtered by the query strings.
 
 Request query strings:
 
-| Query String | Value            | Default | Note                                    |
-| ------------ | ---------------- | ------- | --------------------------------------- |
-| sort         | hot/new/old      | hot     | Sort the returned list in hot/new/old.  |
-| after        | articleID        |         | Return articles succeeded by articleID. |
-| limit        | integer          | 25      | The number of articles to be returned.  |
-| criterion    | sub/by/savedBy   |         | The criterion to filter the articles.   |
-| key          | subName/username |         | The key for the criterion.              |
+| Query String | Value            | Default | Note                                                               |
+| ------------ | ---------------- | ------- | ------------------------------------------------------------------ |
+| sort         | hot/new/old      | hot     | Sort the returned list in hot/new/old.                             |
+| after        | articleID        |         | Return articles succeeded by articleID.                            |
+| limit        | integer          | 25      | The number of articles to be returned.                             |
+| criterion    | sub/by/savedBy   |         | The criterion to filter the articles.                              |
+| key          | subName/username |         | The key for the criterion.                                         |
+| subscribed   | true/false       | false   | Show only articles from subreddits subscribed by the current user. |
 
-*If either the criterion or the key is missing, all articles in the subreddits subscribed by the logged in user would be returned, or if the user is not logged in, articles in all subreddits would be returned.
+*`subscribed` is only effective when either the criterion or the key is missing. If `subscribed` is false, all articles from the site will be returned.*
 
 *When `after` is the blank string "", it returns the list from the start.*
 

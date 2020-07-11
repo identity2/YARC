@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <list-of-articles :criterion="''" :criterionKey="''" :emptyText="'There are currently no articles on YARC :('" />
+    <list-of-articles :showSubscribedToggle="true" :criterion="''" :criterionKey="''" :emptyText="'There are currently no articles on YARC :('" />
 
     <!-- Right Panel -->
     <div class="col-3 q-pr-md q-pt-md gt-sm">

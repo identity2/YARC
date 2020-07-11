@@ -178,3 +178,6 @@ I like to keep a chronological development log, so that I can regain my motivati
 
 # 2020.07.10
 * Finished deploying on Heroku (for backend) and Firebase (for frontend), some code were modified for deployment in the `heroku-deploy` branch.
+
+# 2020.07.11
+* Added a Subscribed Only toggle to the front page.
