@@ -2,14 +2,15 @@ import axios from 'axios';
 import {API_URL} from './const';
 
 export default {
-  getList(sortBy, after, limit, criterion, key, authHeader) {
+  getList(sortBy, after, limit, criterion, key, subscribed, authHeader) {
     return axios.get(API_URL+"/article", {
       params: {
         sort: sortBy,
         after,
         limit,
         criterion,
-        key
+        key,
+        subscribed
       },
       headers: {
         Authorization: authHeader
