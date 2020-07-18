@@ -3,8 +3,8 @@
 package config
 
 import (
+	"net/url"
 	"os"
-	"strconv"
 	"time"
 )
 
@@ -25,12 +25,8 @@ type ServerConfig struct {
 
 // DBConfig defines the configurations related to the DB connection.
 type DBConfig struct {
-	Dialect  string
-	Host     string
-	Port     int
-	Username string
-	Password string
-	Name     string
+	Dialect       string
+	ConnectionURL string
 }
 
 // RedisConfig defines the configurations related to Redis.
@@ -44,8 +40,8 @@ var conf Config
 
 // Initialize the config struct from the environment variables.
 func init() {
-	dbPort, _ := strconv.Atoi(os.Getenv("DB_PORT"))
-	rdbNumber, _ := strconv.Atoi(os.Getenv("RDB_DB_NUMBER"))
+	redisURL, _ := url.Parse(os.Getenv("REDIS_URL"))
+	redisPassword, _ := redisURL.User.Password()
 
 	conf = Config{
 		Server: ServerConfig{
@@ -55,17 +51,13 @@ func init() {
 			WriteTimeout: 10 * time.Second,
 		},
 		DB: DBConfig{
-			Dialect:  os.Getenv("DB_DIALECT"),
-			Host:     os.Getenv("DB_HOST"),
-			Port:     dbPort,
-			Username: os.Getenv("DB_USERNAME"),
-			Password: os.Getenv("DB_PASSWORD"),
-			Name:     os.Getenv("DB_NAME"),
+			Dialect:       os.Getenv("DATABASE_DIALECT"),
+			ConnectionURL: os.Getenv("DATABASE_URL"),
 		},
 		Redis: RedisConfig{
-			Addr:     os.Getenv("RDB_ADDR"),
-			Password: os.Getenv("RDB_PASSWORD"),
-			DB:       rdbNumber,
+			Addr:     redisURL.Host,
+			Password: redisPassword,
+			DB:       0,
 		},
 	}
 }

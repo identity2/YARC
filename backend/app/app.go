@@ -4,7 +4,6 @@ package app
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -34,13 +33,6 @@ type App struct {
 // InitializeAndRun initializes the app with predefined configuration, and run the app.
 func (a *App) InitializeAndRun(config *config.Config, jwtSecretKey string) {
 	// PostgreSQL connection.
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=require",
-		config.DB.Host,
-		config.DB.Port,
-		config.DB.Username,
-		config.DB.Password,
-		config.DB.Name,
-	)
 	var db *sql.DB
 
 	// Connect to PostgreSQL with retries.
@@ -55,7 +47,7 @@ Loop:
 		case <-dbTicker.C:
 			log.Println("Trying to establish connection with the database...")
 			var err error
-			db, err = sql.Open(config.DB.Dialect, psqlInfo)
+			db, err = sql.Open(config.DB.Dialect, config.DB.ConnectionURL)
 			if err == nil {
 				if err = db.Ping(); err == nil {
 					// Successful.
@@ -75,7 +67,7 @@ Loop:
 	}
 
 	// Redis connection.
-	log.Println("Trying to establish connection with Redis...")
+	log.Printf("Trying to establish connection with Redis on %v...\n", config.Redis.Addr)
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     config.Redis.Addr,
 		Password: config.Redis.Password,
