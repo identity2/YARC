@@ -111,6 +111,7 @@ It takes some time to make it work correctly, but saves more time in the long ru
 ### Backend
 * There are still some N+1 problems using this API, for example, when the frontend fetches the article list of N articles, it then has to send N requests separately to fetch the voting state and the join state of each article. I could have added the vote state as well as the join state together with the article API.
 * I could use Redis to cache hot articles and implement rate limiting.
+* The database querying code is a total mess. Should have used the builder pattern.
 
 ### Frontend
 * The naming of the components could be better.
